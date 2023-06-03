@@ -47,6 +47,7 @@ export function setUser(t: string, u: UserInterface) {
   token.set(t);
   user.set(u);
   if (browser) {
+    console.log("browser", browser);
     window.localStorage.setItem("token", t);
     window.localStorage.setItem("user", JSON.stringify(u));
   }

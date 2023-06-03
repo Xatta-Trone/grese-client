@@ -39,6 +39,7 @@
   </h1>
 
   <a href="/login">Login</a>
+  <!-- svelte-ignore a11y-invalid-attribute -->
   <a on:click={() => logout()} href="#">Logout</a>
 
   <h3>{ JSON.stringify(userData) }</h3>

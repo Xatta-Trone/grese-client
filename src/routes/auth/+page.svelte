@@ -1,11 +1,28 @@
 <!-- @format -->
 <script lang="ts">
-  import { login } from "$lib/services/auth";
+  import { goto } from "$app/navigation";
+  import { setUser } from "$lib/services/auth";
+  import { redirect } from "@sveltejs/kit";
   import type { PageData } from "./$types";
+  import { browser } from "$app/environment";
 
   export let data: PageData;
 
-  login(data.user.name, data.user.email, data.token);
+  if (data.success) {
+    console.log("data success", browser);
+    setUser(data.data.token, data.data.user);
+    //   throw redirect(301,'/')
+  }
+
+  function go(): null {
+    goto("/");
+    return null;
+    // redirect(302, '/');
+  }
 </script>
-<h1>{data.user}</h1>
-<h1>{data.user.name}</h1>
+
+<h1>Auth Success. Redirecting.....</h1>
+
+{#if data.success && browser}
+  {setTimeout(() => go(),0)}
+{/if}
