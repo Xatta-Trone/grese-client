@@ -1,10 +1,8 @@
 <!-- @format -->
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { user } from "$lib/services/auth";
-  import { redirect } from "@sveltejs/kit";
-
-  let isLoggedIn: Boolean;
+  
+  let isLoggedIn: boolean;
   user.subscribe((value) => {
     isLoggedIn = value != null;
 	// if(value == null) {

@@ -1,13 +1,13 @@
 /** @format */
 import { user } from "$lib/services/auth";
-import { redirect } from "@sveltejs/kit";
+import { redirectHelper } from "$lib/utils/helpers";
 
 export const load = () => {
   // route guard
   user.subscribe((value) => {
-    console.log(value);
     if (value == null) {
-      throw redirect(301, "/login");
+      redirectHelper('/')
     }
   });
+
 };

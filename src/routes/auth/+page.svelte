@@ -1,10 +1,9 @@
 <!-- @format -->
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { setUser } from "$lib/services/auth";
-  import { redirect } from "@sveltejs/kit";
   import type { PageData } from "./$types";
   import { browser } from "$app/environment";
+  import { redirectHelper } from "$lib/utils/helpers";
 
   export let data: PageData;
 
@@ -13,16 +12,9 @@
     setUser(data.data.token, data.data.user);
     //   throw redirect(301,'/')
   }
-
-  function go(): null {
-    goto("/");
-    return null;
-    // redirect(302, '/');
-  }
 </script>
-
 <h1>Auth Success. Redirecting.....</h1>
 
 {#if data.success && browser}
-  {setTimeout(() => go(),0)}
+  {setTimeout(() => redirectHelper("/"), 0)}
 {/if}

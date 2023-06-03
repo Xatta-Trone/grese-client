@@ -5,7 +5,6 @@ import { env } from "$env/dynamic/private";
 import { setUser, type LoginResponse } from "$lib/services/auth";
 import { error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
-import { goto } from "$app/navigation";
 
 export const load = (async ({ url }) => {
   try {

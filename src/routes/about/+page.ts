@@ -1,6 +1,5 @@
-import { dev } from '$app/environment';
 import { user } from "$lib/services/auth";
-import { redirect } from "@sveltejs/kit";
+import { redirectHelper } from '$lib/utils/helpers';
 
 // // we don't need any JS on this page, though we'll load
 // // it in dev so that we get hot module replacement
@@ -15,7 +14,7 @@ export const load = () => {
   user.subscribe((value) => {
     console.log(value);
     if (value == null) {
-      throw redirect(301, "/");
+      redirectHelper('/')
     }
   });
 };

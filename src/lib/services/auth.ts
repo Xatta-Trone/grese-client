@@ -1,8 +1,9 @@
 /** @format */
 
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import { writable } from "svelte/store";
 import { browser } from "$app/environment";
+import { goto } from "$app/navigation";
 
 export const token = writable<string | null>(null);
 export const user = writable<UserInterface | null>(null);
@@ -41,6 +42,11 @@ export function logout() {
   }
   token.set(null);
   user.set(null);
+  if (browser) {
+    goto("/");
+  } else {
+    throw redirect(301, "/");
+  }
 }
 
 export function setUser(t: string, u: UserInterface) {

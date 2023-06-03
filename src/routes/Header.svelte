@@ -38,14 +38,12 @@
     >
 
     <NavLi id="nav-menu12" class="cursor-pointer"
-      ><Chevron aligned>Dropdown</Chevron></NavLi
+      ><Chevron aligned>Create</Chevron></NavLi
     >
     <Dropdown triggeredBy="#nav-menu12" class="w-44 z-20">
-      <DropdownItem>Dashboard</DropdownItem>
-      <DropdownItem>Settings</DropdownItem>
-      <DropdownItem>Earnings</DropdownItem>
-      <DropdownDivider />
-      <DropdownItem>Sign out</DropdownItem>
+      <DropdownItem>Sets</DropdownItem>
+      <DropdownItem>Folder</DropdownItem>
+      <DropdownItem>Import</DropdownItem>
     </Dropdown>
 
     {#if isLoggedIn}
@@ -57,7 +55,7 @@
           ><NavLi
             href="/profile"
             active={$page.url.pathname == "/profile" ? true : false}
-            >Profile</NavLi
+            >My Profile</NavLi
           ></DropdownItem
         >
         <DropdownDivider />
