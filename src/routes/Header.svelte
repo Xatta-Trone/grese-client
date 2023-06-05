@@ -20,7 +20,7 @@
   });
 </script>
 
-<Navbar let:hidden let:toggle>
+<Navbar let:hidden let:toggle  color="form">
   <NavBrand href="/">
     <span
       class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
@@ -43,7 +43,10 @@
     <Dropdown triggeredBy="#nav-menu12" class="w-44 z-20">
       <DropdownItem>Sets</DropdownItem>
       <DropdownItem>Folder</DropdownItem>
-      <DropdownItem>Import</DropdownItem>
+      <DropdownItem><NavLi
+        href="/create/url"
+        active={$page.url.pathname == "/login" ? true : false}>Import</NavLi
+      ></DropdownItem>
     </Dropdown>
 
     {#if isLoggedIn}

@@ -7,11 +7,11 @@
 <div class="app">
   <Header />
 
-  <main class="container mx-auto">
+  <main class="container max-w-screen-lg mx-auto">
     <slot />
   </main>
 
-  <footer class="container mx-auto">
+  <footer class="container max-w-screen-lg mx-auto text-center">
     <p>
       visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit
     </p>
