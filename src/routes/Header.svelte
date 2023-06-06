@@ -41,8 +41,14 @@
       ><Chevron aligned>Create</Chevron></NavLi
     >
     <Dropdown triggeredBy="#nav-menu12" class="w-44 z-20">
-      <DropdownItem>Sets</DropdownItem>
-      <DropdownItem>Folder</DropdownItem>
+      <DropdownItem><NavLi
+        href="/create/sets"
+        active={$page.url.pathname == "/login" ? true : false}>Set</NavLi
+      ></DropdownItem>
+      <DropdownItem><NavLi
+        href="/create/folder"
+        active={$page.url.pathname == "/login" ? true : false}>Folder</NavLi
+      ></DropdownItem>
       <DropdownItem><NavLi
         href="/create/url"
         active={$page.url.pathname == "/login" ? true : false}>Import</NavLi

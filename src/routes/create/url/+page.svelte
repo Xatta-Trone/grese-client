@@ -29,6 +29,8 @@
     data.form,
     {
       resetForm: true,
+      delayMs: 1,
+      timeoutMs:10,
     }
   );
 
@@ -40,6 +42,8 @@
 
 <div class="mt-5">
   <SuperDebug data={$form} />
+  {#if $delayed}<span class="delayed">Working...</span>{/if}
+  {#if $submitting}<span class="delayed">Working2...</span>{/if}
 
   <form method="POST" use:enhance class="mb-9">
     {#if $message}
@@ -79,6 +83,7 @@
         placeholder="https://quizlet.com/saint1729/folders/gregmat/sets"
         name="url"
         bind:value={$form.url}
+        type="url"
         {...$constraints.url}
       />
       {#if $errors.url}
@@ -101,8 +106,6 @@
     </div>
 
     <Button type="submit">Import data</Button>
-    {#if $delayed}<span class="delayed">Working...</span>{/if}
-    {#if $submitting}<span class="delayed">Working2...</span>{/if}
   </form>
 </div>
 
