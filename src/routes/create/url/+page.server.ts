@@ -83,12 +83,12 @@ export const actions: Actions = {
         // now submit the data 
         const data = { ...form.data, "name": "Import data", "scope": "user" }
 
-        await axiosAPI.post<ListCreateResponse | ListCreateErrorResponse>('/lists', data)
-            .then((res: AxiosResponse) => {
+        await axiosAPI.post<ListCreateResponse>('/lists', data)
+            .then((res) => {
                 if (res.status == 201) {
                     const responseData: ListCreateResponse = res.data
                     console.log(responseData)
-                    return message(form, responseData.message, { status: 400 })
+                    return message(form, responseData.message, { status: 201 });
                 }
 
             })

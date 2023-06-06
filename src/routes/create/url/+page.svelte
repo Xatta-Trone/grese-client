@@ -12,7 +12,6 @@
     A,
     Select,
   } from "flowbite-svelte";
-  
 
   //import type { PageData } from './$types';
   import { superForm } from "sveltekit-superforms/client";
@@ -26,9 +25,12 @@
     { value: 2, name: "Only me" },
   ];
 
-  const { form, errors, constraints, message } = superForm(data.form, {
-    resetForm: false,
-  });
+  const { form, errors, constraints, message, delayed, submitting } = superForm(
+    data.form,
+    {
+      resetForm: true,
+    }
+  );
 
   function testa() {
     console.log("aaa");
@@ -41,9 +43,10 @@
 
   <form method="POST" use:enhance class="mb-9">
     {#if $message}
-      <h3>{$message}</h3>
+      <Alert dismissable>
+        {$message}
+      </Alert>
     {/if}
-    { $page.status }
     <Alert color="dark" class="mb-3">
       You can easily import vocabulary sets or folders from <A
         href="https://quizlet.com"
@@ -98,6 +101,8 @@
     </div>
 
     <Button type="submit">Import data</Button>
+    {#if $delayed}<span class="delayed">Working...</span>{/if}
+    {#if $submitting}<span class="delayed">Working2...</span>{/if}
   </form>
 </div>
 
