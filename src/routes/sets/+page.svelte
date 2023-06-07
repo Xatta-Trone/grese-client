@@ -165,7 +165,11 @@
     <Heading tag="h5">Loading...&#128516;</Heading>
   {/if}
 
-  {#if !hasMore}
+  {#if sets.length == 0 && !hasMore && !loading}
+    <Heading tag="h5">Nothing found. &#128532;</Heading>
+  {/if}
+
+  {#if sets.length > 0 && !hasMore}
     <Heading tag="h6" color="text-gray-600 dark:text-white"
       >End of results &#128522;</Heading
     >
