@@ -6,6 +6,7 @@
   import { inview } from "svelte-inview/dist/index";
   import { Avatar, Card, Heading, Input } from "flowbite-svelte";
   import { page } from "$app/stores";
+  import bot from "$lib/images/bot.jpg"
 
   // interfaces
   interface SetsResponse {
@@ -65,7 +66,7 @@
       )
       .then((res) => {
         const data: SetsResponse = res.data;
-        console.log(data);
+        // console.log(data);
 
         if (data.data.length) {
           newSets = data.data;
@@ -149,7 +150,7 @@
       </h5>
       <div class="flex justify-between mt-2">
         <a class="flex items-center space-x-4" href="/userprofile">
-          <Avatar size="xs" border />
+          <Avatar src={bot} size="xs" />
           <div class="space-y-1 font-medium dark:text-white">
             <div>{set.user.username}</div>
           </div>
