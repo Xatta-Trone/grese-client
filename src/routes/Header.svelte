@@ -39,6 +39,9 @@
     <NavLi href="/sets" active={$page.url.pathname == "/sets" ? true : false}
       >Sets</NavLi
     >
+     <NavLi href="/folders" active={$page.url.pathname == "/folders" ? true : false}
+      >Folders</NavLi
+    >
 
     <NavLi id="nav-menu12" class="cursor-pointer"
       ><Chevron aligned>Create</Chevron></NavLi
