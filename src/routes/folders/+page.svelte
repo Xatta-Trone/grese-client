@@ -24,7 +24,7 @@
     status: number;
     crated_at: Date;
     updated_at: Date;
-    user: User;
+    user?: User;
     lists_count: number;
   }
 
@@ -59,6 +59,7 @@
   //   export let data: PageData;
 
   async function fetchData() {
+    if (loading) return;
     loading = true;
     await axiosAPI
       .get(
@@ -79,7 +80,7 @@
   }
 
   function loadMore() {
-    if (!hasMore) return;
+    if (loading || !hasMore) return;
     currentPage++;
     fetchData();
   }
@@ -142,7 +143,7 @@
   </div>
 
   {#each sets as set}
-    <Card size="xl" href="/sets-details" class="mb-3">
+    <Card size="xl" href="/folders/{set.id}-{set.slug}" class="mb-3">
       <h5
         class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
       >
@@ -152,10 +153,10 @@
         <a class="flex items-center space-x-4" href="/userprofile">
           <Avatar src={bot} size="xs" />
           <div class="space-y-1 font-medium dark:text-white">
-            <div>{set.user.username}</div>
+            <div>{set.user?.username}</div>
           </div>
         </a>
-        <div>{set.lists_count} {set.lists_count > 1 ? "sets" : "set"}</div>
+        <div>{set.lists_count ?? 0 } {set.lists_count > 1 ? "sets" : "set"}</div>
       </div>
     </Card>
   {/each}

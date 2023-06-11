@@ -6,7 +6,7 @@
   import { inview } from "svelte-inview/dist/index";
   import { Avatar, Card, Heading, Input } from "flowbite-svelte";
   import { page } from "$app/stores";
-  import bot from "$lib/images/bot.jpg"
+  import bot from "$lib/images/bot.jpg";
 
   // interfaces
   interface SetsResponse {
@@ -79,7 +79,7 @@
   }
 
   function loadMore() {
-    if (!hasMore) return;
+    if (loading || !hasMore) return;
     currentPage++;
     fetchData();
   }

@@ -168,7 +168,7 @@
   </div>
 
   {#each sets as set}
-    <Card size="xl" href="/sets-details" class="mb-3">
+    <Card size="xl" href="/sets/{set.id}-{set.slug}" class="mb-3">
       <h5
         class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
       >

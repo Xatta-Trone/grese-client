@@ -11,6 +11,7 @@ const axiosAPI: AxiosInstance = axios.create({
     baseURL: PUBLIC_API_URL // it's not recommended to have this info here.
 });
 axiosAPI.defaults.headers.post['Content-Type'] = 'application/json';
+// axiosAPI.defaults.withCredentials = true;
 // Request Interceptor
 const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const { method, url } = config;
