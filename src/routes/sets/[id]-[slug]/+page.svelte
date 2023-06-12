@@ -95,6 +95,7 @@
 
   // fetch data
   async function fetchData() {
+    if (loading) return;
     loading = true;
     await axiosAPI
       .get(
@@ -122,7 +123,7 @@
   }
 
   function loadMore() {
-    if (!hasMore) return;
+    if (loading || !hasMore) return;
     currentPage++;
     fetchData();
   }
@@ -139,7 +140,7 @@
 
   {#if words.length > 0}
     <div class="grid md:grid-cols-4 gap-4 my-8 font-bold">
-      <Button color="light">Flash Cards</Button>
+      <Button href="/sets/{listMeta.id}-{listMeta.slug}/flashcard" color="light">Flash Cards</Button>
       <Button color="light">Definition Match</Button>
       <Button color="light">Single Quiz</Button>
       <Button color="light">SE Practice</Button>
@@ -155,7 +156,7 @@
         </div>
       </a>
       <div class="font-bold">
-        {#if u == null} 
+        {#if u == null}
           <Button color="dark" href="/login">Login to save</Button>
         {:else if u && u.id == listMeta.user_id}
           <Button color="dark">Edit</Button>
@@ -168,7 +169,8 @@
 
   {#if listMeta}
     <Heading tag="h4" class="my-6"
-      >{listMeta.word_count} {listMeta.word_count > 1 ? "words" : "word"} in this set</Heading
+      >{listMeta.word_count}
+      {listMeta.word_count > 1 ? "words" : "word"} in this set</Heading
     >
   {/if}
 
@@ -187,10 +189,13 @@
       </Card>
     {/each}
   {/if}
+
   <div use:inview={{}} on:change={loadMore} />
+
   {#if loading}
     <Heading tag="h5">Loading...&#128516;</Heading>
   {/if}
+
   {#if words.length == 0 && !hasMore && !loading}
     <Heading tag="h5">Nothing found. &#128532;</Heading>
   {/if}
