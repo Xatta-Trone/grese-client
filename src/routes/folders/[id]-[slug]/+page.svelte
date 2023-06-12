@@ -98,7 +98,7 @@
     loading = true;
     await axiosAPI
       .get(
-        `/folders/${$page.params.id}?page=${currentPage}&per_page=${per_page}&query=${query}`
+        `/folders/${$page.params.id}?page=${currentPage}&per_page=${per_page}&query=${query}&order_by=asc`
       )
       .then((res) => {
         const data: SingleFolderResponse = res.data;
