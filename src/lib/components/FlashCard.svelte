@@ -6,6 +6,7 @@
   let showBack: boolean;
   let showNonGreWords: boolean = false;
   export let word: Word;
+  export let currentIndex: number;
 
   flipped.subscribe((val) => (showBack = val));
 
@@ -18,8 +19,6 @@
   function toggleNonGre() {
     showNonGre.set(!showNonGreWords);
   }
-
-  
 
   interface Word {
     id: number;
@@ -45,7 +44,7 @@
 </script>
 
 <div class="flex justify-between">
-  <div class="capitalize">{word.word}</div>
+  <div class="capitalize">{word.word} (#{currentIndex + 1})</div>
   <div>
     <Toggle size="small" checked={showNonGreWords} on:change={toggleNonGre}
       >Show non-GRE synonyms</Toggle
@@ -117,4 +116,3 @@
     </div>
   {/if}
 </div>
-

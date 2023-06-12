@@ -118,7 +118,7 @@
     loading = true;
     await axiosAPI
       .get(
-        `/lists/${$page.params.slug}?page=${currentPage}&per_page=${per_page}&query=${query}`
+        `/lists/${$page.params.slug}?page=${currentPage}&per_page=${per_page}&query=${query}&order_by=asc`
       )
       .then((res) => {
         const data: SingleSetResponse = res.data;
@@ -225,11 +225,10 @@
   let notClickedWords: number[] = [];
 
   function iKnowThisWord() {
-
     // check if all are mastered
-    if(masteredWords.length == words.length) {
-      console.log("All words mastered")
-      return
+    if (masteredWords.length == words.length) {
+      console.log("All words mastered");
+      return;
     }
 
     const wordId = words[currentIndex].id;
@@ -262,7 +261,6 @@
     }
 
     const index = knownWords.indexOf(wordId);
-
 
     if (index == -1) {
       // add to known set
@@ -336,7 +334,7 @@
   }
 
   function determineNextIndex() {
-    console.log("not clicked words", notClickedWords)
+    console.log("not clicked words", notClickedWords);
     if (notClickedWords.length > 0) {
       // set the first word as next word
       const wordId = notClickedWords[0];
@@ -351,23 +349,29 @@
     } else {
       // merge the learning and not known words
       const newMergedArray = [...knownWords, ...unknownWords];
-      console.log("new merged array",newMergedArray)
+      console.log("new merged array", newMergedArray);
 
       if (newMergedArray.length > 0) {
         // set the first word as next word
         // select random item from the list
-        const wordId = newMergedArray[(Math.floor(Math.random()*newMergedArray.length))];
+        const wordId =
+          newMergedArray[Math.floor(Math.random() * newMergedArray.length)];
 
         // get the index from words
         const wordIndexInWordsArray = words.findIndex(
           (word) => word.id == wordId
         );
-        console.log("wordIndexInWordsArray",wordId,wordIndexInWordsArray,words)
+        console.log(
+          "wordIndexInWordsArray",
+          wordId,
+          wordIndexInWordsArray,
+          words
+        );
 
         // set the current index as it is
         currentIndex = wordIndexInWordsArray;
       } else {
-        console.log("Learned all the words")
+        console.log("Learned all the words");
       }
     }
   }
@@ -401,71 +405,75 @@
     </p>
   {/if}
 
-  {#if listMeta}
-    <!-- content here -->
+  {#if !loading || words.length > 0}
+    {#if listMeta}
+      <!-- content here -->
 
-    <!-- card count -->
-    <div class="clear-both flex justify-center">
-      <div class="inline-flex rounded-md shadow-sm">
-        <div
-          class="py-3 px-4 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium bg-white text-gray-700 align-middle hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-sm dark:bg-gray-800 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400"
-        >
-          Mastered {masteredWords.length} / {listMeta.word_count}
-        </div>
-        <div
-          class="py-3 px-4 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium bg-white text-gray-700 align-middle hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-sm dark:bg-gray-800 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400"
-        >
-          Learning {knownWords.length} / {listMeta.word_count}
-        </div>
-        <div
-          class="py-3 px-4 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium bg-white text-gray-700 align-middle hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-sm dark:bg-gray-800 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400"
-        >
-          Unknown {unknownWords.length} / {listMeta.word_count}
+      <!-- card count -->
+      <div class="clear-both flex justify-center">
+        <div class="inline-flex rounded-md shadow-sm">
+          <div
+            class="py-3 px-4 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium bg-white text-gray-700 align-middle hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-sm dark:bg-gray-800 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400"
+          >
+            Mastered {masteredWords.length} / {listMeta.word_count}
+          </div>
+          <div
+            class="py-3 px-4 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium bg-white text-gray-700 align-middle hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-sm dark:bg-gray-800 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400"
+          >
+            Learning {knownWords.length} / {listMeta.word_count}
+          </div>
+          <div
+            class="py-3 px-4 inline-flex justify-center items-center gap-2 -ml-px first:rounded-l-lg first:ml-0 last:rounded-r-lg border font-medium bg-white text-gray-700 align-middle hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-sm dark:bg-gray-800 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400"
+          >
+            Unknown {unknownWords.length} / {listMeta.word_count}
+          </div>
         </div>
       </div>
-    </div>
+    {/if}
+
+    {#if words.length > 0}
+      {#key words[currentIndex].id}
+        <FlashCard word={words[currentIndex]} currentIndex={currentIndex} />
+      {/key}
+
+      <div class="my-2 flex justify-center">
+        <ButtonGroup>
+          <Button on:click={iKnowThisWord} color="green">
+            I know this word
+            <Kbd class="inline-flex items-center px-2 py-1.5 ml-1">Enter</Kbd>
+          </Button>
+          <Button on:click={iDoNotKnowThisWord} color="red">
+            I don't know this word
+            <Kbd class="inline-flex items-center px-2 py-1.5 ml-1">Space</Kbd>
+          </Button>
+        </ButtonGroup>
+      </div>
+
+      <div class="clear-both flex justify-center">
+        <ButtonGroup outline>
+          <Button on:click={previous}>
+            <Kbd class="inline-flex items-center mr-1 px-2 py-1.5">
+              <ArrowKeyLeft />
+            </Kbd>
+            Previous word
+          </Button>
+          <Button on:click={toggleShowBack}>
+            Flip card
+            <Kbd class="inline-flex items-center px-2 py-1.5 ml-1"
+              ><ArrowKeyUp /> <ArrowKeyDown /></Kbd
+            >
+          </Button>
+          <Button on:click={next}>
+            Next word
+            <Kbd class="inline-flex items-center ml-1 px-2 py-1.5">
+              <ArrowKeyRight />
+            </Kbd>
+          </Button>
+        </ButtonGroup>
+      </div>
+    {/if}
+  {:else if loading && words.length == 0}
+    <Heading tag="h5">Loading...&#128516;</Heading>
   {/if}
-
-  {#if words.length > 0}
-    {#key words[currentIndex].id}
-      <FlashCard word={words[currentIndex]} />
-    {/key}
-  {/if}
-
-  <div class="my-2 flex justify-center">
-    <ButtonGroup>
-      <Button on:click={iKnowThisWord} color="green">
-        I know this word
-        <Kbd class="inline-flex items-center px-2 py-1.5 ml-1">Enter</Kbd>
-      </Button>
-      <Button on:click={iDoNotKnowThisWord} color="red">
-        I don't know this word
-        <Kbd class="inline-flex items-center px-2 py-1.5 ml-1">Space</Kbd>
-      </Button>
-    </ButtonGroup>
-  </div>
-
-  <div class="clear-both flex justify-center">
-    <ButtonGroup outline>
-      <Button on:click={previous}>
-        <Kbd class="inline-flex items-center mr-1 px-2 py-1.5">
-          <ArrowKeyLeft />
-        </Kbd>
-        Previous word
-      </Button>
-      <Button on:click={toggleShowBack}>
-        Flip card
-        <Kbd class="inline-flex items-center px-2 py-1.5 ml-1"
-          ><ArrowKeyUp /> <ArrowKeyDown /></Kbd
-        >
-      </Button>
-      <Button on:click={next}>
-        Next word
-        <Kbd class="inline-flex items-center ml-1 px-2 py-1.5">
-          <ArrowKeyRight />
-        </Kbd>
-      </Button>
-    </ButtonGroup>
-  </div>
 </main>
 <svelte:window on:keydown|preventDefault={onKeyDown} />

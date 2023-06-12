@@ -9,7 +9,7 @@
   import bot from "$lib/images/bot.jpg";
   import { inview } from "svelte-inview/dist/index";
 
-  export let data: PageData;
+  // export let data: PageData;
 
   console.log($page.params.id, $page.params.slug);
 
@@ -99,7 +99,7 @@
     loading = true;
     await axiosAPI
       .get(
-        `/lists/${$page.params.slug}?page=${currentPage}&per_page=${per_page}&query=${query}`
+        `/lists/${$page.params.slug}?page=${currentPage}&per_page=${per_page}&query=${query}&order_by=asc`
       )
       .then((res) => {
         const data: SingleSetResponse = res.data;
