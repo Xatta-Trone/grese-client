@@ -1,25 +1,11 @@
 <!-- @format -->
 <script lang="ts">
-  import { flipped, showNonGre } from "$lib/services/flashcard";
-  import { Badge, P, Toggle } from "flowbite-svelte";
-
-  let showBack: boolean;
-  let showNonGreWords: boolean = false;
-  export let word: Word;
-  export let currentIndex: number;
-
-  flipped.subscribe((val) => (showBack = val));
-
-  function toggleShowBack() {
-    flipped.set(!showBack);
-    // showBack = !showBack;
-  }
-
-  showNonGre.subscribe((val) => (showNonGreWords = val));
-  function toggleNonGre() {
-    showNonGre.set(!showNonGreWords);
-  }
-
+  import { browser } from "$app/environment";
+  import SpeakerIcon from "$lib/icons/speakerIcon.svelte";
+  import SettingsIcon from "$lib/icons/settingsIcon.svelte";
+  import { autoSpeak, flipped, showNonGre } from "$lib/services/flashcard";
+  import { Badge, Button, Modal, P, Toggle } from "flowbite-svelte";
+  import { onMount } from "svelte";
   interface Word {
     id: number;
     word: string;
@@ -41,14 +27,78 @@
     synonyms_gre: string[];
     synonyms_normal: string[];
   }
+
+  export let word: Word;
+  export let currentIndex: number;
+
+  let showBack: boolean;
+  flipped.subscribe((val) => (showBack = val));
+  function toggleShowBack() {
+    flipped.set(!showBack);
+    // showBack = !showBack;
+  }
+
+  let showNonGreWords: boolean = false;
+  showNonGre.subscribe((val) => (showNonGreWords = val));
+  function toggleNonGre() {
+    showNonGre.set(!showNonGreWords);
+  }
+
+  let autoSpeakValue: boolean = false;
+  autoSpeak.subscribe((val) => (autoSpeakValue = val));
+  function toggleAutoSpeak() {
+    autoSpeak.set(!autoSpeakValue);
+  }
+
+  // text to speech
+  function speak() {
+    if (browser) {
+      window.speechSynthesis.cancel();
+      var msg = new SpeechSynthesisUtterance();
+      msg.text = word.word;
+      window.speechSynthesis.speak(msg);
+    }
+  }
+
+  onMount(() => {
+    console.log("mounted", word);
+    if (autoSpeakValue) {
+      speak();
+    }
+  });
+
+  // modal
+  let clickOutsideModal = false;
 </script>
 
+<Modal
+  title="Flashcard settings"
+  bind:open={clickOutsideModal}
+  autoclose
+  outsideclose
+>
+  <Toggle size="small" checked={autoSpeakValue} on:change={toggleAutoSpeak}
+    >Auto pronounce</Toggle
+  >
+  <Toggle size="small" checked={showNonGreWords} on:change={toggleNonGre}
+    >Show non-GRE synonyms</Toggle
+  >
+  <svelte:fragment slot="footer">
+    <Button color="alternative">Close</Button>
+  </svelte:fragment>
+</Modal>
+
 <div class="flex justify-between">
-  <div class="capitalize">{word.word} (#{currentIndex + 1})</div>
-  <div>
-    <Toggle size="small" checked={showNonGreWords} on:change={toggleNonGre}
-      >Show non-GRE synonyms</Toggle
+  <div class="capitalize">
+    {word.word} (#{currentIndex + 1})
+    <button class="inline cursor-pointer" on:click={speak}
+      ><SpeakerIcon /></button
     >
+  </div>
+  <div>
+    <button on:click={() => (clickOutsideModal = true)}>
+      <SettingsIcon />
+    </button>
   </div>
 </div>
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -80,7 +130,6 @@
                 >
                   <div class="inline-flex items-center">
                     <Badge rounded large>{pos.partsOfSpeech}</Badge>
-                    <P size="sm" class="ml-2">{def}</P>
                   </div>
                 </div>
               {/each}
