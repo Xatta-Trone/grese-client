@@ -27,7 +27,7 @@
   import { flipped, showNonGre } from "$lib/services/flashcard";
   import { dev } from "$app/environment";
 
-  export let data: PageData;
+  // export let data: PageData;
 
   console.log($page.params.id, $page.params.slug);
 
