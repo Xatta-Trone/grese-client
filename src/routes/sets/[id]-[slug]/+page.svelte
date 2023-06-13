@@ -141,7 +141,7 @@
   {#if words.length > 0}
     <div class="grid md:grid-cols-4 gap-4 my-8 font-bold">
       <Button href="/sets/{listMeta.id}-{listMeta.slug}/flashcard" color="light">Flash Cards</Button>
-      <Button color="light">Definition Match</Button>
+      <Button href="/sets/{listMeta.id}-{listMeta.slug}/practice" color="light">Definition Match</Button>
       <Button color="light">Single Quiz</Button>
       <Button color="light">SE Practice</Button>
     </div>
