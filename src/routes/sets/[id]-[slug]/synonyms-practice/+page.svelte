@@ -104,17 +104,12 @@
     synonyms_normal: string[];
   }
 
-  interface Question {
+  interface SynonymsQuestion {
     wordId: number;
     question: string;
-    correctAns: string;
-    selectedAns: string | null;
-    questionType: QuestionType;
+    correctAns: string[];
+    selectedAns: string[];
     options: string[];
-  }
-  enum QuestionType {
-    WORD,
-    DEFINITION,
   }
 
   // data variables
@@ -184,17 +179,16 @@
   let currentIndex: number = 0;
   let isRandom: boolean = false;
   let completedQuiz: boolean = false;
-  let questionType: QuestionType = QuestionType.WORD;
-  let question: Question | null = null;
   let totalQuestion: number = 0;
   let questionRemaining: number = 0;
   let correctQuestion: number = 0;
+  let synonymsQuestion: SynonymsQuestion | null = null;
 
   function buildQuestion() {
-    if (question != null) {
+    if (synonymsQuestion != null) {
       // remove the current element
       words.splice(
-        words.findIndex((word) => word.id == question?.wordId),
+        words.findIndex((word) => word.id == synonymsQuestion?.wordId),
         1
       );
       words = [...words]; // reactivity
@@ -221,108 +215,100 @@
     if (currentIndex >= 0) {
       const word: Word = words[currentIndex];
       // create empty question instance
-      const questionToPopulate: Question = {
+      const questionToPopulate: SynonymsQuestion = {
         wordId: 0,
         question: "",
-        selectedAns: null,
-        correctAns: "",
-        questionType: questionType,
+        selectedAns: [],
+        correctAns: [],
         options: [],
       };
 
       // populate the question
       questionToPopulate.wordId = word.id;
+      questionToPopulate.question = word.word;
 
-      if (questionType == QuestionType.WORD) {
-        questionToPopulate.question = word.word;
-        questionToPopulate.correctAns =
-          word.word_data.partsOfSpeeches[0].definitions[0];
-        questionToPopulate.options.push(
-          word.word_data.partsOfSpeeches[0].definitions[0]
-        );
-      } else {
-        // select POS
-        const pos: PartsOfSpeech | null =
-          word.word_data.partsOfSpeeches.length > 0
-            ? word.word_data.partsOfSpeeches[0]
-            : null;
-        //  if its null, then re run the function
-        if (pos == null || pos.definitions[0].trim().length == 0) {
-          buildQuestion();
-          return;
-        } else {
-          questionToPopulate.question = pos.definitions[0];
-          questionToPopulate.correctAns = word.word;
-        }
+      // get all the synonyms
+      let tempSynonyms: string[] = [];
+
+      word.word_data.partsOfSpeeches.forEach((pos) => {
+        // tempSynonyms = [...tempSynonyms, ...pos.synonyms_gre];
+        tempSynonyms.push(...pos.synonyms_gre);
+      });
+
+      // check if gre synonyms is empty or less than 3
+      if (tempSynonyms.length < 3) {
+        buildQuestion();
+        return;
       }
+
+      //  choose the correct answers
+      const MIN_ANS_SIZE = 1;
+      const MAX_ANS_SIZE = tempSynonyms.length < 4 ? tempSynonyms.length : 4;
+      const numberOfCorrectAns: number = Math.floor(
+        Math.random() * (MAX_ANS_SIZE - MIN_ANS_SIZE + 1) + MIN_ANS_SIZE
+      );
+      const correctAns: string[] = getMultipleRandom(
+        tempSynonyms,
+        numberOfCorrectAns
+      );
+
+      //   set the correct ans array
+      questionToPopulate.correctAns = [...correctAns];
 
       // now add additional answers
       const additionalAns = buildAdditionalAnswer(
-        questionToPopulate.questionType,
         word.id,
         questionToPopulate.correctAns
       );
+      console.log(additionalAns);
       questionToPopulate.options = [...additionalAns];
       // randomize the array
       questionToPopulate.options = shuffle(questionToPopulate.options);
 
-      question = questionToPopulate;
+      synonymsQuestion = questionToPopulate;
+      //   reset the state
+      showNextQuestionButton = false;
+      showCorrectAns = false;
     }
   }
 
-  function setAns(option: string) {
-    if (question) {
-      question.selectedAns = option;
-      // update the states
-      questionRemaining = questionRemaining > 0 ? questionRemaining - 1 : 0;
-
-      if (question.correctAns == question.selectedAns) {
-        correctQuestion++;
-      }
-    }
+  function getMultipleRandom(arr: string[], num: number) {
+    const shuffled = [...arr].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, num);
   }
 
   function buildAdditionalAnswer(
-    type: QuestionType,
     wordId: number,
-    correctAns: string
+    correctAns: string[]
   ): string[] {
-    let additionalAns: string[] = [correctAns];
+    let additionalAns: string[] = [...correctAns];
 
-    if (type == QuestionType.WORD) {
-      while (additionalAns.length < 6) {
-        // find random definition
-        let randomWord: Word =
-          backupWords[Math.floor(Math.random() * backupWords.length)];
-        const definition: string =
-          randomWord.word_data.partsOfSpeeches[0].definitions[0];
+    while (additionalAns.length < 6) {
+      // find random definition
+      let randomWord: Word =
+        backupWords[Math.floor(Math.random() * backupWords.length)];
 
-        if (
-          randomWord.id == wordId ||
-          additionalAns.some((ans) => ans == definition)
-        ) {
-          continue;
-        } else {
-          additionalAns.push(definition);
-        }
-      }
-    }
+      let tempSynonyms: string[] = [];
 
-    if (type == QuestionType.DEFINITION) {
-      while (additionalAns.length < 6) {
-        // find random definition
-        let randomWord: Word =
-          backupWords[Math.floor(Math.random() * backupWords.length)];
-        const word: string = randomWord.word;
+      randomWord.word_data.partsOfSpeeches.forEach((pos) => {
+        tempSynonyms = [...tempSynonyms, ...pos.synonyms_gre];
+      });
 
-        if (
-          randomWord.id == wordId ||
-          additionalAns.some((ans) => ans == word)
-        ) {
-          continue;
-        } else {
-          additionalAns.push(word);
-        }
+      if (
+        randomWord.id == wordId ||
+        additionalAns.some((ans) => tempSynonyms.includes(ans))
+      ) {
+        continue;
+      } else {
+        // get a radom synonym
+        const randomSynonymIndex = Math.floor(
+          Math.random() * tempSynonyms.length
+        );
+        additionalAns.push(tempSynonyms[randomSynonymIndex]);
+
+        additionalAns = [
+          ...additionalAns.filter((el) => el != null || el != undefined),
+        ];
       }
     }
 
@@ -352,7 +338,7 @@
   function resetQuiz() {
     if (listMeta) {
       // set the total question
-      question = null;
+      synonymsQuestion = null;
       completedQuiz = false;
       questionRemaining = totalQuestion;
       correctQuestion = 0;
@@ -368,14 +354,6 @@
   let clickOutsideModal = false;
   function toggleRandom() {
     isRandom = !isRandom;
-  }
-  function toggleQuestionType() {
-    if (questionType == QuestionType.DEFINITION) {
-      questionType = QuestionType.WORD;
-    } else {
-      questionType = QuestionType.DEFINITION;
-    }
-    resetQuiz();
   }
 
   function handleQuestionRemainingInc() {
@@ -401,26 +379,52 @@
       questionRemaining = totalQuestion;
     }
   }
+
+  let showCorrectAns: boolean = false;
+  let showNextQuestionButton: boolean = false;
+
+  function setSynAns(option: string) {
+    // index
+    const index = synonymsQuestion?.selectedAns.findIndex((el) => el == option);
+
+    if (synonymsQuestion && index != undefined && index == -1) {
+      synonymsQuestion.selectedAns = [...synonymsQuestion.selectedAns, option];
+    }
+
+    if (synonymsQuestion && index != undefined && index > -1) {
+      // remove the element
+      synonymsQuestion.selectedAns.splice(index, 1);
+      synonymsQuestion.selectedAns = [...synonymsQuestion.selectedAns];
+    }
+  }
+
+  function checkAnswer() {
+    showCorrectAns = true;
+    showNextQuestionButton = true;
+
+    if (synonymsQuestion) {
+      // update the states
+      questionRemaining = questionRemaining > 0 ? questionRemaining - 1 : 0;
+
+      if (
+        synonymsQuestion.correctAns.sort().join(",") ==
+        synonymsQuestion.selectedAns.sort().join(",")
+      ) {
+        correctQuestion++;
+      }
+    }
+  }
 </script>
 
 <Modal title="Settings" bind:open={clickOutsideModal} outsideclose>
   <Toggle size="small" checked={isRandom} on:change={toggleRandom}
     >Choose questions randomly</Toggle
   >
-  <Toggle
-    size="small"
-    checked={questionType == QuestionType.WORD}
-    on:change={toggleQuestionType}
-    >Question Type ({questionType == QuestionType.WORD
-      ? "word"
-      : "definition"})</Toggle
-  >
   <ButtonGroup>
     <Button on:click={handleQuestionRemainingDec}>-</Button>
     <Button># of questions: {totalQuestion}</Button>
     <Button on:click={handleQuestionRemainingInc}>+</Button>
   </ButtonGroup>
-
 </Modal>
 
 <main class="my-6">
@@ -436,9 +440,13 @@
       <p>Correct {correctQuestion}</p>
       <p>Quiz complete {completedQuiz}</p>
       <p>
-        Question type {questionType == QuestionType.WORD
-          ? "word"
-          : "definition"}
+        selectedAns {JSON.stringify(synonymsQuestion?.selectedAns)}
+      </p>
+      <p>
+        selectedAns {JSON.stringify(synonymsQuestion?.correctAns)}
+      </p>
+      <p>
+        All {JSON.stringify(synonymsQuestion?.options)}
       </p>
     </div>
   {/if}
@@ -458,39 +466,34 @@
         </div>
       </div>
 
-      {#if question}
+      <!-- practice question -->
+      {#if synonymsQuestion}
         <P class="my-3">
-          {#if question.questionType == QuestionType.WORD}
-            <span class="font-bold">Q.</span> Select the best definition of
-            <strong class="uppercase">
-              {question.question}
-            </strong>.
-          {:else}
-            <span class="font-bold">Q.</span>
-            <strong class="">
-              {question.question.charAt(0).toUpperCase() +
-                question.question.slice(1)}
-            </strong>
-          {/if}
+          <span class="font-bold">Q.</span> Select the synonyms of
+          <strong class="uppercase">
+            {synonymsQuestion.question}
+          </strong>.
         </P>
+        <!-- display options -->
         <div class="flex flex-col">
-          {#each question.options as option}
+          {#each synonymsQuestion.options as option}
             <button
-              class={question.selectedAns
-                ? question.selectedAns == option
-                  ? question.selectedAns == question.correctAns
-                    ? " bg-green-300"
-                    : "bg-red-300"
-                  : question.correctAns == option
-                  ? "bg-green-300"
+              class:cDisable={showCorrectAns}
+              on:click={() =>
+                synonymsQuestion && !showCorrectAns ? setSynAns(option) : ""}
+              class={synonymsQuestion.selectedAns
+                ? showCorrectAns
+                  ? synonymsQuestion.selectedAns.includes(option)
+                    ? synonymsQuestion.correctAns.includes(option)
+                      ? "bg-green-300"
+                      : "bg-red-300"
+                    : synonymsQuestion.correctAns.includes(option)
+                    ? "bg-green-300"
+                    : ""
+                  : synonymsQuestion.selectedAns.includes(option)
+                  ? "bg-slate-200"
                   : ""
                 : ""}
-              class:cDisable={question.selectedAns != null &&
-                question.selectedAns != option}
-              class:cPointer={question.selectedAns != null &&
-                question.selectedAns == option}
-              disabled={question.selectedAns != null ? true : false}
-              on:click={() => (question ? setAns(option) : "")}
             >
               <P
                 size="lg"
@@ -502,11 +505,15 @@
             <div class="mb-2" />
           {/each}
         </div>
-        <Button
-          class="mt-3"
-          disabled={question.selectedAns == null}
-          on:click={buildQuestion}>Next</Button
-        >
+        {#if showNextQuestionButton}
+          <Button class="mt-3" on:click={buildQuestion}>Next</Button>
+        {:else}
+          <Button
+            class="mt-3"
+            disabled={synonymsQuestion.selectedAns.length == 0}
+            on:click={checkAnswer}>Check</Button
+          >
+        {/if}
       {/if}
     {/if}
   {/if}
@@ -524,8 +531,5 @@
 <style>
   .cDisable {
     cursor: not-allowed;
-  }
-  .cPointer {
-    cursor: pointer;
   }
 </style>

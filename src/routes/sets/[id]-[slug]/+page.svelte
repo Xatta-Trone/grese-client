@@ -142,7 +142,7 @@
     <div class="grid md:grid-cols-4 gap-4 my-8 font-bold">
       <Button href="/sets/{listMeta.id}-{listMeta.slug}/flashcard" color="light">Flash Cards</Button>
       <Button href="/sets/{listMeta.id}-{listMeta.slug}/practice" color="light">Definition Match</Button>
-      <Button color="light">Single Quiz</Button>
+      <Button href="/sets/{listMeta.id}-{listMeta.slug}/synonyms-practice"color="light">Synonyms Practice</Button>
       <Button color="light">SE Practice</Button>
     </div>
   {/if}
