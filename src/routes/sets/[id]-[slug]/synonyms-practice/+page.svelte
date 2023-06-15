@@ -128,7 +128,7 @@
 
   // fetch data
   async function fetchData() {
-    if (loading) return;
+    if (loading || !hasMore) return;
     loading = true;
     await axiosAPI
       .get(
@@ -282,8 +282,9 @@
     correctAns: string[]
   ): string[] {
     let additionalAns: string[] = [...correctAns];
+    const totalOption:number = 6
 
-    while (additionalAns.length < 6) {
+    while (additionalAns.length < totalOption) {
       // find random definition
       let randomWord: Word =
         backupWords[Math.floor(Math.random() * backupWords.length)];

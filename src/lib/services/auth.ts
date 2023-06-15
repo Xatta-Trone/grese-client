@@ -4,6 +4,8 @@ import { error, redirect } from "@sveltejs/kit";
 import { writable } from "svelte/store";
 import { browser } from "$app/environment";
 import { goto } from "$app/navigation";
+import { PUBLIC_API_URL } from '$env/static/public';
+
 
 export const token = writable<string | null>(null);
 export const user = writable<UserInterface | null>(null);
@@ -13,7 +15,7 @@ export async function login(name: string, email: string, token_data: string) {
   hasAuthInitialized.set(true);
 
   try {
-    const res = await fetch("https://dev.gre-sentence-equivalence.com/login", {
+    const res = await fetch(`${PUBLIC_API_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

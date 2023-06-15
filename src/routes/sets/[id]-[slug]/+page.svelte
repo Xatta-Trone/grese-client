@@ -143,7 +143,7 @@
       <Button href="/sets/{listMeta.id}-{listMeta.slug}/flashcard" color="light">Flash Cards</Button>
       <Button href="/sets/{listMeta.id}-{listMeta.slug}/practice" color="light">Definition Match</Button>
       <Button href="/sets/{listMeta.id}-{listMeta.slug}/synonyms-practice"color="light">Synonyms Practice</Button>
-      <Button color="light">SE Practice</Button>
+      <Button href="/sets/{listMeta.id}-{listMeta.slug}/se-practice"color="light">SE Practice</Button>
     </div>
   {/if}
 

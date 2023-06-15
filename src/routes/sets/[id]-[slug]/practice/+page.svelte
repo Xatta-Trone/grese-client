@@ -133,7 +133,7 @@
 
   // fetch data
   async function fetchData() {
-    if (loading) return;
+    if (loading || !hasMore) return;
     loading = true;
     await axiosAPI
       .get(
@@ -141,7 +141,7 @@
       )
       .then((res) => {
         const data: SingleSetResponse = res.data;
-        // console.log(data);
+        console.log(data);
         if (meta == undefined) {
           meta = data.meta;
         }
@@ -162,9 +162,11 @@
           hasMore = false;
         }
       })
+      .catch(err => console.log(err))
       .finally(() => {
         loading = false;
         // call for next
+        
         return loadMore();
       });
   }
@@ -288,9 +290,10 @@
     correctAns: string
   ): string[] {
     let additionalAns: string[] = [correctAns];
+    const totalOption:number = 5
 
     if (type == QuestionType.WORD) {
-      while (additionalAns.length < 6) {
+      while (additionalAns.length < totalOption) {
         // find random definition
         let randomWord: Word =
           backupWords[Math.floor(Math.random() * backupWords.length)];
@@ -309,7 +312,7 @@
     }
 
     if (type == QuestionType.DEFINITION) {
-      while (additionalAns.length < 6) {
+      while (additionalAns.length < totalOption) {
         // find random definition
         let randomWord: Word =
           backupWords[Math.floor(Math.random() * backupWords.length)];
@@ -420,7 +423,6 @@
     <Button># of questions: {totalQuestion}</Button>
     <Button on:click={handleQuestionRemainingInc}>+</Button>
   </ButtonGroup>
-
 </Modal>
 
 <main class="my-6">

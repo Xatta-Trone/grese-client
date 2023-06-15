@@ -5,6 +5,7 @@ import { env } from "$env/dynamic/private";
 import { setUser, type LoginResponse } from "$lib/services/auth";
 import { error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
+import axiosAPI from "$lib/services/customAxios";
 
 export const load = (async ({ url }) => {
   try {
@@ -51,19 +52,25 @@ export const load = (async ({ url }) => {
     }
 
     // now login to grese
-    const res = await fetch("https://dev.gre-sentence-equivalence.com/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: userInfoData.name,
-        email: userInfoData.email,
-        token: idTokenData.access_token,
-      }),
-    });
+    const res = await axiosAPI.post('/login', {
+      name: userInfoData.name,
+      email: userInfoData.email,
+      token: idTokenData.access_token,
+    })
+    // const res = await fetch("https://dev.gre-sentence-equivalence.com/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     name: userInfoData.name,
+    //     email: userInfoData.email,
+    //     token: idTokenData.access_token,
+    //   }),
+    // });
 
-    const data: LoginResponse = await res.json();
+    // const data: LoginResponse = await res.json();
+    const data: LoginResponse = await res.data;
 
     console.log(data, browser);
 
