@@ -7,7 +7,7 @@ import { error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
 import axiosAPI from "$lib/services/customAxios";
 
-export const load = (async ({ url }) => {
+export const load = (async ({ url, cookies }) => {
   try {
     const code = url.searchParams.get("code");
     const wellKnown = await fetch(
@@ -70,12 +70,13 @@ export const load = (async ({ url }) => {
     // });
 
     // const data: LoginResponse = await res.json();
+    console.log(res.headers)
     const data: LoginResponse = await res.data;
 
     console.log(data, browser);
 
     setUser(data.token, data.user);
-
+    cookies.set("grese_token", data.token, { maxAge: 604800 })
     return {
       success: true,
       data: data
