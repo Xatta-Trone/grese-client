@@ -42,7 +42,7 @@
     "dotenv": "^16.1.4",
     "flowbite": "^1.6.5",
     "flowbite-svelte": "^0.37.3",
-    "lucia-auth": "^1.7.1",
-    "svelte-inview": "^4.0.0"
+    "svelte-inview": "^4.0.0",
+    "typescript-cookie": "^1.0.6"
   }
 }

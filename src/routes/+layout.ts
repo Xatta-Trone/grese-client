@@ -1,5 +1,7 @@
 import { user, type UserInterface } from '$lib/services/auth';
+import { getCookie } from 'typescript-cookie';
 import type { LayoutLoad } from './$types';
+import { COOKIE_KEY } from '$lib/utils/constants';
 
 let u: UserInterface | null
 
