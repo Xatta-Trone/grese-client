@@ -38,5 +38,5 @@ jobs:
           git pull origin staging
           npm i
           sudo npm run build
-          pm2 reload grese-client-dev
+          pm2 reload grese-client-dev --update-env
           pm2 restart grese-client-dev
