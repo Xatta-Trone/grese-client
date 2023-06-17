@@ -13,7 +13,8 @@ const schema = z.object({
     visibility: z.number().default(1)
 })
 
-export const load = (async () => {
+export const load = (async ({locals}) => {
+    console.log(locals.user)
     user.subscribe((value) => {
         console.log(value);
         if (value == null) {

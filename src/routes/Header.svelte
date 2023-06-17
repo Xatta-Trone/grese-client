@@ -36,6 +36,18 @@
     <NavLi href="/about" active={$page.url.pathname == "/about" ? true : false}
       >About</NavLi
     >
+    <NavLi href="/sets" active={$page.url.pathname == "/sets" ? true : false}
+      >Sets</NavLi
+    >
+     <NavLi href="/folders" active={$page.url.pathname == "/folders" ? true : false}
+      >Folders</NavLi
+    >
+     <NavLi href="/my-sets" active={$page.url.pathname == "/my-sets" ? true : false}
+      >My sets</NavLi
+    >
+     <NavLi href="/my-folders" active={$page.url.pathname == "/my-folders" ? true : false}
+      >My folders</NavLi
+    >
 
     <NavLi id="nav-menu12" class="cursor-pointer"
       ><Chevron aligned>Create</Chevron></NavLi

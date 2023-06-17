@@ -9,7 +9,7 @@
 
   if (data.success) {
     console.log("data success", browser);
-    setUser(data.data.token, data.data.user);
+    setUser(data.data.token, data.data.user, data.data.exp);
     //   throw redirect(301,'/')
   }
 </script>

@@ -1,22 +1,45 @@
 import { browser } from "$app/environment";
-import { setUser, hasAuthInitialized } from "$lib/services/auth";
-import type { UserInterface } from "$lib/services/auth";
+import { token, user, type MeEndpointResponse, type UserInterface, logout } from "$lib/services/auth";
+import axiosAPI from "$lib/services/customAxios";
+import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from "$lib/utils/constants";
 
 
-console.log('client hooks called')
+// fetch("https://dev.gre-sentence-equivalence.com/me", { credentials: 'include' })
+// axiosAPI.get("https://dev.gre-sentence-equivalence.com/me")
 
-console.log(browser)
+let u: UserInterface | null = null
 
-if (browser) {
-    hasAuthInitialized.set(true)
-    const token = localStorage.getItem('token')
-    const user = localStorage.getItem('user')
+user.subscribe(val => {
+    u = val
+})
 
-    if (token != null && user != null) {
-        const u: UserInterface = JSON.parse(user)
-        setUser(token, u)
+
+if (browser && u == null) {
+    const t: string | null = localStorage.getItem(COOKIE_KEY)
+    const k: string | null = localStorage.getItem(COOKIE_KEY_EXP)
+    const u: string | null = localStorage.getItem(COOKIE_KEY_USER)
+
+    if (k != null && u != null) {
+        const today = new Date();
+        const tokenExp = new Date(JSON.parse(k))
+
+        if (today > tokenExp) {
+            logout()
+            localStorage.removeItem(COOKIE_KEY)
+            localStorage.removeItem(COOKIE_KEY_EXP)
+        } else {
+            token.set(t)
+            user.set(JSON.parse(u))
+
+            axiosAPI.get('/me')
+                .then(res => {
+                    const response: MeEndpointResponse = res.data
+
+                    console.log('hooks client', response)
+
+                    user.set(response.data)
+
+                });
+        }
     }
-
-    console.log(token, user)
 }
-

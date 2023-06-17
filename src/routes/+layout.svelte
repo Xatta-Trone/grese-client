@@ -1,7 +1,7 @@
 <script>
   import "../app.postcss";
   import Header from "./Header.svelte";
-  import "./styles.css";
+  // import "./styles.css";
 </script>
 
 <div class="app">
@@ -11,7 +11,7 @@
     <slot />
   </main>
 
-  <footer class="container max-w-screen-lg mx-auto text-center">
+  <footer class="container max-w-screen-lg mx-auto text-center clear-both">
     <p>
       visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit
     </p>

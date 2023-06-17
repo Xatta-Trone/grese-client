@@ -1,7 +1,12 @@
 <!-- @format -->
 <script lang="ts">
   import { Alert } from "flowbite-svelte";
-  import { user, logout } from "$lib/services/auth";
+  import { user, logout, type UserInterface } from "$lib/services/auth";
+
+  let u: UserInterface|null
+
+  user.subscribe(val => u = val)
+
 </script>
 
 <svelte:head>
@@ -16,9 +21,12 @@
     again.
   </Alert>
 
+  {JSON.stringify(u)}
+
   <a href="/login">Login</a>
   <!-- svelte-ignore a11y-invalid-attribute -->
   <a on:click={() => logout()} href="#">Logout</a>
+  <a href="/logout">Logout2</a>
 
   <h2>
     try editing <strong>src/routes/+page.svelte</strong>
