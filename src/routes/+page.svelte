@@ -24,7 +24,7 @@
 
 <section>
   <Alert>
-    <span class="font-medium">Test Info alert!</span> Change a few things up and try submitting
+    <span class="font-medium">Test Info alert!</span> aaa Change a few things up and try submitting
     again.
   </Alert>
 
