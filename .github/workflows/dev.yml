@@ -36,7 +36,7 @@ jobs:
           cd /var/www/grese-client-dev
           git checkout staging
           git pull origin staging
-          npm ci
+          npm i
           sudo npm run build
           pm2 reload grese-client-dev
           pm2 restart grese-client-dev
