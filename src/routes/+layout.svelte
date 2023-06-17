@@ -1,7 +1,37 @@
-<script>
+<!-- @format -->
+<script lang="ts">
   import "../app.postcss";
   import Header from "./Header.svelte";
+  import { page } from "$app/stores";
+  import { beforeNavigate, goto } from "$app/navigation";
+  import { user, type UserInterface } from "$lib/services/auth";
+
+  let u:UserInterface|null 
+
+  user.subscribe(val => {
+    u = val
+  })
   // import "./styles.css";
+  // @ts-ignore
+  function popState(event) {
+    console.log(event, $page);
+
+    if (window.location.pathname == "/auth") {
+      history.go(-2);
+    }
+  }
+
+  beforeNavigate(() => {
+    console.log("before navigate called")
+
+    // if(window.location.pathname == '/auth' && u != null) {
+    //   goto('/profile')
+    // }
+
+
+  })
+
+
 </script>
 
 <div class="app">
@@ -18,6 +48,7 @@
   </footer>
 </div>
 
+<svelte:window on:popstate={popState} />
+
 <style>
-  
 </style>

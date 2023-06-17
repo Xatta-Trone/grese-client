@@ -2,11 +2,16 @@ import { user } from '$lib/services/auth';
 import { redirectHelper } from '$lib/utils/helpers';
 import type { PageLoad } from './$types';
 
-export const load = (async () => {
+export const load = (async ({ url }) => {
     user.subscribe((value) => {
         console.log(value);
         if (value == null) {
-            redirectHelper('/login')
+
+            // if (browser) {
+            //     localStorage.setItem(INTENDED_KEY, url.pathname + url.search)
+            // }
+
+            redirectHelper('/login', url)
         }
     });
 

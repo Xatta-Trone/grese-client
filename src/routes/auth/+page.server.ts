@@ -2,13 +2,22 @@
 
 import type { PageServerLoad } from "./$types";
 import { env } from "$env/dynamic/private";
-import { setUser, type LoginResponse } from "$lib/services/auth";
+import type { LoginResponse } from "$lib/services/auth";
 import { error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
 import axiosAPI from "$lib/services/customAxios";
 import { COOKIE_KEY, COOKIE_KEY_EXP } from "$lib/utils/constants";
+import { redirectHelper } from "$lib/utils/helpers";
 
 export const load = (async ({ url, cookies }) => {
+
+  // user.subscribe(val => {
+  //   if (val != null) {
+  //     redirectHelper("/profile")
+  //   }
+  // })
+
+
   try {
     const code = url.searchParams.get("code");
     const wellKnown = await fetch(
