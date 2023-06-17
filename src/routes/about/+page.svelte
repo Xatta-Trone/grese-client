@@ -1,6 +1,6 @@
 <!-- @format -->
 <script lang="ts">
-  import { user } from "$lib/services/auth";
+  import { token, user } from "$lib/services/auth";
   import type { PageServerData } from "./$types";
   
   let isLoggedIn: boolean;
@@ -10,6 +10,8 @@
 	// 	goto('/')
 	// }
   });
+
+
 
   export let data:PageServerData
 
@@ -23,7 +25,7 @@
 </svelte:head>
 
 <div class="text-column">
-  <h1>About this app {isLoggedIn}</h1>
+  <h1>About this app {isLoggedIn} {$token}</h1>
 
   <p>
     This is a <a href="https://kit.svelte.dev">SvelteKit</a> app. You can make your

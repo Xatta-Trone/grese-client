@@ -6,6 +6,7 @@
   let u: UserInterface|null
 
   user.subscribe(val => u = val)
+
 </script>
 
 <svelte:head>

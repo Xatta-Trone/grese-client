@@ -1,5 +1,6 @@
 import { user, type UserInterface } from "$lib/services/auth";
 import { redirectHelper } from '$lib/utils/helpers';
+import type { PageServerLoad } from "../$types";
 
 // // we don't need any JS on this page, though we'll load
 // // it in dev so that we get hot module replacement
@@ -20,7 +21,7 @@ user.subscribe((value) => {
 });
 
 
-export const load = async ({ locals, parent }) => {
+export const load: PageServerLoad = async ({ locals, parent }) => {
   await parent();
   console.log("about page", locals.user);
 

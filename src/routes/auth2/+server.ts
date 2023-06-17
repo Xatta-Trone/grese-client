@@ -2,8 +2,8 @@ import type { RequestHandler } from './$types';
 import { env } from "$env/dynamic/private";
 import { error } from '@sveltejs/kit';
 import axiosAPI from '$lib/services/customAxios';
-import { setUser, type LoginResponse } from '$lib/services/auth';
 import { COOKIE_KEY, COOKIE_KEY_EXP } from '$lib/utils/constants';
+import { setUser, type LoginResponse } from '$lib/services/auth';
 
 
 export const GET: RequestHandler = async ({ url, cookies, locals }) => {
@@ -67,21 +67,23 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 
         // console.log(data)
 
-        const exp: Date = new Date(data.exp)
+        const exp: Date = new Date(data.exp) 
 
-        cookies.set(COOKIE_KEY, data.token, { expires: exp })
-        cookies.set(COOKIE_KEY_EXP, JSON.stringify(data.exp), { expires: exp })
+        console.log(exp)
+
+        cookies.set(COOKIE_KEY, data.token, { expires: exp, path: '/', domain: 'gre-sentence-equivalence.com' })
+        cookies.set(COOKIE_KEY_EXP, JSON.stringify(exp), { expires: exp })
 
         // setHeaders({
         //     'set-cookie': cookies.serialize(COOKIE_KEY, data.token, { expires: exp, path: "/" })
         // })
 
-        // return new Response(null, {
-        //     status: 303,
-        //     headers: {
-        //         location: '/profile'
-        //     }
-        // });
+        return new Response(null, {
+            status: 307,
+            headers: {
+                location: '/'
+            }
+        });
 
 
     } catch (e) {

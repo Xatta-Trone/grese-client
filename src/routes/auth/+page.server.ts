@@ -76,7 +76,7 @@ export const load = (async ({ url, cookies }) => {
 
     console.log(data, browser);
 
-    setUser(data.token, data.user);
+    // setUser(data.token, data.user);
 
     console.log(data)
 
