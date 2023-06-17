@@ -6,6 +6,7 @@ import { setUser, type LoginResponse } from "$lib/services/auth";
 import { error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
 import axiosAPI from "$lib/services/customAxios";
+import { COOKIE_KEY, COOKIE_KEY_EXP } from "$lib/utils/constants";
 
 export const load = (async ({ url, cookies }) => {
   try {
@@ -76,7 +77,15 @@ export const load = (async ({ url, cookies }) => {
     console.log(data, browser);
 
     setUser(data.token, data.user);
-    cookies.set("grese_token", data.token, { maxAge: 604800 })
+
+    console.log(data)
+
+    const exp: Date = new Date(data.exp)
+
+    cookies.set(COOKIE_KEY, data.token, { expires: exp })
+    cookies.set(COOKIE_KEY_EXP, JSON.stringify(data.exp), { expires: exp })
+
+
     return {
       success: true,
       data: data

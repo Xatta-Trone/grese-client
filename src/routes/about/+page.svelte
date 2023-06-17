@@ -1,6 +1,7 @@
 <!-- @format -->
 <script lang="ts">
   import { user } from "$lib/services/auth";
+  import type { PageServerData } from "./$types";
   
   let isLoggedIn: boolean;
   user.subscribe((value) => {
@@ -9,6 +10,10 @@
 	// 	goto('/')
 	// }
   });
+
+  export let data:PageServerData
+
+  console.log(data.user)
 
 
 </script>

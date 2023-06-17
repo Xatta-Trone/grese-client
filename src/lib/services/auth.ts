@@ -52,17 +52,27 @@ export function logout() {
 }
 
 export function setUser(t: string, u: UserInterface) {
-  token.set(t);
-  user.set(u);
+  if (token != null) {
+    token.set(t);
+
+  }
+
+  if (user != null) {
+    user.set(u);
+
+  }
+
+
   if (browser) {
     console.log("browser", browser);
-    window.localStorage.setItem("token", t);
-    window.localStorage.setItem("user", JSON.stringify(u));
+    // window.localStorage.setItem("token", t);
+    // window.localStorage.setItem("user", JSON.stringify(u));
   }
 }
 
 export interface LoginResponse {
   token: string;
+  exp: Date;
   user: UserInterface;
 }
 
@@ -73,4 +83,8 @@ export interface UserInterface {
   username: string;
   created_at: Date;
   updated_at: Date;
+}
+
+export interface MeEndpointResponse {
+  data: UserInterface;
 }
