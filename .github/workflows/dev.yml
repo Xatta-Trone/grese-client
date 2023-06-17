@@ -37,6 +37,6 @@ jobs:
           git checkout staging
           git pull origin staging
           npm ci
-          npm run build
+          sudo npm run build
           pm2 reload grese-client-dev
           pm2 restart grese-client-dev
