@@ -5,6 +5,7 @@ import { writable } from "svelte/store";
 import { browser } from "$app/environment";
 import { goto } from "$app/navigation";
 import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from "$lib/utils/constants";
+import { redirectHelper } from "$lib/utils/helpers";
 
 
 export const token = writable<string | null>(null);
@@ -18,11 +19,9 @@ export function logout() {
   }
   token.set(null);
   user.set(null);
-  if (browser) {
-    goto("/");
-  } else {
-    throw redirect(301, "/");
-  }
+
+  redirectHelper('/')
+
 }
 
 export function setUser(t: string, u: UserInterface, exp: Date) {
