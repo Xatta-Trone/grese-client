@@ -8,11 +8,6 @@ export const load = (async ({url}) => {
     user.subscribe((value) => {
         console.log(value);
         if (value == null) {
-
-            // if (browser) {
-            //     localStorage.setItem(INTENDED_KEY, url.pathname + url.search)
-            // }
-
             redirectHelper('/login', url)
         }
     });

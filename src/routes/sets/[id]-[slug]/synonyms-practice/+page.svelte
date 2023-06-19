@@ -3,35 +3,23 @@
   import { page } from "$app/stores";
   import { user, type UserInterface } from "$lib/services/auth";
   import {
-    ArrowKeyDown,
-    ArrowKeyLeft,
-    ArrowKeyRight,
-    ArrowKeyUp,
-    Avatar,
-    Badge,
     Button,
     ButtonGroup,
-    Card,
     Heading,
-    Input,
-    Kbd,
-    Label,
     Modal,
     P,
-    Radio,
-    Toast,
     Toggle,
   } from "flowbite-svelte";
-  import type { PageData } from "./$types";
   import axiosAPI from "$lib/services/customAxios";
   import { onMount } from "svelte";
-  import bot from "$lib/images/bot.jpg";
-  import { inview } from "svelte-inview/dist/index";
-  import FlashCard from "$lib/components/FlashCard.svelte";
-  import { flipped, showNonGre } from "$lib/services/flashcard";
-  import { dev } from "$app/environment";
-  import { array } from "zod";
   import SettingsIcon from "$lib/icons/settingsIcon.svelte";
+  import DevComponent from "$lib/components/DevComponent.svelte";
+  import type {
+    ListMeta,
+    Meta,
+    SingleSetResponse,
+    Word,
+  } from "$lib/interfaces/setData";
 
   // export let data: PageData;
 
@@ -42,67 +30,6 @@
   user.subscribe((value) => {
     u = value;
   });
-
-  // interface
-  interface SingleSetResponse {
-    list_meta: ListMeta;
-    meta: Meta;
-    words: Word[];
-  }
-
-  interface ListMeta {
-    id: number;
-    user_id: number;
-    list_meta_id: number;
-    name: string;
-    slug: string;
-    visibility: number;
-    status: number;
-    crated_at: Date;
-    updated_at: Date;
-    user: User;
-    word_count: number;
-  }
-  interface User {
-    id: number;
-    name: string;
-    email: string;
-    username: string;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface Meta {
-    id: number;
-    query: string;
-    order_by: string;
-    page: number;
-    per_page: number;
-    total: number;
-    list_id: number;
-  }
-
-  interface Word {
-    id: number;
-    word: string;
-    word_data: WordData;
-    is_reviewed: number;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface WordData {
-    word: string;
-    partsOfSpeeches: PartsOfSpeech[];
-  }
-
-  interface PartsOfSpeech {
-    partsOfSpeech: string;
-    definitions: string[];
-    examples: string[];
-    synonyms_gre: string[];
-    synonyms_normal: string[];
-  }
 
   interface SynonymsQuestion {
     wordId: number;
@@ -429,28 +356,26 @@
 </Modal>
 
 <main class="my-6">
-  {#if dev}
-    <div class="p-5 border border-slate-950">
-      <!-- content here -->
-      <p>words {words.length}</p>
-      <p>Current Index:{currentIndex}</p>
-      <p>Has more data:{hasMore}</p>
-      <p>Backup words:{backupWords.length}</p>
-      <p>total Question {totalQuestion}</p>
-      <p>Remaining {questionRemaining}</p>
-      <p>Correct {correctQuestion}</p>
-      <p>Quiz complete {completedQuiz}</p>
-      <p>
-        selectedAns {JSON.stringify(synonymsQuestion?.selectedAns)}
-      </p>
-      <p>
-        selectedAns {JSON.stringify(synonymsQuestion?.correctAns)}
-      </p>
-      <p>
-        All {JSON.stringify(synonymsQuestion?.options)}
-      </p>
-    </div>
-  {/if}
+  <DevComponent>
+    <!-- content here -->
+    <p>words {words.length}</p>
+    <p>Current Index:{currentIndex}</p>
+    <p>Has more data:{hasMore}</p>
+    <p>Backup words:{backupWords.length}</p>
+    <p>total Question {totalQuestion}</p>
+    <p>Remaining {questionRemaining}</p>
+    <p>Correct {correctQuestion}</p>
+    <p>Quiz complete {completedQuiz}</p>
+    <p>
+      selectedAns {JSON.stringify(synonymsQuestion?.selectedAns)}
+    </p>
+    <p>
+      selectedAns {JSON.stringify(synonymsQuestion?.correctAns)}
+    </p>
+    <p>
+      All {JSON.stringify(synonymsQuestion?.options)}
+    </p>
+  </DevComponent>
 
   {#if completedQuiz == false}
     {#if words.length > 0}
@@ -497,10 +422,11 @@
                 : ""}
             >
               <P
-                size="lg"
-                weight="light"
+                size="base"
+                weight="medium"
                 class="px-4 py-2 rounded border border-gray-200 dark:border-gray-700"
-                color="text-gray-900 dark:text-gray-900 ">{option}</P
+                color="text-gray-900 dark:text-gray-900 "
+                >{option.charAt(0).toUpperCase() + option.slice(1)}</P
               >
             </button>
             <div class="mb-2" />

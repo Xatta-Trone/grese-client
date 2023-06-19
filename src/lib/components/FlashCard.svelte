@@ -6,6 +6,7 @@
   import { autoSpeak, flipped, showNonGre } from "$lib/services/flashcard";
   import { Badge, Button, Modal, P, Toggle } from "flowbite-svelte";
   import { onMount } from "svelte";
+  import { LearningState } from "$lib/interfaces/setData";
   interface Word {
     id: number;
     word: string;
@@ -30,6 +31,7 @@
 
   export let word: Word;
   export let currentIndex: number;
+  export let learningState: LearningState
 
   let showBack: boolean;
   flipped.subscribe((val) => (showBack = val));
@@ -91,6 +93,14 @@
 <div class="flex justify-between">
   <div class="capitalize">
     {word.word} (#{currentIndex + 1})
+    <!-- learnings tate -->
+    {#if learningState == LearningState.MASTERED}
+       <Badge color="green">Mastered</Badge>
+    {:else if  learningState == LearningState.LEARNING}
+       <Badge color="yellow">Learning</Badge>
+    {:else}
+       <Badge color="dark">Unknown</Badge>
+    {/if}
     <button class="inline cursor-pointer" on:click={speak}
       ><SpeakerIcon /></button
     >

@@ -1,77 +1,17 @@
 <!-- @format -->
 <script lang="ts">
   import { page } from "$app/stores";
-
   import { dev } from "$app/environment";
   import { P, Button, Badge, Heading } from "flowbite-svelte";
-  import type { PageData } from "./$types";
   import axiosAPI from "$lib/services/customAxios";
   import { onMount } from "svelte";
-
-  export let data: PageData;
-
-  console.log($page.params.id, $page.params.slug);
-
-  interface SingleSetResponse {
-    list_meta: ListMeta;
-    meta: Meta;
-    words: Word[];
-  }
-
-  interface ListMeta {
-    id: number;
-    user_id: number;
-    list_meta_id: number;
-    name: string;
-    slug: string;
-    visibility: number;
-    status: number;
-    crated_at: Date;
-    updated_at: Date;
-    user: User;
-    word_count: number;
-  }
-  interface User {
-    id: number;
-    name: string;
-    email: string;
-    username: string;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface Meta {
-    id: number;
-    query: string;
-    order_by: string;
-    page: number;
-    per_page: number;
-    total: number;
-    list_id: number;
-  }
-
-  interface Word {
-    id: number;
-    word: string;
-    word_data: WordData;
-    is_reviewed: number;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface WordData {
-    word: string;
-    partsOfSpeeches: PartsOfSpeech[];
-  }
-
-  interface PartsOfSpeech {
-    partsOfSpeech: string;
-    definitions: string[];
-    examples: string[];
-    synonyms_gre: string[];
-    synonyms_normal: string[];
-  }
-
+  import type {
+    ListMeta,
+    Meta,
+    SingleSetResponse,
+    Word,
+  } from "$lib/interfaces/setData";
+  import DevComponent from "$lib/components/DevComponent.svelte";
   // call and get the data
   // data variables
   let currentPage = 1;
@@ -147,7 +87,6 @@
 
   // with questions
   let currentIndex: number = 0;
-  let isRandom: boolean = false;
   let completedQuiz: boolean = false;
   let totalQuestion: number = 0;
   let questionRemaining: number = 0;
@@ -478,27 +417,25 @@
 </script>
 
 <main class="my-6">
-  {#if dev}
-    <div class="p-5 border border-slate-950">
-      <p>words {words.length}</p>
-      <p>Current Index:{currentIndex}</p>
-      <p>Has more data:{hasMore}</p>
-      <p>Backup words:{backupWords.length}</p>
-      <p>total Question {totalQuestion}</p>
-      <p>Remaining {questionRemaining}</p>
-      <p>Correct {correctQuestion}</p>
-      <p>Quiz complete {completedQuiz}</p>
-      <p>
-        selectedAns {JSON.stringify(synonymsQuestion?.selectedAns)}
-      </p>
-      <p>
-        correctAns {JSON.stringify(synonymsQuestion?.correctAns)}
-      </p>
-      <p>
-        All {JSON.stringify(synonymsQuestion?.options)}
-      </p>
-    </div>
-  {/if}
+  <DevComponent>
+    <p>words {words.length}</p>
+    <p>Current Index:{currentIndex}</p>
+    <p>Has more data:{hasMore}</p>
+    <p>Backup words:{backupWords.length}</p>
+    <p>total Question {totalQuestion}</p>
+    <p>Remaining {questionRemaining}</p>
+    <p>Correct {correctQuestion}</p>
+    <p>Quiz complete {completedQuiz}</p>
+    <p>
+      selectedAns {JSON.stringify(synonymsQuestion?.selectedAns)}
+    </p>
+    <p>
+      correctAns {JSON.stringify(synonymsQuestion?.correctAns)}
+    </p>
+    <p>
+      All {JSON.stringify(synonymsQuestion?.options)}
+    </p>
+  </DevComponent>
 
   {#if completedQuiz == true}
     <Heading tag="h5" class="mb-5">Completed Quiz...&#128516;</Heading>
@@ -535,11 +472,11 @@
               : ""}
           >
             <P
-              size="lg"
-              weight="light"
+              size="base"
+              weight="medium"
               class="px-4 py-2 rounded border border-gray-200 dark:border-gray-700"
               color="text-gray-900 dark:text-gray-900 "
-              >{option}
+              >{option.charAt(0).toUpperCase() + option.slice(1)}
 
               {#if getIndex(option) != -1}
                 <Badge rounded>Pair {getIndex(option)}</Badge>

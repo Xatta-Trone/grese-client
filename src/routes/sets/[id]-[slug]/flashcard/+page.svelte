@@ -7,30 +7,36 @@
     ArrowKeyLeft,
     ArrowKeyRight,
     ArrowKeyUp,
-    Avatar,
-    Badge,
     Button,
     ButtonGroup,
-    Card,
     Heading,
     Kbd,
-    P,
-    Toast,
-    Toggle,
   } from "flowbite-svelte";
-  import type { PageData } from "./$types";
   import axiosAPI from "$lib/services/customAxios";
   import { onMount } from "svelte";
-  import bot from "$lib/images/bot.jpg";
-  import { inview } from "svelte-inview/dist/index";
   import FlashCard from "$lib/components/FlashCard.svelte";
   import { flipped, showNonGre } from "$lib/services/flashcard";
-  import { dev } from "$app/environment";
+  import type { LearningStatusGetResponse } from "$lib/interfaces/learningStatus";
+  import {
+    LearningState,
+    type ListMeta,
+    type Meta,
+    type SingleSetResponse,
+    type Word,
+  } from "$lib/interfaces/setData";
+  import DevComponent from "$lib/components/DevComponent.svelte";
   import { beforeNavigate } from "$app/navigation";
   import { redirectHelper } from "$lib/utils/helpers";
 
   // export let data: PageData;
 
+  // beforeNavigate(() => {
+  //   console.log('before navigate')
+  //   if($user == null) {
+  //     redirectHelper('/login', $page.url)
+  //   }
+  //   console.log('before navigate')
+  // })
 
   console.log($page.params.id, $page.params.slug);
 
@@ -39,67 +45,6 @@
   user.subscribe((value) => {
     u = value;
   });
-
-  // interface
-  interface SingleSetResponse {
-    list_meta: ListMeta;
-    meta: Meta;
-    words: Word[];
-  }
-
-  interface ListMeta {
-    id: number;
-    user_id: number;
-    list_meta_id: number;
-    name: string;
-    slug: string;
-    visibility: number;
-    status: number;
-    crated_at: Date;
-    updated_at: Date;
-    user: User;
-    word_count: number;
-  }
-  interface User {
-    id: number;
-    name: string;
-    email: string;
-    username: string;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface Meta {
-    id: number;
-    query: string;
-    order_by: string;
-    page: number;
-    per_page: number;
-    total: number;
-    list_id: number;
-  }
-
-  interface Word {
-    id: number;
-    word: string;
-    word_data: WordData;
-    is_reviewed: number;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface WordData {
-    word: string;
-    partsOfSpeeches: PartsOfSpeech[];
-  }
-
-  interface PartsOfSpeech {
-    partsOfSpeech: string;
-    definitions: string[];
-    examples: string[];
-    synonyms_gre: string[];
-    synonyms_normal: string[];
-  }
 
   // data variables
   let currentPage = 1;
@@ -112,6 +57,13 @@
   let loading = false;
   let hasMore = true;
   let query: string = "";
+  let learningStatusCount: LearningStatusGetResponse;
+
+  // known and unknown words
+  let knownWords: number[] = [];
+  let unknownWords: number[] = [];
+  let masteredWords: number[] = [];
+  let notClickedWords: number[] = [];
 
   $: words = [...words, ...newWords];
 
@@ -156,9 +108,28 @@
     fetchData();
   }
 
+  async function getLearningStatus() {
+    await axiosAPI
+      .get(`/learning-status/${$page.params.id}`)
+      .then((res) => {
+        learningStatusCount = res.data;
+        console.log(learningStatusCount);
+        masteredWords = [...learningStatusCount.mastered];
+        knownWords = [...learningStatusCount.learning];
+        unknownWords = [...learningStatusCount.unknown];
+      })
+      .catch((err) => {
+        console.log(err);
+        // masteredWords = [];
+        // knownWords = [];
+        // unknownWords = [];
+      });
+  }
+
   onMount(() => {
     fetchData();
     currentIndex = 0;
+    getLearningStatus();
   });
   let showBack: boolean = false;
   let showNonGreWords: boolean = false;
@@ -172,6 +143,7 @@
 
   //   flashcard data
   let currentIndex: number = 0;
+
   function next() {
     loadMore();
     console.log(currentIndex);
@@ -221,12 +193,6 @@
     }
   }
 
-  // known and unknown words
-  let knownWords: number[] = [];
-  let unknownWords: number[] = [];
-  let masteredWords: number[] = [];
-  let notClickedWords: number[] = [];
-
   function iKnowThisWord() {
     // check if all are mastered
     if (masteredWords.length == words.length) {
@@ -251,16 +217,18 @@
       // remove from unknown index
       unknownWords.splice(unknownIndex, 1);
       unknownWords = [...unknownWords];
+      updateWordStatus(wordId, LearningState.LEARNING);
     }
 
     // check in mastered words
     const masteredIndex = masteredWords.indexOf(wordId);
 
     if (masteredIndex != -1) {
-      console.log("inside unknownIndex");
+      console.log("this word is mastered");
       // remove from unknown index
       knownWords.splice(unknownIndex, 1);
       knownWords = [...knownWords];
+      updateWordStatus(wordId, LearningState.LEARNING);
     }
 
     const index = knownWords.indexOf(wordId);
@@ -268,6 +236,7 @@
     if (index == -1) {
       // add to known set
       knownWords = [...knownWords, wordId];
+      updateWordStatus(wordId, LearningState.LEARNING);
       // remove from first
       // const removedWord: Word | undefined = words.shift();
       // // add to the last element
@@ -279,6 +248,7 @@
       console.log(knownWords.indexOf(wordId));
       // add to mastered words
       masteredWords = [...masteredWords, knownWords[index]];
+      updateWordStatus(wordId, LearningState.MASTERED);
       // remove from known words
       knownWords.splice(index, 1);
       knownWords = [...knownWords];
@@ -333,6 +303,7 @@
     console.log(wordId, unknownWords);
     // finally call the next word
     // next();
+    updateWordStatus(wordId, LearningState.UNKOWN);
     determineNextIndex();
   }
 
@@ -378,10 +349,40 @@
       }
     }
   }
+
+  function updateWordStatus(wordId: number, state: LearningState) {
+    const data = {
+      list_id: listMeta.id,
+      word_id: wordId,
+      learning_state: state,
+      user_id: $user?.id ?? 0,
+    };
+
+    axiosAPI
+      .post("learning-status", data)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function getWordLearningState(wordId: number): LearningState {
+    if (masteredWords.indexOf(wordId) != -1) {
+      return LearningState.MASTERED;
+    }
+
+    if (knownWords.indexOf(wordId) != -1) {
+      return LearningState.LEARNING;
+    }
+
+    return LearningState.UNKOWN;
+  }
 </script>
 
 <main class="my-6">
-  {#if dev}
+  <DevComponent>
     <!-- content here -->
     {words.length}
     {showBack}
@@ -406,7 +407,7 @@
       Not clicked {notClickedWords.length}
       {notClickedWords}
     </p>
-  {/if}
+  </DevComponent>
 
   {#if !loading || words.length > 0}
     {#if listMeta}
@@ -436,7 +437,11 @@
 
     {#if words.length > 0}
       {#key words[currentIndex].id}
-        <FlashCard word={words[currentIndex]} currentIndex={currentIndex} />
+        <FlashCard
+          word={words[currentIndex]}
+          {currentIndex}
+          learningState={getWordLearningState(words[currentIndex].id)}
+        />
       {/key}
 
       <div class="my-2 flex justify-center">
