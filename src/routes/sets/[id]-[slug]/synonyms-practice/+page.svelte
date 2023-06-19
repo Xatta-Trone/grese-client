@@ -282,7 +282,7 @@
     correctAns: string[]
   ): string[] {
     let additionalAns: string[] = [...correctAns];
-    const totalOption:number = 6
+    const totalOption: number = 6;
 
     while (additionalAns.length < totalOption) {
       // find random definition

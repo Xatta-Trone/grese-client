@@ -8,6 +8,8 @@
   import { onMount } from "svelte";
   import bot from "$lib/images/bot.jpg";
   import { inview } from "svelte-inview/dist/index";
+  import type { LearningStatusGetResponse } from "$lib/interfaces/learningStatus";
+  import { unknown } from "zod";
 
   // export let data: PageData;
 
@@ -90,6 +92,7 @@
   let loading = false;
   let hasMore = true;
   let query: string = "";
+  let learningStatusCount: LearningStatusGetResponse;
 
   $: words = [...words, ...newWords];
 
@@ -128,8 +131,29 @@
     fetchData();
   }
 
+  async function getLearningStatus() {
+    await axiosAPI
+      .get(`/learning-status/${$page.params.id}`)
+      .then((res) => {
+        learningStatusCount = res.data;
+        console.log(learningStatusCount);
+      })
+      .catch((err) => {
+        console.log(err);
+        learningStatusCount.learning = [];
+        learningStatusCount.mastered = [];
+        learningStatusCount.unknown = [];
+      });
+  }
+
   onMount(() => {
     fetchData();
+
+    console.log($page.url.pathname);
+    console.log($user);
+    if ($user != null) {
+      getLearningStatus();
+    }
   });
 </script>
 
@@ -140,10 +164,20 @@
 
   {#if words.length > 0}
     <div class="grid md:grid-cols-4 gap-4 my-8 font-bold">
-      <Button href="/sets/{listMeta.id}-{listMeta.slug}/flashcard" color="light">Flash Cards</Button>
-      <Button href="/sets/{listMeta.id}-{listMeta.slug}/practice" color="light">Definition Match</Button>
-      <Button href="/sets/{listMeta.id}-{listMeta.slug}/synonyms-practice"color="light">Synonyms Practice</Button>
-      <Button href="/sets/{listMeta.id}-{listMeta.slug}/se-practice"color="light">SE Practice</Button>
+      <Button href="/sets/{listMeta.id}-{listMeta.slug}/flashcard" color="light"
+        >Flash Cards</Button
+      >
+      <Button href="/sets/{listMeta.id}-{listMeta.slug}/practice" color="light"
+        >Definition Match</Button
+      >
+      <Button
+        href="/sets/{listMeta.id}-{listMeta.slug}/synonyms-practice"
+        color="light">Synonyms Practice</Button
+      >
+      <Button
+        href="/sets/{listMeta.id}-{listMeta.slug}/se-practice"
+        color="light">SE Practice</Button
+      >
     </div>
   {/if}
 
@@ -172,6 +206,20 @@
       >{listMeta.word_count}
       {listMeta.word_count > 1 ? "words" : "word"} in this set</Heading
     >
+  {/if}
+
+  {#if learningStatusCount && listMeta}
+    <div class="grid md:grid-cols-3 gap-4 my-8 font-bold cursor-default">
+      <Button color="alternative">
+        Mastered: {learningStatusCount.mastered.length}
+      </Button>
+      <Button color="alternative"
+        >Learning: {learningStatusCount.learning.length}
+      </Button>
+      <Button color="alternative"
+        >Not studied: {learningStatusCount.unknown.length}
+      </Button>
+    </div>
   {/if}
 
   {#if words.length > 0}

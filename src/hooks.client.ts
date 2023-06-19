@@ -17,8 +17,11 @@ if (browser && u == null) {
     // const t: string | null = localStorage.getItem(COOKIE_KEY)
     // const k: string | null = localStorage.getItem(COOKIE_KEY_EXP)
     // const u: string | null = localStorage.getItem(COOKIE_KEY_USER)
+    const host = window.location.origin
 
-    fetch(`cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER}`)
+    console.log(host)
+
+    fetch(`${host}/cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER}`)
         .then(res => res.json())
         .then(res => {
             console.log('res in fetch cookie')
@@ -43,8 +46,6 @@ if (browser && u == null) {
         .catch(err => {
             console.log(err)
             logout()
-
-
         })
 }
 

@@ -16,11 +16,10 @@ export const hasAuthInitialized = writable<boolean>(false);
 export function logout() {
   if (browser) {
     window.localStorage.clear();
+    fetch(`${window.location.origin}/cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER},${COOKIE_KEY_EXP}`, { method: "delete" })
   }
   token.set(null);
   user.set(null);
-
-  fetch(`cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER},${COOKIE_KEY_EXP}`, { method: "delete" })
 
   redirectHelper('/')
 
@@ -37,9 +36,9 @@ export function setUser(t: string, u: UserInterface, exp: Date) {
 export function setData(t: string, u: UserInterface, exp: Date) {
   if (browser) {
     console.log("browser", browser);
-    window.localStorage.setItem(COOKIE_KEY, t);
-    window.localStorage.setItem(COOKIE_KEY_USER, JSON.stringify(u));
-    window.localStorage.setItem(COOKIE_KEY_EXP, JSON.stringify(exp));
+    // window.localStorage.setItem(COOKIE_KEY, t);
+    // window.localStorage.setItem(COOKIE_KEY_USER, JSON.stringify(u));
+    // window.localStorage.setItem(COOKIE_KEY_EXP, JSON.stringify(exp));
   }
 }
 

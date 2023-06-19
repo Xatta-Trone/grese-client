@@ -26,8 +26,11 @@
   import FlashCard from "$lib/components/FlashCard.svelte";
   import { flipped, showNonGre } from "$lib/services/flashcard";
   import { dev } from "$app/environment";
+  import { beforeNavigate } from "$app/navigation";
+  import { redirectHelper } from "$lib/utils/helpers";
 
   // export let data: PageData;
+
 
   console.log($page.params.id, $page.params.slug);
 
