@@ -21,15 +21,15 @@
     }
   }
 
-  beforeNavigate(() => {
-    console.log("before navigate called")
+  // beforeNavigate(() => {
+  //   console.log("before navigate called")
 
-    // if(window.location.pathname == '/auth' && u != null) {
-    //   goto('/profile')
-    // }
+  //   // if(window.location.pathname == '/auth' && u != null) {
+  //   //   goto('/profile')
+  //   // }
 
 
-  })
+  // })
 
 
 </script>
