@@ -3,13 +3,15 @@
   import PencilIcon from "$lib/icons/pencilIcon.svelte";
   import UserCircle from "$lib/icons/userCircle.svelte";
   import type { BadStatusErrorResponse } from "$lib/interfaces/common";
-  import { user } from "$lib/services/auth";
+  import {  user } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
+  import { updateUser } from "$lib/services/updateUser";
   import type { AxiosError } from "axios";
   import {
     Button,
     Card,
     CloseButton,
+    Heading,
     Helper,
     Input,
     Label,
@@ -45,6 +47,7 @@
       .put("/update", data)
       .then((res) => {
         console.log(res.data);
+        updateUser();
         alert("Username updated");
       })
       .catch((err: AxiosError) => {
@@ -65,9 +68,7 @@
 
 {#if $user != null}
   <Card size="xl">
-    <Label class="space-y-2">
-      <span>User name</span>
-    </Label>
+    <Heading tag="h5">Username</Heading>
     <Input
       type="text"
       bind:value={userName}
