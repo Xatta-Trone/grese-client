@@ -20,6 +20,8 @@ export function logout() {
   token.set(null);
   user.set(null);
 
+  fetch(`cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER},${COOKIE_KEY_EXP}`, { method: "delete" })
+
   redirectHelper('/')
 
 }
@@ -54,6 +56,7 @@ export interface UserInterface {
   username: string;
   created_at: Date;
   updated_at: Date;
+  expires_on: Date | null;
 }
 
 export interface MeEndpointResponse {

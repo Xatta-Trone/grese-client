@@ -6,7 +6,7 @@ import type { LoginResponse } from "$lib/services/auth";
 import { error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
 import axiosAPI from "$lib/services/customAxios";
-import { COOKIE_KEY, COOKIE_KEY_EXP } from "$lib/utils/constants";
+import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from "$lib/utils/constants";
 import { redirectHelper } from "$lib/utils/helpers";
 
 export const load = (async ({ url, cookies }) => {
@@ -92,7 +92,8 @@ export const load = (async ({ url, cookies }) => {
     const exp: Date = new Date(data.exp)
 
     cookies.set(COOKIE_KEY, data.token, { expires: exp })
-    cookies.set(COOKIE_KEY_EXP, JSON.stringify(data.exp), { expires: exp })
+    // cookies.set(COOKIE_KEY_EXP, JSON.stringify(data.exp), { expires: exp })
+    cookies.set(COOKIE_KEY_USER, JSON.stringify(data.user), { expires: exp })
 
 
     return {
