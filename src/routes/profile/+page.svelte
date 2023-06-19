@@ -1,6 +1,7 @@
 <!-- @format -->
 <script lang="ts">
-  import { user } from "$lib/services/auth";
+  import UserName from "$lib/components/profile/UserName.svelte";
+import { user } from "$lib/services/auth";
   import type { UserInterface } from "$lib/services/auth";
 
   let userData: UserInterface | null;
@@ -16,8 +17,6 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </svelte:head>
 
-<section>
-    <h2>{JSON.stringify(userData)}</h2>
-</section>
-<style>
-</style>
+<main class="my-6">
+  <UserName/>
+</main>
