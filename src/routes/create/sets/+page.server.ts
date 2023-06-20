@@ -74,6 +74,20 @@ export const actions: Actions = {
             return fail(400, { form });
         }
 
+        // check words length
+        let length = 0
+
+        form.data.words.split('\n').forEach(wordLine => {
+            wordLine.split(",").forEach(() => {
+                length = length + 1
+            })
+        });
+
+        if (length < 5) {
+            setError(form, "words", "Please input at least 5 words.")
+            return { form }
+        }
+
 
         // TODO: Do something with the validated data
         // now submit the data 
