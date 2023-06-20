@@ -9,7 +9,7 @@ import axiosAPI from "$lib/services/customAxios";
 import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from "$lib/utils/constants";
 import { redirectHelper } from "$lib/utils/helpers";
 
-export const load = (async ({ url, cookies }) => {
+export const load = (async ({ url, cookies, request }) => {
 
   // user.subscribe(val => {
   //   if (val != null) {
