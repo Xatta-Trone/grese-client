@@ -88,6 +88,7 @@
         class="block mb-2">Words</Label
       >
       <Textarea {...textareaprops} bind:value={$form.words} {...$constraints.words} />
+      <Helper >At least 5 words required.</Helper>
 
       {#if $errors.words}
         <Helper class="mt-2" color="red">
