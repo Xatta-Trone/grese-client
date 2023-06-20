@@ -35,15 +35,13 @@
 
 <main class="my-6">
   {#if userData == null}
-     <Heading tag="h5">Loading...&#128516;</Heading>
+    <Heading tag="h5">Loading...&#128516;</Heading>
   {:else}
-  
-  <div id="username">
-    <UserName username={userData?.username ?? ""} />
-  </div>
-
-  <div id="subscription" class="my-4">
-    <Subscription />
-  </div>
+    <div id="username">
+      <UserName username={userData?.username ?? ""} />
+    </div>
+    <div id="subscription" class="my-4">
+      <Subscription />
+    </div>
   {/if}
 </main>

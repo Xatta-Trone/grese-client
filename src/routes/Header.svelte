@@ -13,11 +13,8 @@
   } from "flowbite-svelte";
   import { page } from "$app/stores";
   import { user, logout } from "$lib/services/auth";
-  let isLoggedIn: boolean = false;
+  export let isLoggedIn: boolean;
 
-  user.subscribe((val) => {
-    isLoggedIn = val != null;
-  });
 </script>
 
 <Navbar let:hidden let:toggle color="form">
@@ -77,7 +74,7 @@
       >
     </Dropdown>
 
-    {#if isLoggedIn}
+    {#if isLoggedIn == true}
       <NavLi id="nav-menu1" class="cursor-pointer"
         ><Chevron aligned>Profile</Chevron></NavLi
       >

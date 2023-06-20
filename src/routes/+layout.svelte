@@ -5,21 +5,24 @@
   import { page } from "$app/stores";
   import { beforeNavigate, goto } from "$app/navigation";
   import { user, type UserInterface } from "$lib/services/auth";
+  import type { PageData, PageServerData } from "./$types";
 
-  let u:UserInterface|null 
+  export let data:PageData;
 
-  user.subscribe(val => {
-    u = val
-  })
-  // import "./styles.css";
-  // @ts-ignore
-  function popState(event) {
-    console.log(event, $page);
+  // let u:UserInterface|null 
 
-    if (window.location.pathname == "/auth") {
-      history.go(-2);
-    }
-  }
+  // user.subscribe(val => {
+  //   u = val
+  // })
+  // // import "./styles.css";
+  // // @ts-ignore
+  // function popState(event) {
+  //   console.log(event, $page);
+
+  //   if (window.location.pathname == "/auth") {
+  //     history.go(-2);
+  //   }
+  // }
 
   // beforeNavigate(() => {
   //   console.log("before navigate called")
@@ -35,7 +38,7 @@
 </script>
 
 <div class="app">
-  <Header />
+  <Header isLoggedIn={data.isLoggedIn} />
 
   <main class="container max-w-screen-lg mx-auto">
     <slot />
@@ -48,7 +51,7 @@
   </footer>
 </div>
 
-<svelte:window on:popstate={popState} />
+<!-- <svelte:window on:popstate={popState} /> -->
 
 <style>
 </style>

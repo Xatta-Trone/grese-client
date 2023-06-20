@@ -3,7 +3,7 @@
 import { error, redirect } from "@sveltejs/kit";
 import { writable } from "svelte/store";
 import { browser } from "$app/environment";
-import { goto } from "$app/navigation";
+import { goto, invalidateAll } from "$app/navigation";
 import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from "$lib/utils/constants";
 import { redirectHelper } from "$lib/utils/helpers";
 
@@ -17,6 +17,9 @@ export function logout() {
   if (browser) {
     window.localStorage.clear();
     fetch(`${window.location.origin}/cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER},${COOKIE_KEY_EXP}`, { method: "delete" })
+      .then(() => {
+        window.location.href = "/"
+      })
   }
   token.set(null);
   user.set(null);

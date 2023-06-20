@@ -15,6 +15,7 @@ export const handle = (async ({ event, resolve }) => {
     if (userValue != undefined) {
         const user = JSON.parse(userValue) as UserInterface
         event.locals.user = user
+        event.locals.isLoggedIn = true
     }
 
     if (token != undefined) {
@@ -32,11 +33,6 @@ export const handle = (async ({ event, resolve }) => {
                 event.locals.user = response.data
             });
     }
-
-
-
-
-
 
 
     const response = await resolve(event);

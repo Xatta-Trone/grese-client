@@ -34,5 +34,5 @@
 <h1>Auth Success. Redirecting.....</h1>
 
 {#if data.success && browser}
-  Magic number: {setTimeout(() => redirectHelper(intended), 0)}
+  Magic number: {setTimeout(() => window.location.href = intended, 0)}
 {/if}

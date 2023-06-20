@@ -9,6 +9,7 @@ declare global {
 		interface Locals {
 			'user': UserInterface | null,
 			'token': string | null,
+			'isLoggedIn':boolean
 		}
 		// interface PageData {}
 		// interface Platform {}

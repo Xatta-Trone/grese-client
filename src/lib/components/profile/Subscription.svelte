@@ -25,8 +25,9 @@
   let clickOutsideModal = false;
   let couponCode = "";
   let loading = false;
+  let initLoading = false;
 
-  onMount(() => {
+  onMount(async () => {
     getUserData();
     determineUserState($user?.expires_on ?? null);
   });
@@ -75,18 +76,6 @@
         loading = false;
       });
   }
-
-  function handleSubscribe() {
-    fetch(`/api/stripe-checkout?user=${$user?.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        window.location.replace(data.url)
-      })
-      .catch(err => {
-        alert(err)
-      })
-  }
 </script>
 
 <Modal title="Upgrade to premium" bind:open={clickOutsideModal} outsideclose>
@@ -103,24 +92,22 @@
   >
 </Modal>
 
-{#if $user != null}
-  <Card size="xl">
-    <Heading tag="h5">Subscription</Heading>
-    {#if isPremium == false || isPremiumExpired}
-      <div class="mt-4">
-        <Button color="dark" href={`/api/stripe-checkout?user=${$user?.id}`}
-          >Upgrade to GRE SE+</Button
-        >
-        <Button color="red" on:click={() => (clickOutsideModal = true)}
-          >I have a spacial coupon</Button
-        >
-      </div>
-    {:else}
-      <P
-        >Thanks for your support. Your subscription expires on <strong
-          class="inline">{expires.toUTCString()}</strong
-        ></P
+<Card size="xl">
+  <Heading tag="h5">Subscription</Heading>
+  {#if isPremium == false || isPremiumExpired}
+    <div class="mt-4">
+      <Button color="dark" href={`/api/stripe-checkout?user=${$user?.id}`}
+        >Upgrade to GRE SE+</Button
       >
-    {/if}
-  </Card>
-{/if}
+      <Button color="red" on:click={() => (clickOutsideModal = true)}
+        >I have a spacial coupon</Button
+      >
+    </div>
+  {:else}
+    <P
+      >Thanks for your support. Your subscription expires on <strong
+        class="inline">{expires.toUTCString()}</strong
+      ></P
+    >
+  {/if}
+</Card>
