@@ -6,6 +6,7 @@ import { error } from '@sveltejs/kit';
 
 const stripeKey = env.STRIPE_PRIVATE_KEY ?? ""
 const productId = env.PRODUCT_ID ?? ""
+const appURL = env.APP_URL ?? ""
 const stripe = new Stripe(stripeKey, { apiVersion: "2022-11-15" });
 
 export const GET: RequestHandler = async ({ url }) => {
@@ -27,8 +28,8 @@ export const GET: RequestHandler = async ({ url }) => {
     const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
         mode: 'payment',
-        success_url: `${url.origin}/callback/success?token=${token}`,
-        cancel_url: `${url.origin}/callback/cancel`,
+        success_url: `${appURL}/callback/success?token=${token}`,
+        cancel_url: `${appURL}/callback/cancel`,
     });
 
     console.log(session)

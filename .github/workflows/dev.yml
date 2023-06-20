@@ -35,7 +35,7 @@ jobs:
         script: |
           cd /var/www/grese-client-dev
           sudo git checkout staging 
-          sudo git pull
+          sudo git pull --rebase
           sudo rm -rf ./node_modules
           sudo npm ci --force
           sudo npm run build
