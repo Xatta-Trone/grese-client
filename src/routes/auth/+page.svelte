@@ -8,7 +8,7 @@
   import { INTENDED_KEY } from "$lib/utils/constants";
 
   export let data: PageData;
-  let intended: string = "/";
+  let intended: string = "/profile";
 
   if (data.success) {
     console.log("data success", browser);

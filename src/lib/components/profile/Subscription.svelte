@@ -75,6 +75,18 @@
         loading = false;
       });
   }
+
+  function handleSubscribe() {
+    fetch(`/api/stripe-checkout?user=${$user?.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        window.location.replace(data.url)
+      })
+      .catch(err => {
+        alert(err)
+      })
+  }
 </script>
 
 <Modal title="Upgrade to premium" bind:open={clickOutsideModal} outsideclose>
@@ -96,7 +108,9 @@
     <Heading tag="h5">Subscription</Heading>
     {#if isPremium == false || isPremiumExpired}
       <div class="mt-4">
-        <Button color="dark">Upgrade to GRE SE+</Button>
+        <Button color="dark" on:click={handleSubscribe}
+          >Upgrade to GRE SE+</Button
+        >
         <Button color="red" on:click={() => (clickOutsideModal = true)}
           >I have a spacial coupon</Button
         >
