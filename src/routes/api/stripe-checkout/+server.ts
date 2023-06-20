@@ -30,6 +30,8 @@ export const GET: RequestHandler = async ({ url }) => {
         cancel_url: `${url.origin}/callback/cancel`,
     });
 
+    // asdf
+
     return new Response(
         JSON.stringify({ url: session.url }),
         {
