@@ -1,7 +1,7 @@
 import type { UserInterface } from '$lib/services/auth';
 import { COOKIE_KEY, COOKIE_KEY_USER } from '$lib/utils/constants';
 import type { PageServerLoad } from './$types';
-import { verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { env } from '$env/dynamic/private';
 import axiosAPI from '$lib/services/customAxios';
 
@@ -27,7 +27,7 @@ export const load = (async ({ cookies, url }) => {
         console.log(user)
 
         try {
-            const decoded = verify(token, jwtSecret)
+            const decoded = jwt.verify(token, jwtSecret)
             console.log(decoded)
 
             if (user?.id) {

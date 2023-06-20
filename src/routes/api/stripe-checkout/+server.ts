@@ -1,7 +1,7 @@
 import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
 import Stripe from 'stripe';
-import { sign } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 const stripeKey = env.STRIPE_PRIVATE_KEY ?? ""
 const productId = env.PRODUCT_ID ?? ""
@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ url }) => {
     const userId = url.searchParams.get("user")
 
     // generate token
-    const token = sign({ userId: userId }, jwtSecret);
+    const token = jwt.sign({ userId: userId }, jwtSecret);
 
     console.log(token)
 
