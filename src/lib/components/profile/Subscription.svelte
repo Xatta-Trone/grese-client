@@ -108,7 +108,7 @@
     <Heading tag="h5">Subscription</Heading>
     {#if isPremium == false || isPremiumExpired}
       <div class="mt-4">
-        <Button color="dark" on:click={handleSubscribe}
+        <Button color="dark" href={`/api/stripe-checkout?user=${$user?.id}`}
           >Upgrade to GRE SE+</Button
         >
         <Button color="red" on:click={() => (clickOutsideModal = true)}

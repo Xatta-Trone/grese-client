@@ -2,6 +2,7 @@ import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
 import Stripe from 'stripe';
 import jwt from 'jsonwebtoken';
+import { error } from '@sveltejs/kit';
 
 const stripeKey = env.STRIPE_PRIVATE_KEY ?? ""
 const productId = env.PRODUCT_ID ?? ""
@@ -30,7 +31,19 @@ export const GET: RequestHandler = async ({ url }) => {
         cancel_url: `${url.origin}/callback/cancel`,
     });
 
-    // asdf
+    console.log(session)
+
+    if (session.url != null) {
+        return new Response(null, {
+            status: 302,
+            headers: {
+                location: session.url
+            }
+        });
+
+    } else {
+        throw error(400, "session could not created")
+    }
 
     return new Response(
         JSON.stringify({ url: session.url }),
