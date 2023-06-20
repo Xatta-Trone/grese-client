@@ -1,11 +1,12 @@
-import { browser } from '$app/environment';
 import { user } from '$lib/services/auth';
-import { INTENDED_KEY } from '$lib/utils/constants';
 import { redirectHelper } from '$lib/utils/helpers';
-import type { PageLoad } from './$types';
+import type { LayoutServerLoad } from '../$types';
 
-export const load = (async ({ url }) => {
-    // console.log(url)
+export const load = (async ({ url, locals, parent }) => {
+    await parent()
+    if (locals.user == null || locals.user == undefined) {
+        redirectHelper('/login', url)
+    }
 
     // user.subscribe((value) => {
     //     console.log(value);
@@ -18,6 +19,5 @@ export const load = (async ({ url }) => {
     //         redirectHelper('/login', url)
     //     }
     // });
-
     return {};
-}) satisfies PageLoad;
+}) satisfies LayoutServerLoad;

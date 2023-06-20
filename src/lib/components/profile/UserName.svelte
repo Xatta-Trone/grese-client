@@ -1,11 +1,10 @@
 <!-- @format -->
 <script lang="ts">
+  import { invalidateAll } from "$app/navigation";
   import PencilIcon from "$lib/icons/pencilIcon.svelte";
   import UserCircle from "$lib/icons/userCircle.svelte";
   import type { BadStatusErrorResponse } from "$lib/interfaces/common";
-  import {  user } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
-  import { updateUser } from "$lib/services/updateUser";
   import type { AxiosError } from "axios";
   import {
     Button,
@@ -14,25 +13,19 @@
     Heading,
     Helper,
     Input,
-    Label,
   } from "flowbite-svelte";
-  import { onMount } from "svelte";
 
-  let userName = "";
+  export let username: string;
+
   let isEditing = false;
   let loading = false;
 
   const nameRegex = /^[a-zA-Z0-9_\-]+$/;
-  //   letters numbers _, -
-
-  onMount(() => {
-    userName = $user?.username ?? "";
-  });
 
   function changeUserName() {
-    console.log(nameRegex.test(userName));
+    console.log(nameRegex.test(username));
 
-    if (nameRegex.test(userName) == false) {
+    if (nameRegex.test(username) == false) {
       alert("Username can only contain letters, numbers dash and underscore");
       return;
     }
@@ -40,15 +33,15 @@
     loading = true;
 
     const data = {
-      username: userName,
+      username: username,
     };
 
     axiosAPI
       .put("/update", data)
       .then((res) => {
         console.log(res.data);
-        updateUser();
         alert("Username updated");
+        invalidateAll();
       })
       .catch((err: AxiosError) => {
         console.log(err.response);
@@ -66,12 +59,12 @@
   }
 </script>
 
-{#if $user != null}
+{#if username != ""}
   <Card size="xl">
     <Heading tag="h5">Username</Heading>
     <Input
       type="text"
-      bind:value={userName}
+      bind:value={username}
       placeholder="xatta-trone"
       size="md"
       disabled={isEditing == false && loading == false}
@@ -98,10 +91,16 @@
     {#if isEditing}
       <div class="mt-3">
         <Button size="sm" on:click={changeUserName} disabled={loading}
-          >Change username</Button
+          >Update username</Button
         >
         <Button size="sm" color="red" on:click={() => (isEditing = false)}
           >Cancel</Button
+        >
+      </div>
+    {:else}
+      <div class="mt-3">
+        <Button size="sm" on:click={() => (isEditing = true)} disabled={loading}
+          >Change username</Button
         >
       </div>
     {/if}

@@ -14,12 +14,12 @@ const schema = z.object({
 })
 
 export const load: PageServerLoad = async () => {
-    user.subscribe((value) => {
-        console.log(value);
-        if (value == null) {
-            redirectHelper('/login')
-        }
-    });
+    // user.subscribe((value) => {
+    //     console.log(value);
+    //     if (value == null) {
+    //         redirectHelper('/login')
+    //     }
+    // });
     const form = await superValidate(schema)
 
     return { form }
@@ -88,7 +88,7 @@ export const actions: Actions = {
                 if (res.status == 201) {
                     const responseData: ListCreateResponse = res.data
                     console.log(responseData)
-                    return message(form, responseData.message, { status: 201 });
+                    return message(form, responseData.message);
                 }
 
             })

@@ -16,9 +16,9 @@ axiosAPI.defaults.withCredentials = true;
 const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const { method, url } = config;
     // Set Headers Here
-    if (tokenData != null) {
-        config.headers.set('Authorization', `Bearer ${tokenData}`)
-    }
+    // if (tokenData != null) {
+    //     config.headers.set('Authorization', `Bearer ${tokenData}`)
+    // }
     // Check Authentication Here
     // Set Loading Start Here
     console.log(`🚀 [API] ${method?.toUpperCase()} ${url} | Request`);

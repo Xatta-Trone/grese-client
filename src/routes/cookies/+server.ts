@@ -4,7 +4,9 @@ import type {
     CookieMaker,
     CookieResponse,
 } from "$lib/interfaces/cookiesInterface";
+import cookieDomain from "$lib/utils/cookieDomain";
 import type { RequestHandler } from "./$types";
+
 
 export const GET: RequestHandler = async ({ cookies, url }) => {
     const keys = url.searchParams.get("key");
@@ -45,6 +47,7 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
                 expires: cookie.expires,
                 maxAge: cookie.maxAge,
                 path: "/",
+                domain: cookieDomain
             });
         });
     }

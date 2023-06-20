@@ -1,32 +1,38 @@
-import { user } from '$lib/services/auth';
-import { redirectHelper } from '$lib/utils/helpers';
-import { message, setError, superValidate } from 'sveltekit-superforms/server';
-import type { Actions, PageServerLoad } from './$types';
+import { fail } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
+import { superValidate, message, setError } from 'sveltekit-superforms/server';
 import { z } from 'zod'
-import { fail, redirect } from '@sveltejs/kit';
-import axiosAPI from '$lib/services/customAxios';
-
+import { user } from "$lib/services/auth";
+import { redirectHelper } from "$lib/utils/helpers";
+import axiosAPI from "$lib/services/customAxios";
 
 
 const schema = z.object({
+    visibility: z.number().default(1),
     name: z.string(),
-    visibility: z.number().default(1)
+    words: z.string(),
 })
+let folder_id: number | null = null
 
-export const load = (async ({locals}) => {
-    console.log(locals.user)
-    user.subscribe((value) => {
-        console.log(value);
-        if (value == null) {
-            redirectHelper('/login')
-        }
-    });
+export const load: PageServerLoad = (async ({ url }) => {
+    // user.subscribe((value) => {
+    //     console.log(value);
+    //     if (value == null) {
+    //         redirectHelper('/login')
+    //     }
+    // });
+
+    const tempFolderId: string | null = url.searchParams.get('folder_id')
+
+    folder_id = tempFolderId ? parseInt(tempFolderId) : null
+
     const form = await superValidate(schema)
 
     return { form }
-}) satisfies PageServerLoad;
+});
 
-export interface FolderCreateSuccessResponse {
+
+export interface ListCreateResponse {
     data: Data;
     message: string;
 }
@@ -34,23 +40,26 @@ export interface FolderCreateSuccessResponse {
 export interface Data {
     id: number;
     user_id: number;
-    list_meta_id: null;
     name: string;
-    slug: string;
+    url: null | string;
+    words: null | string;
     visibility: number;
     status: number;
     crated_at: Date;
     updated_at: Date;
 }
 
-export interface FolderCreateErrorResponse {
+export interface ListCreateErrorResponse {
     errors?: Errors;
 }
 
 export interface Errors {
     name?: string;
+    url?: string;
+    words?: string;
     visibility?: string;
 }
+
 
 
 export const actions: Actions = {
@@ -65,17 +74,32 @@ export const actions: Actions = {
             return fail(400, { form });
         }
 
+        // check words length
+        let length = 0
+
+        form.data.words.split('\n').forEach(wordLine => {
+            wordLine.split(",").forEach(() => {
+                length = length + 1
+            })
+        });
+
+        if (length < 5) {
+            setError(form, "words", "Please input at least 5 words.")
+            return { form }
+        }
+
+
         // TODO: Do something with the validated data
         // now submit the data 
-        const data = { ...form.data, }
+        const data = { ...form.data, "scope": "user", folder_id }
+        console.log(folder_id)
 
-        await axiosAPI.post<FolderCreateSuccessResponse>('/folders', data)
+        await axiosAPI.post<ListCreateResponse>('/lists', data)
             .then((res) => {
                 if (res.status == 201) {
-                    const responseData: FolderCreateSuccessResponse = res.data
+                    const responseData: ListCreateResponse = res.data
                     console.log(responseData)
-                    // return redirectHelper('/create/sets?folder_id=' + responseData.data.id)
-                    return message(form, responseData.message, { status: 201 });
+                    return message(form, responseData.message);
                 }
 
             })
@@ -86,10 +110,14 @@ export const actions: Actions = {
 
                     if (error.response.status == 422) {
                         // check for validation error 
-                        const d: FolderCreateErrorResponse = error.response.data
+                        const d: ListCreateErrorResponse = error.response.data
 
                         if (d.errors?.name) {
                             setError(form, "name", d.errors?.name)
+                        }
+
+                        if (d.errors?.words) {
+                            setError(form, "words", d.errors?.words)
                         }
 
                         if (d.errors?.visibility) {
