@@ -36,7 +36,8 @@ jobs:
           cd /var/www/grese-client-dev
           sudo git checkout staging 
           sudo git pull
-          sudo npm ci
+          sudo rm -rf ./node_modules
+          sudo npm ci --force
           sudo npm run build
           pm2 reload grese-client-dev --update-env
           pm2 restart grese-client-dev
