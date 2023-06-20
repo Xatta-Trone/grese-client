@@ -20,7 +20,7 @@
   });
 </script>
 
-<Navbar let:hidden let:toggle  color="form">
+<Navbar let:hidden let:toggle color="form">
   <NavBrand href="/">
     <span
       class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
@@ -39,13 +39,17 @@
     <NavLi href="/sets" active={$page.url.pathname == "/sets" ? true : false}
       >Sets</NavLi
     >
-     <NavLi href="/folders" active={$page.url.pathname == "/folders" ? true : false}
-      >Folders</NavLi
+    <NavLi
+      href="/folders"
+      active={$page.url.pathname == "/folders" ? true : false}>Folders</NavLi
     >
-     <NavLi href="/my-sets" active={$page.url.pathname == "/my-sets" ? true : false}
-      >My sets</NavLi
+    <NavLi
+      href="/my-sets"
+      active={$page.url.pathname == "/my-sets" ? true : false}>My sets</NavLi
     >
-     <NavLi href="/my-folders" active={$page.url.pathname == "/my-folders" ? true : false}
+    <NavLi
+      href="/my-folders"
+      active={$page.url.pathname == "/my-folders" ? true : false}
       >My folders</NavLi
     >
 
@@ -53,18 +57,24 @@
       ><Chevron aligned>Create</Chevron></NavLi
     >
     <Dropdown triggeredBy="#nav-menu12" class="w-44 z-20">
-      <DropdownItem><NavLi
-        href="/create/sets"
-        active={$page.url.pathname == "/login" ? true : false}>Set</NavLi
-      ></DropdownItem>
-      <DropdownItem><NavLi
-        href="/create/folder"
-        active={$page.url.pathname == "/login" ? true : false}>Folder</NavLi
-      ></DropdownItem>
-      <DropdownItem><NavLi
-        href="/create/url"
-        active={$page.url.pathname == "/login" ? true : false}>Import</NavLi
-      ></DropdownItem>
+      <DropdownItem
+        ><NavLi
+          href="/create/sets"
+          active={$page.url.pathname == "/login" ? true : false}>Set</NavLi
+        ></DropdownItem
+      >
+      <DropdownItem
+        ><NavLi
+          href="/create/folder"
+          active={$page.url.pathname == "/login" ? true : false}>Folder</NavLi
+        ></DropdownItem
+      >
+      <DropdownItem
+        ><NavLi
+          href="/create/url"
+          active={$page.url.pathname == "/login" ? true : false}>Import</NavLi
+        ></DropdownItem
+      >
     </Dropdown>
 
     {#if isLoggedIn}
@@ -82,6 +92,7 @@
         <DropdownDivider />
         <DropdownItem><NavLi href="#" on:click={() => logout()}>Logout</NavLi
           ></DropdownItem>
+        <!-- <DropdownItem><NavLi href="logout">Logout</NavLi></DropdownItem> -->
       </Dropdown>
     {:else}
       <NavLi
