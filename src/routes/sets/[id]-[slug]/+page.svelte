@@ -197,13 +197,14 @@
   {/if}
 
   {#if listMeta}
-    <div class="flex flex-col md:flex-row">
+    <div class="flex flex-col md:flex-row items-center">
       <Heading tag="h4" class="my-6"
         >{listMeta.word_count}
         {listMeta.word_count > 1 ? "words" : "word"} in this set</Heading
       >
       <div>
         <Select
+          size="sm"
           items={filters}
           bind:value={selected}
           on:change={handleFilter}
