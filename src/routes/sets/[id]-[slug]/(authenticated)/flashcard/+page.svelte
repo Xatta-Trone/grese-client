@@ -1,7 +1,6 @@
 <!-- @format -->
 <script lang="ts">
   import { page } from "$app/stores";
-  import { user, type UserInterface } from "$lib/services/auth";
   import {
     ArrowKeyDown,
     ArrowKeyLeft,
@@ -25,27 +24,9 @@
     type Word,
   } from "$lib/interfaces/setData";
   import DevComponent from "$lib/components/DevComponent.svelte";
-  import { beforeNavigate } from "$app/navigation";
-  import { redirectHelper } from "$lib/utils/helpers";
+  import type { PageData } from "./$types";
 
-  // export let data: PageData;
-
-  // beforeNavigate(() => {
-  //   console.log('before navigate')
-  //   if($user == null) {
-  //     redirectHelper('/login', $page.url)
-  //   }
-  //   console.log('before navigate')
-  // })
-
-  console.log($page.params.id, $page.params.slug);
-
-  let u: UserInterface | null;
-
-  user.subscribe((value) => {
-    u = value;
-  });
-
+  export let data: PageData;
   // data variables
   let currentPage = 1;
   let per_page = 50;
@@ -351,15 +332,15 @@
   }
 
   function updateWordStatus(wordId: number, state: LearningState) {
-    const data = {
+    const formData = {
       list_id: listMeta.id,
       word_id: wordId,
       learning_state: state,
-      user_id: $user?.id ?? 0,
+      user_id: data.user?.id ?? 0,
     };
 
     axiosAPI
-      .post("learning-status", data)
+      .post("learning-status", formData)
       .then((res) => {
         console.log(res.data);
       })
@@ -380,6 +361,10 @@
     return LearningState.UNKOWN;
   }
 </script>
+
+<svelte:head>
+  <title>{listMeta ? `Flash Cards: ${listMeta.name}` : "Flash Cards"}</title>
+</svelte:head>
 
 <main class="my-6">
   <DevComponent>

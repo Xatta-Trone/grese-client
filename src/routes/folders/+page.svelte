@@ -128,9 +128,13 @@
   });
 </script>
 
+<svelte:head>
+  <title>Available Set Folders</title>
+</svelte:head>
+
 <main>
   <div class="my-3">
-    <Heading tag="h4">Pubic folders</Heading>
+    <Heading tag="h4">Available Set Folders</Heading>
   </div>
   <div class="mb-6">
     <Input

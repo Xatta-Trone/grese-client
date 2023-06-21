@@ -55,7 +55,7 @@ export interface Word {
 
 export interface WordData {
     word: string;
-    partsOfSpeeches: PartsOfSpeech[];
+    partsOfSpeeches: PartsOfSpeech[] | null;
 }
 
 export interface PartsOfSpeech {

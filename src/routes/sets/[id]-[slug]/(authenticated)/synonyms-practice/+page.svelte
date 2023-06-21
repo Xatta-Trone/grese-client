@@ -20,16 +20,9 @@
     SingleSetResponse,
     Word,
   } from "$lib/interfaces/setData";
+  import { fade } from "svelte/transition";
 
   // export let data: PageData;
-
-  console.log($page.params.id, $page.params.slug);
-
-  let u: UserInterface | null;
-
-  user.subscribe((value) => {
-    u = value;
-  });
 
   interface SynonymsQuestion {
     wordId: number;
@@ -70,15 +63,18 @@
 
         if (listMeta == undefined) {
           listMeta = data.list_meta;
-          // set the total question
-          totalQuestion = listMeta.word_count;
-          questionRemaining = listMeta.word_count;
         }
 
         if (data.words.length) {
-          words = [...words, ...data.words];
-          // newWords = data.words;
-          backupWords = [...backupWords, ...data.words];
+          // to prevent the errors occurring from null parts of speech
+          const filteredWords = data.words.filter(
+            (word) => word.word_data.partsOfSpeeches != null
+          );
+          words = [...words, ...filteredWords];
+          // newWords = filteredWords;
+          backupWords = [...backupWords, ...filteredWords];
+          totalQuestion = backupWords.length;
+          questionRemaining = backupWords.length;
           hasMore = data.words.length >= per_page ? true : false;
         } else {
           hasMore = false;
@@ -157,6 +153,11 @@
       // get all the synonyms
       let tempSynonyms: string[] = [];
 
+      if (word.word_data.partsOfSpeeches == null) {
+        buildQuestion();
+        return;
+      }
+
       word.word_data.partsOfSpeeches.forEach((pos) => {
         // tempSynonyms = [...tempSynonyms, ...pos.synonyms_gre];
         tempSynonyms.push(...pos.synonyms_gre);
@@ -217,6 +218,10 @@
         backupWords[Math.floor(Math.random() * backupWords.length)];
 
       let tempSynonyms: string[] = [];
+
+      if (randomWord.word_data.partsOfSpeeches == null) {
+        continue;
+      }
 
       randomWord.word_data.partsOfSpeeches.forEach((pos) => {
         tempSynonyms = [...tempSynonyms, ...pos.synonyms_gre];
@@ -355,7 +360,15 @@
   </ButtonGroup>
 </Modal>
 
-<main class="my-6">
+<svelte:head>
+  <title
+    >{listMeta
+      ? `Synonyms Practice: ${listMeta.name}`
+      : "Synonyms Practice"}</title
+  >
+</svelte:head>
+
+<main class="my-6" in:fade>
   <DevComponent>
     <!-- content here -->
     <p>words {words.length}</p>

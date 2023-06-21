@@ -1,7 +1,6 @@
 <!-- @format -->
 <script lang="ts">
   import { page } from "$app/stores";
-  import { user, type UserInterface } from "$lib/services/auth";
   import {
     Button,
     ButtonGroup,
@@ -14,18 +13,14 @@
   import { onMount } from "svelte";
   import SettingsIcon from "$lib/icons/settingsIcon.svelte";
   import DevComponent from "$lib/components/DevComponent.svelte";
-  import type { ListMeta, Meta, PartsOfSpeech, SingleSetResponse, Word } from "$lib/interfaces/setData";
-
-  // export let data: PageData;
-
-  console.log($page.params.id, $page.params.slug);
-
-  let u: UserInterface | null;
-
-  user.subscribe((value) => {
-    u = value;
-  });
-
+  import type {
+    ListMeta,
+    Meta,
+    PartsOfSpeech,
+    SingleSetResponse,
+    Word,
+  } from "$lib/interfaces/setData";
+  import { fade } from "svelte/transition";
 
   interface Question {
     wordId: number;
@@ -71,25 +66,28 @@
 
         if (listMeta == undefined) {
           listMeta = data.list_meta;
-          // set the total question
-          totalQuestion = listMeta.word_count;
-          questionRemaining = listMeta.word_count;
         }
 
         if (data.words.length) {
-          words = [...words, ...data.words];
+          // to prevent the errors occurring from null parts of speech
+          const filteredWords = data.words.filter(
+            (word) => word.word_data.partsOfSpeeches != null
+          );
+          words = [...words, ...filteredWords];
           // newWords = data.words;
-          backupWords = [...backupWords, ...data.words];
+          backupWords = [...backupWords, ...filteredWords];
+          totalQuestion = backupWords.length;
+          questionRemaining = backupWords.length;
           hasMore = data.words.length >= per_page ? true : false;
         } else {
           hasMore = false;
         }
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err))
       .finally(() => {
         loading = false;
         // call for next
-        
+
         return loadMore();
       });
   }
@@ -158,7 +156,10 @@
       // populate the question
       questionToPopulate.wordId = word.id;
 
-      if (questionType == QuestionType.WORD) {
+      if (
+        questionType == QuestionType.WORD &&
+        word.word_data.partsOfSpeeches != null
+      ) {
         questionToPopulate.question = word.word;
         questionToPopulate.correctAns =
           word.word_data.partsOfSpeeches[0].definitions[0];
@@ -168,7 +169,7 @@
       } else {
         // select POS
         const pos: PartsOfSpeech | null =
-          word.word_data.partsOfSpeeches.length > 0
+          word.word_data.partsOfSpeeches != null
             ? word.word_data.partsOfSpeeches[0]
             : null;
         //  if its null, then re run the function
@@ -213,13 +214,16 @@
     correctAns: string
   ): string[] {
     let additionalAns: string[] = [correctAns];
-    const totalOption:number = 5
+    const totalOption: number = 5;
 
     if (type == QuestionType.WORD) {
       while (additionalAns.length < totalOption) {
         // find random definition
         let randomWord: Word =
           backupWords[Math.floor(Math.random() * backupWords.length)];
+        if (randomWord.word_data.partsOfSpeeches == null) {
+          continue;
+        }
         const definition: string =
           randomWord.word_data.partsOfSpeeches[0].definitions[0];
 
@@ -292,9 +296,11 @@
 
   // modal
   let clickOutsideModal = false;
+
   function toggleRandom() {
     isRandom = !isRandom;
   }
+
   function toggleQuestionType() {
     if (questionType == QuestionType.DEFINITION) {
       questionType = QuestionType.WORD;
@@ -348,23 +354,24 @@
   </ButtonGroup>
 </Modal>
 
-<main class="my-6">
-  <DevComponent>
-      <!-- content here -->
-      <p>words {words.length}</p>
-      <p>Current Index:{currentIndex}</p>
-      <p>Has more data:{hasMore}</p>
-      <p>Backup words:{backupWords.length}</p>
-      <p>total Question {totalQuestion}</p>
-      <p>Remaining {questionRemaining}</p>
-      <p>Correct {correctQuestion}</p>
-      <p>Quiz complete {completedQuiz}</p>
-      <p>
-        Question type {questionType == QuestionType.WORD
-          ? "word"
-          : "definition"}
-      </p>
+<svelte:head>
+  <title>{listMeta ? `Practice definition: ${listMeta.name}` : "Practice definition"}</title>
+</svelte:head>
 
+<main class="my-6" in:fade>
+  <DevComponent>
+    <!-- content here -->
+    <p>words {words.length}</p>
+    <p>Current Index:{currentIndex}</p>
+    <p>Has more data:{hasMore}</p>
+    <p>Backup words:{backupWords.length}</p>
+    <p>total Question {totalQuestion}</p>
+    <p>Remaining {questionRemaining}</p>
+    <p>Correct {correctQuestion}</p>
+    <p>Quiz complete {completedQuiz}</p>
+    <p>
+      Question type {questionType == QuestionType.WORD ? "word" : "definition"}
+    </p>
   </DevComponent>
 
   {#if completedQuiz == false}
@@ -420,7 +427,9 @@
                 size="base"
                 weight="medium"
                 class="px-4 py-2 rounded border border-gray-200 dark:border-gray-700"
-                color="text-gray-900 dark:text-gray-900 ">{option}</P
+                color="text-gray-900 dark:text-gray-900 "
+              >
+                {option}</P
               >
             </button>
             <div class="mb-2" />
@@ -449,6 +458,7 @@
   .cDisable {
     cursor: not-allowed;
   }
+
   .cPointer {
     cursor: pointer;
   }

@@ -134,7 +134,7 @@
 
 <main in:fade>
   <div class="my-3">
-    <Heading tag="h4">Pubic sets</Heading>
+    <Heading tag="h4">Available Sets</Heading>
   </div>
   <div class="mb-6">
     <Input

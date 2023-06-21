@@ -2,6 +2,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import {
+    Alert,
     Avatar,
     Badge,
     Button,
@@ -10,6 +11,7 @@
     P,
     Select,
     TextPlaceholder,
+    Toast,
   } from "flowbite-svelte";
   import type { PageData } from "./$types";
   import axiosAPI from "$lib/services/customAxios";
@@ -26,6 +28,8 @@
     Meta,
     SingleSetResponse,
   } from "$lib/interfaces/setData";
+  import type { AxiosResponse } from "axios";
+  import CloseIcon from "$lib/icons/closeIcon.svelte";
 
   export let data: PageData;
 
@@ -111,6 +115,10 @@
     redirectHelper("/login");
   }
 
+  // =========================
+  // sorting
+  // =========================
+
   let selected: string = "default";
   let filters = [
     { value: "default", name: "Original" },
@@ -143,6 +151,46 @@
     newWords = [];
     loading = false;
     fetchData();
+  }
+
+  // =========================
+  // set save function
+  // =========================
+  let saving = false;
+  let saveSuccess: string | null = null;
+  let saveError: string | null = null;
+  function handleSave() {
+    saving = true;
+    console.log("handle save");
+
+    if (data.user == null) {
+      redirectHelper("/login", $page.url);
+      return;
+    }
+
+    // continue to save
+    const postData = {
+      user_id: data.user.id,
+      list_id: listMeta.id,
+      scope: "user",
+    };
+
+    axiosAPI
+      .post("/saved-lists", postData)
+      .then((res: AxiosResponse) => {
+        if (res.status == 201) {
+          saveSuccess = "Successfully saved the set.";
+        } else {
+          saveError = "There was an error saving this set.";
+        }
+      })
+      .catch((err) => {
+        console.log(err.response);
+        saveError = "Error saving the set.";
+      })
+      .finally(() => {
+        saving = false;
+      });
   }
 </script>
 
@@ -190,10 +238,26 @@
         {:else if data.user?.id == listMeta.user_id}
           <Button color="dark">Edit</Button>
         {:else}
-          <Button color="dark">Save</Button>
+          <Button color="dark" on:click={handleSave} disabled={saving}
+            >Save</Button
+          >
         {/if}
       </div>
     </div>
+  {/if}
+
+  {#if saveError}
+    <Alert color="red" dismissable class="my-1">
+      <span slot="icon"><CloseIcon /></span>
+      {saveError}
+    </Alert>
+  {/if}
+
+  {#if saveSuccess}
+    <Alert color="green" dismissable class="my-1">
+      <span slot="icon"><CloseIcon /></span>
+      {saveSuccess}
+    </Alert>
   {/if}
 
   {#if listMeta}
@@ -250,16 +314,9 @@
   <div use:inview={{}} on:change={loadMore} />
 
   {#if loading}
-    <TextPlaceholder size="xxl" class="mt-8" />
-    <TextPlaceholder size="xxl" class="mt-8" />
-    <TextPlaceholder size="xxl" class="mt-8" />
-    <TextPlaceholder size="xxl" class="mt-8" />
-    <TextPlaceholder size="xxl" class="mt-8" />
-    <TextPlaceholder size="xxl" class="mt-8" />
-    <TextPlaceholder size="xxl" class="mt-8" />
-    <TextPlaceholder size="xxl" class="mt-8" />
-    <TextPlaceholder size="xxl" class="mt-8" />
-    <TextPlaceholder size="xxl" class="mt-8" />
+    {#each Array(10) as _, index (index)}
+      <TextPlaceholder size="xxl" class="mt-8" />
+    {/each}
   {/if}
 
   {#if words.length == 0 && !hasMore && !loading}

@@ -1,7 +1,6 @@
 <!-- @format -->
 <script lang="ts">
   import { page } from "$app/stores";
-  import { dev } from "$app/environment";
   import { P, Button, Badge, Heading } from "flowbite-svelte";
   import axiosAPI from "$lib/services/customAxios";
   import { onMount } from "svelte";
@@ -12,6 +11,7 @@
     Word,
   } from "$lib/interfaces/setData";
   import DevComponent from "$lib/components/DevComponent.svelte";
+  import { fade } from "svelte/transition";
   // call and get the data
   // data variables
   let currentPage = 1;
@@ -44,15 +44,18 @@
 
         if (listMeta == undefined) {
           listMeta = data.list_meta;
-          // set the total question
-          totalQuestion = listMeta.word_count;
-          questionRemaining = listMeta.word_count;
         }
 
         if (data.words.length) {
-          words = [...words, ...data.words];
+          // to prevent the errors occurring from null parts of speech
+          const filteredWords = data.words.filter(
+            (word) => word.word_data.partsOfSpeeches != null
+          );
+          words = [...words, ...filteredWords];
           // newWords = data.words;
-          backupWords = [...backupWords, ...data.words];
+          backupWords = [...backupWords, ...filteredWords];
+          totalQuestion = backupWords.length;
+          questionRemaining = backupWords.length;
           hasMore = data.words.length >= per_page ? true : false;
         } else {
           hasMore = false;
@@ -146,6 +149,10 @@
       // get all the synonyms
       let tempSynonyms: string[] = [];
 
+      if (word.word_data.partsOfSpeeches == null) {
+        continue;
+      }
+
       word.word_data.partsOfSpeeches.forEach((pos) => {
         tempSynonyms.push(...pos.synonyms_gre);
       });
@@ -223,6 +230,9 @@
       } else {
         // merge all the synonyms
         let tempSynonyms: string[] = [randomWord.word];
+        if (randomWord.word_data.partsOfSpeeches == null) {
+          continue;
+        }
         randomWord.word_data.partsOfSpeeches.forEach((pos) => {
           tempSynonyms = [...tempSynonyms, ...pos.synonyms_gre];
         });
@@ -263,17 +273,6 @@
 
     return array;
   }
-
-  // const question: QuestionInterface = {
-  //   wordId: [0],
-  //   question: "Select in pairs",
-  //   correctAns: [
-  //     ["a", "b"],
-  //     ["c", "d"],
-  //   ],
-  //   selectedAns: [],
-  //   options: ["a", "b", "c", "d", "e", "f"],
-  // };
 
   let showCorrectAns: boolean = false;
   let showNextQuestionButton: boolean = false;
@@ -416,7 +415,11 @@
   }
 </script>
 
-<main class="my-6">
+<svelte:head>
+  <title>{listMeta ? `Sentence Equivalence Practice: ${listMeta.name}` : "Sentence Equivalence Practice"}</title>
+</svelte:head>
+
+<main class="my-6" in:fade>
   <DevComponent>
     <p>words {words.length}</p>
     <p>Current Index:{currentIndex}</p>
