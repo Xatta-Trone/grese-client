@@ -1,13 +1,6 @@
 import type { LayoutServerLoad } from './$types';
 import axiosAPI from '$lib/services/customAxios';
 import type { MeEndpointResponse } from '$lib/services/auth';
-import { redirect } from '@sveltejs/kit';
-
-// let u: UserInterface | null
-
-// user.subscribe(val => {
-//     u = val
-// })
 
 export const load = (async ({ locals, parent }) => {
     await parent();
