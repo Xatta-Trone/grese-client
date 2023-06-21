@@ -14,6 +14,7 @@
     Select,
     P,
   } from "flowbite-svelte";
+  import { fade } from "svelte/transition";
 
   //import type { PageData } from './$types';
   import { superForm } from "sveltekit-superforms/client";
@@ -41,7 +42,7 @@
   }
 </script>
 
-<div class="mt-5">
+<div class="mt-5" in:fade>
   <SuperDebug data={$form} />
   {#if $delayed}<span class="delayed">Working...</span>{/if}
   {#if $submitting}<span class="delayed">Working2...</span>{/if}

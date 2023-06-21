@@ -6,6 +6,7 @@
   import { beforeNavigate, goto } from "$app/navigation";
   import { user, type UserInterface } from "$lib/services/auth";
   import type { PageData, PageServerData } from "./$types";
+  import { fade } from "svelte/transition";
 
   export let data:PageData;
 
@@ -40,7 +41,7 @@
 <div class="app">
   <Header isLoggedIn={data.isLoggedIn} />
 
-  <main class="container max-w-screen-lg mx-auto">
+  <main class="container max-w-screen-lg mx-auto" in:fade>
     <slot />
   </main>
 

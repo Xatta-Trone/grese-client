@@ -18,6 +18,7 @@
   import CloseIcon from "$lib/icons/closeIcon.svelte";
   import axiosAPI from "$lib/services/customAxios";
   import type { AxiosResponse } from "axios";
+  import { fade } from "svelte/transition";
   let textareaprops = {
     id: "words",
     name: "words",
@@ -182,7 +183,7 @@
   }
 </script>
 
-<div class="mt-5">
+<div class="mt-5" in:fade>
   <DevComponent>
     <p>Name: {formData.name}</p>
     <p>visibility: {formData.visibility}</p>

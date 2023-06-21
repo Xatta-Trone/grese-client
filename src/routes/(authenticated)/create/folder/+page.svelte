@@ -16,6 +16,7 @@
   import CloseIcon from "$lib/icons/closeIcon.svelte";
   import axiosAPI from "$lib/services/customAxios";
   import type { AxiosError, AxiosResponse } from "axios";
+  import { fade } from "svelte/transition";
 
   interface FormData {
     name: string;
@@ -145,7 +146,7 @@
   }
 </script>
 
-<div class="mt-5">
+<div class="mt-5" in:fade>
   <DevComponent>
     <p>Name: {formData.name}</p>
     <p>visibility: {formData.visibility}</p>
