@@ -103,7 +103,7 @@ export const load = (async ({ url, cookies, request }) => {
     const exp: Date = new Date(data.exp)
 
     cookies.set(COOKIE_KEY, data.token, { expires: exp, domain: cookieDomain })
-    cookies.set(COOKIE_KEY_EXP, JSON.stringify(data.exp), { expires: exp })
+    cookies.set(COOKIE_KEY_EXP, JSON.stringify(data.exp), { expires: exp, domain: cookieDomain })
     cookies.set(COOKIE_KEY_USER, JSON.stringify(data.user), { expires: exp, domain: cookieDomain })
 
 

@@ -62,7 +62,7 @@ export const DELETE: RequestHandler = async ({ cookies, url }) => {
         console.info("cookies delete");
 
         keys.split(",").forEach(key => {
-            cookies.delete(key);
+            cookies.delete(key, { domain: cookieDomain });
         })
 
 
