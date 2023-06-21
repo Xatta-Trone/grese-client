@@ -12,10 +12,10 @@
     DropdownDivider,
   } from "flowbite-svelte";
   import { page } from "$app/stores";
-  import { user, logout } from "$lib/services/auth";
+  import { logout, type UserInterface } from "$lib/services/auth";
   import CirclePlusIcon from "$lib/icons/circlePlusIcon.svelte";
   export let isLoggedIn: boolean;
-
+  export let user: UserInterface | null;
 </script>
 
 <Navbar let:hidden let:toggle color="form">
@@ -51,9 +51,7 @@
       >My folders</NavLi
     >
 
-    <NavLi id="nav-menu12" class="cursor-pointer"
-      ><CirclePlusIcon/></NavLi
-    >
+    <NavLi id="nav-menu12" class="cursor-pointer"><CirclePlusIcon /></NavLi>
     <Dropdown triggeredBy="#nav-menu12" class="w-44 z-20">
       <DropdownItem
         ><NavLi
@@ -80,6 +78,14 @@
         ><Chevron aligned>Profile</Chevron></NavLi
       >
       <Dropdown triggeredBy="#nav-menu1" class="w-44 z-20">
+        <DropdownItem slot="header">
+          <div class="px-2 py-0 pl-0">
+            <span class="block text-sm text-gray-900 dark:text-white">
+              {user?.name}
+            </span>
+          </div>
+        </DropdownItem>
+
         <DropdownItem
           ><NavLi
             href="/profile"
@@ -87,10 +93,10 @@
             >My Profile</NavLi
           ></DropdownItem
         >
-        <DropdownDivider />
-        <DropdownItem><NavLi href="#" on:click={() => logout()}>Logout</NavLi
-          ></DropdownItem>
-        <!-- <DropdownItem><NavLi href="logout">Logout</NavLi></DropdownItem> -->
+        <DropdownItem slot="footer"
+          ><NavLi href="#" on:click={() => logout()}>Logout</NavLi
+          ></DropdownItem
+        >
       </Dropdown>
     {:else}
       <NavLi

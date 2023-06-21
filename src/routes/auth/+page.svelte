@@ -6,6 +6,7 @@
   import { redirectHelper } from "$lib/utils/helpers";
   import { onMount } from "svelte";
   import { INTENDED_KEY } from "$lib/utils/constants";
+  import { goto } from "$app/navigation";
 
   export let data: PageData;
   let intended: string = "/profile";
@@ -25,14 +26,11 @@
     }
 
     localStorage.removeItem(INTENDED_KEY);
-
-
-
   });
 </script>
 
 <h1>Auth Success. Redirecting.....</h1>
 
 {#if data.success && browser}
-  Magic number: {setTimeout(() => window.location.href = intended, 0)}
+  Magic number: {setTimeout(() => goto(intended, { replaceState: true }), 0)}
 {/if}

@@ -14,7 +14,7 @@ export interface SingleSetResponse {
 export interface ListMeta {
     id: number;
     user_id: number;
-    list_meta_id: number;
+    list_meta_id?: number;
     name: string;
     slug: string;
     visibility: number;
@@ -37,6 +37,7 @@ export interface Meta {
     id: number;
     query: string;
     order_by: string;
+    order?: string;
     page: number;
     per_page: number;
     total: number;

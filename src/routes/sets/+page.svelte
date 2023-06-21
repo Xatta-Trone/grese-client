@@ -4,9 +4,10 @@
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
   import { inview } from "svelte-inview/dist/index";
-  import { Avatar, Card, Heading, Input } from "flowbite-svelte";
+  import { Avatar, Card, Heading, Input, Skeleton } from "flowbite-svelte";
   import { page } from "$app/stores";
   import bot from "$lib/images/bot.png";
+  import { fade } from "svelte/transition";
 
   // interfaces
   interface SetsResponse {
@@ -56,7 +57,7 @@
 
   $: sets = [...sets, ...newSets];
 
-  //   export let data: PageData;
+  // export let data: PageData;
 
   async function fetchData() {
     loading = true;
@@ -127,7 +128,11 @@
   });
 </script>
 
-<main>
+<svelte:head>
+  <title>Available Sets</title>
+</svelte:head>
+
+<main in:fade>
   <div class="my-3">
     <Heading tag="h4">Pubic sets</Heading>
   </div>
@@ -141,29 +146,37 @@
     />
   </div>
 
-  {#each sets as set}
-    <Card size="xl" href="/sets/{set.id}-{set.slug}" class="mb-3">
-      <h5
-        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-      >
-        {set.name}
-      </h5>
-      <div class="flex justify-between mt-2">
-        <a class="flex items-center space-x-4" href="/userprofile">
-          <Avatar src={bot} size="xs" />
-          <div class="space-y-1 font-medium dark:text-white">
-            <div>{set.user.username}</div>
-          </div>
-        </a>
-        <div>{set.word_count} {set.word_count > 1 ? "words" : "word"}</div>
-      </div>
-    </Card>
-  {/each}
-
+  <div in:fade>
+    {#each sets as set}
+      <Card size="xl" href="/sets/{set.id}-{set.slug}" class="mb-3">
+        <h5
+          class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+        >
+          {set.name}
+        </h5>
+        <div class="flex justify-between mt-2">
+          <a class="flex items-center space-x-4" href="/userprofile">
+            <Avatar src={bot} size="xs" />
+            <div class="space-y-1 font-medium dark:text-white">
+              <div>{set.user.username}</div>
+            </div>
+          </a>
+          <div>{set.word_count} {set.word_count > 1 ? "words" : "word"}</div>
+        </div>
+      </Card>
+    {/each}
+  </div>
   <div use:inview={{}} on:change={loadMore} />
 
   {#if loading}
-    <Heading tag="h5">Loading...&#128516;</Heading>
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
   {/if}
 
   {#if sets.length == 0 && !hasMore && !loading}

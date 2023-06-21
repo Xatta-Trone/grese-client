@@ -1,86 +1,33 @@
 <!-- @format -->
 <script lang="ts">
   import { page } from "$app/stores";
-  import { user, type UserInterface } from "$lib/services/auth";
-  import { Avatar, Badge, Button, Card, Heading, P } from "flowbite-svelte";
+  import {
+    Avatar,
+    Badge,
+    Button,
+    Card,
+    Heading,
+    P,
+    Select,
+    TextPlaceholder,
+  } from "flowbite-svelte";
   import type { PageData } from "./$types";
   import axiosAPI from "$lib/services/customAxios";
   import { onMount } from "svelte";
   import bot from "$lib/images/bot.png";
   import { inview } from "svelte-inview/dist/index";
   import type { LearningStatusGetResponse } from "$lib/interfaces/learningStatus";
-  import { unknown } from "zod";
+  import { browser } from "$app/environment";
+  import { INTENDED_KEY } from "$lib/utils/constants";
+  import { redirectHelper } from "$lib/utils/helpers";
+  import type {
+    Word,
+    ListMeta,
+    Meta,
+    SingleSetResponse,
+  } from "$lib/interfaces/setData";
 
-  // export let data: PageData;
-
-  console.log($page.params.id, $page.params.slug);
-
-  let u: UserInterface | null;
-
-  user.subscribe((value) => {
-    u = value;
-  });
-
-  // interface
-  interface SingleSetResponse {
-    list_meta: ListMeta;
-    meta: Meta;
-    words: Word[];
-  }
-
-  interface ListMeta {
-    id: number;
-    user_id: number;
-    list_meta_id: number;
-    name: string;
-    slug: string;
-    visibility: number;
-    status: number;
-    crated_at: Date;
-    updated_at: Date;
-    user: User;
-    word_count: number;
-  }
-  interface User {
-    id: number;
-    name: string;
-    email: string;
-    username: string;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface Meta {
-    id: number;
-    query: string;
-    order_by: string;
-    page: number;
-    per_page: number;
-    total: number;
-    list_id: number;
-  }
-
-  interface Word {
-    id: number;
-    word: string;
-    word_data: WordData;
-    is_reviewed: number;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface WordData {
-    word: string;
-    partsOfSpeeches: PartsOfSpeech[];
-  }
-
-  interface PartsOfSpeech {
-    partsOfSpeech: string;
-    definitions: string[];
-    examples: string[];
-    synonyms_gre: string[];
-    synonyms_normal: string[];
-  }
+  export let data: PageData;
 
   // data variables
   let currentPage = 1;
@@ -93,6 +40,8 @@
   let hasMore = true;
   let query: string = "";
   let learningStatusCount: LearningStatusGetResponse;
+  let orderBy = "id";
+  let orderDir = "asc";
 
   $: words = [...words, ...newWords];
 
@@ -102,7 +51,7 @@
     loading = true;
     await axiosAPI
       .get(
-        `/lists/${$page.params.slug}?page=${currentPage}&per_page=${per_page}&query=${query}&order_by=asc`
+        `/lists/${$page.params.slug}?page=${currentPage}&per_page=${per_page}&query=${query}&order_by=${orderDir}&order=${orderBy}`
       )
       .then((res) => {
         const data: SingleSetResponse = res.data;
@@ -117,7 +66,7 @@
 
         if (data.words.length) {
           newWords = data.words;
-          hasMore = true;
+          hasMore = data.words.length <= per_page ? true : false;
         } else {
           hasMore = false;
         }
@@ -148,14 +97,58 @@
 
   onMount(() => {
     fetchData();
-
-    console.log($page.url.pathname);
-    console.log($user);
-    if ($user != null) {
+    if (data.user != null) {
       getLearningStatus();
     }
   });
+
+  function handleLoginToSave() {
+    if (browser) {
+      localStorage.setItem(INTENDED_KEY, $page.url.pathname + $page.url.search);
+      // goto("/login");
+    }
+
+    redirectHelper("/login");
+  }
+
+  let selected: string = "default";
+  let filters = [
+    { value: "default", name: "Original" },
+    { value: "az", name: "A-Z" },
+    { value: "za", name: "Z-A" },
+  ];
+
+  function handleFilter() {
+    //   let orderBy = "id";
+    // let orderDir = "asc";
+    switch (selected) {
+      case "az":
+        orderBy = "word";
+        orderDir = "asc";
+        break;
+      case "za":
+        orderBy = "word";
+        orderDir = "desc";
+        break;
+
+      default:
+        orderBy = "id";
+        orderDir = "desc";
+        break;
+    }
+
+    // set page 1
+    currentPage = 1;
+    words = [];
+    newWords = [];
+    loading = false;
+    fetchData();
+  }
 </script>
+
+<svelte:head>
+  <title>{listMeta ? listMeta.name : "Set details"}</title>
+</svelte:head>
 
 <main class="my-6">
   {#if listMeta}
@@ -190,9 +183,11 @@
         </div>
       </a>
       <div class="font-bold">
-        {#if u == null}
-          <Button color="dark" href="/login">Login to save</Button>
-        {:else if u && u.id == listMeta.user_id}
+        {#if data.user == null}
+          <Button color="dark" on:click={handleLoginToSave}
+            >Login to save</Button
+          >
+        {:else if data.user?.id == listMeta.user_id}
           <Button color="dark">Edit</Button>
         {:else}
           <Button color="dark">Save</Button>
@@ -202,10 +197,19 @@
   {/if}
 
   {#if listMeta}
-    <Heading tag="h4" class="my-6"
-      >{listMeta.word_count}
-      {listMeta.word_count > 1 ? "words" : "word"} in this set</Heading
-    >
+    <div class="flex flex-col md:flex-row">
+      <Heading tag="h4" class="my-6"
+        >{listMeta.word_count}
+        {listMeta.word_count > 1 ? "words" : "word"} in this set</Heading
+      >
+      <div>
+        <Select
+          items={filters}
+          bind:value={selected}
+          on:change={handleFilter}
+        />
+      </div>
+    </div>
   {/if}
 
   {#if learningStatusCount && listMeta}
@@ -228,11 +232,15 @@
         <P>
           <span class="font-bold capitalize">{word.word}</span>
           <Badge color="dark" large
-            >{word.word_data.partsOfSpeeches ? word.word_data.partsOfSpeeches[0].partsOfSpeech : ''}</Badge
+            >{word.word_data.partsOfSpeeches
+              ? word.word_data.partsOfSpeeches[0].partsOfSpeech
+              : ""}</Badge
           >
         </P>
         <P>
-          {word.word_data.partsOfSpeeches ? word.word_data.partsOfSpeeches[0].definitions[0] : '' }
+          {word.word_data.partsOfSpeeches
+            ? word.word_data.partsOfSpeeches[0].definitions[0]
+            : ""}
         </P>
       </Card>
     {/each}
@@ -241,7 +249,16 @@
   <div use:inview={{}} on:change={loadMore} />
 
   {#if loading}
-    <Heading tag="h5">Loading...&#128516;</Heading>
+    <TextPlaceholder size="xxl" class="mt-8" />
+    <TextPlaceholder size="xxl" class="mt-8" />
+    <TextPlaceholder size="xxl" class="mt-8" />
+    <TextPlaceholder size="xxl" class="mt-8" />
+    <TextPlaceholder size="xxl" class="mt-8" />
+    <TextPlaceholder size="xxl" class="mt-8" />
+    <TextPlaceholder size="xxl" class="mt-8" />
+    <TextPlaceholder size="xxl" class="mt-8" />
+    <TextPlaceholder size="xxl" class="mt-8" />
+    <TextPlaceholder size="xxl" class="mt-8" />
   {/if}
 
   {#if words.length == 0 && !hasMore && !loading}

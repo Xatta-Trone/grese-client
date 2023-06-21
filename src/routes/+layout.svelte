@@ -39,7 +39,7 @@
 </script>
 
 <div class="app">
-  <Header isLoggedIn={data.isLoggedIn} />
+  <Header isLoggedIn={data.isLoggedIn} user={data.user} />
 
   <main class="container max-w-screen-lg mx-auto" in:fade>
     <slot />
