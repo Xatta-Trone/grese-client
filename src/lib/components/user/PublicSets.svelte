@@ -8,7 +8,9 @@
   import { fade } from "svelte/transition";
   import type { Data, SetsResponse } from "$lib/interfaces/setListData";
 
+  export let username: string;
   // interfaces
+  
 
   // data variables
   let currentPage = 1;
@@ -27,7 +29,7 @@
     loading = true;
     await axiosAPI
       .get(
-        `/public-lists?page=${currentPage}&per_page=${per_page}&query=${query}`
+        `/public-lists?page=${currentPage}&per_page=${per_page}&query=${query}&user_name=${username}`
       )
       .then((res) => {
         const data: SetsResponse = res.data;
@@ -92,14 +94,7 @@
   });
 </script>
 
-<svelte:head>
-  <title>Available Sets</title>
-</svelte:head>
-
 <main in:fade>
-  <div class="my-3">
-    <Heading tag="h4">Available Sets</Heading>
-  </div>
   <div class="mb-6">
     <Input
       id="large-input"

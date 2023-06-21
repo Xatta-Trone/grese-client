@@ -224,7 +224,7 @@
 
   {#if listMeta}
     <div class="flex justify-between my-8">
-      <a class="flex items-center space-x-4" href="/userprofile">
+      <a class="flex items-center space-x-4" href="/@{listMeta.user.username}">
         <Avatar src={bot} size="sm" />
         <div class="space-y-1 font-medium dark:text-white">
           <div class="font-bold">{listMeta.user.username}</div>
