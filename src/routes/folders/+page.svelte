@@ -139,7 +139,7 @@
   <div class="mb-6">
     <Input
       id="large-input"
-      size="lg"
+      size="md"
       placeholder="Type to search...."
       bind:value={query}
       on:keyup={debounce}
