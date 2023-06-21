@@ -228,11 +228,11 @@
         <P>
           <span class="font-bold capitalize">{word.word}</span>
           <Badge color="dark" large
-            >{word.word_data.partsOfSpeeches[0].partsOfSpeech}</Badge
+            >{word.word_data.partsOfSpeeches ? word.word_data.partsOfSpeeches[0].partsOfSpeech : ''}</Badge
           >
         </P>
         <P>
-          {word.word_data.partsOfSpeeches[0].definitions[0]}
+          {word.word_data.partsOfSpeeches ? word.word_data.partsOfSpeeches[0].definitions[0] : '' }
         </P>
       </Card>
     {/each}
