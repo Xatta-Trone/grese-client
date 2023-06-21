@@ -13,12 +13,12 @@ export const GET: RequestHandler = async ({ locals, cookies, fetch }) => {
     cookies.delete(COOKIE_KEY_USER, { domain: cookieDomain })
     locals.user = null
     locals.token = null
-    fetch(`/cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER},${COOKIE_KEY_EXP}`, { method: "delete" })
+    await fetch(`/cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER},${COOKIE_KEY_EXP}`, { method: "delete" })
         .then(() => {
             return new Response(null, {
-                status: 200,
+                status: 301,
                 headers: {
-                    Location: '/login'
+                    Location: '/'
                 }
             });
 
@@ -43,9 +43,9 @@ export const GET: RequestHandler = async ({ locals, cookies, fetch }) => {
     // invalidateAll();
 
     return new Response(null, {
-        status: 200,
+        status: 301,
         headers: {
-            Location: '/login'
+            Location: '/'
         }
     });
 };

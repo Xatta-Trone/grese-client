@@ -1,6 +1,6 @@
 <!-- @format -->
 <script lang="ts">
-  import {
+import {
     Navbar,
     NavBrand,
     NavLi,
@@ -11,13 +11,18 @@
     Chevron,
     DropdownDivider,
     DarkMode,
-  } from "flowbite-svelte";
-  import { page } from "$app/stores";
-  import { logout, type UserInterface } from "$lib/services/auth";
-  import CirclePlusIcon from "$lib/icons/circlePlusIcon.svelte";
-  export let isLoggedIn: boolean;
-  export let user: UserInterface | null;
-  let btnClass =
+} from "flowbite-svelte";
+import {
+    page
+} from "$app/stores";
+import {
+    logout,
+    type UserInterface
+} from "$lib/services/auth";
+import CirclePlusIcon from "$lib/icons/circlePlusIcon.svelte";
+export let isLoggedIn: boolean;
+export let user: UserInterface | null;
+let btnClass =
     "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-md";
 </script>
 
@@ -54,7 +59,7 @@
       >My folders</NavLi
     >
 
-    <NavLi class="cursor-pointer"><DarkMode btnClass={btnClass} /></NavLi>
+    <NavLi class="cursor-pointer"><DarkMode initialTheme="light" btnClass={btnClass} /></NavLi>
     <NavLi id="nav-menu12" class="cursor-pointer"><CirclePlusIcon /></NavLi>
     <Dropdown triggeredBy="#nav-menu12" class="w-44 z-20">
       <DropdownItem
@@ -90,13 +95,20 @@
           </div>
         </DropdownItem>
 
-        <DropdownItem
-          ><NavLi
+        <DropdownItem>
+          <NavLi
             href="/profile"
             active={$page.url.pathname == "/profile" ? true : false}
             >My Profile</NavLi
-          ></DropdownItem
-        >
+          >
+        </DropdownItem>
+        <DropdownItem>
+          <NavLi
+            href="/logout"
+            active={$page.url.pathname == "/profile" ? true : false}
+            >Logout 2</NavLi
+          >
+        </DropdownItem>
         <DropdownItem slot="footer"
           ><NavLi href="#" on:click={() => logout()}>Logout</NavLi
           ></DropdownItem

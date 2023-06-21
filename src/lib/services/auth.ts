@@ -13,17 +13,16 @@ export const user = writable<UserInterface | null>(null);
 export const hasAuthInitialized = writable<boolean>(false);
 
 
-export function logout() {
+export async function logout() {
   if (browser) {
     window.localStorage.clear();
-    fetch(`${window.location.origin}/cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER},${COOKIE_KEY_EXP}`, { method: "delete" })
+    await fetch(`${window.location.origin}/cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER},${COOKIE_KEY_EXP}`, { method: "delete" })
       .then(() => {
+        // token.set(null);
+        // user.set(null);
         window.location.href = "/"
       })
   }
-  token.set(null);
-  user.set(null);
-
   redirectHelper('/')
 
 }

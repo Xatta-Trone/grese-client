@@ -32,5 +32,5 @@
 <h1>Auth Success. Redirecting.....</h1>
 
 {#if data.success && browser}
-  Magic number: {setTimeout(() => goto(intended, { replaceState: true }), 0)}
+  Magic number: {setTimeout(() => redirectHelper(intended), 0)}
 {/if}
