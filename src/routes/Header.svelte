@@ -10,12 +10,15 @@
     DropdownItem,
     Chevron,
     DropdownDivider,
+    DarkMode,
   } from "flowbite-svelte";
   import { page } from "$app/stores";
   import { logout, type UserInterface } from "$lib/services/auth";
   import CirclePlusIcon from "$lib/icons/circlePlusIcon.svelte";
   export let isLoggedIn: boolean;
   export let user: UserInterface | null;
+  let btnClass =
+    "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-md";
 </script>
 
 <Navbar let:hidden let:toggle color="form">
@@ -51,6 +54,7 @@
       >My folders</NavLi
     >
 
+    <NavLi class="cursor-pointer"><DarkMode btnClass={btnClass} /></NavLi>
     <NavLi id="nav-menu12" class="cursor-pointer"><CirclePlusIcon /></NavLi>
     <Dropdown triggeredBy="#nav-menu12" class="w-44 z-20">
       <DropdownItem

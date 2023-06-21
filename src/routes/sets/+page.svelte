@@ -35,7 +35,7 @@
 
         if (data.data.length) {
           newSets = data.data;
-          hasMore = true;
+          hasMore = data.data.length <= per_page ? true : false;
         } else {
           hasMore = false;
         }

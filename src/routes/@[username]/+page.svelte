@@ -24,11 +24,17 @@
 
   <div class="w-full">
     <Tabs style="underline" class="mt-5">
-      <TabItem open title="Available Sets">
+      <TabItem
+        open={$page.url.searchParams.get("tab") != "folders"}
+        title="Available Sets"
+      >
         <PublicSets username={$page.params.username} />
       </TabItem>
-      <TabItem title="Available Set Folders">
-        <PublicFolders />
+      <TabItem
+        open={$page.url.searchParams.get("tab") == "folders"}
+        title="Available Set Folders"
+      >
+        <PublicFolders username={$page.params.username} />
       </TabItem>
     </Tabs>
   </div>
