@@ -6,7 +6,7 @@
   import { inview } from "svelte-inview/dist/index";
   import { Avatar, Card, Heading, Input, Label, Select } from "flowbite-svelte";
   import { page } from "$app/stores";
-  import bot from "$lib/images/bot.jpg";
+  import bot from "$lib/images/bot.png";
 
   // interfaces
   interface FoldersResponse {
@@ -176,7 +176,7 @@
       </h5>
       <div class="flex justify-between mt-2">
         <a class="flex items-center space-x-4" href="/userprofile">
-          <Avatar src={bot} size="xs" />
+          <Avatar src={bot} size="sm" />
           <div class="space-y-1 font-medium dark:text-white">
             <div>{set.user.username}</div>
           </div>

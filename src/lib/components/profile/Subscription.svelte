@@ -18,14 +18,15 @@
     P,
   } from "flowbite-svelte";
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
 
   let expires: Date = new Date(0);
   let isPremium = false;
-  let isPremiumExpired = false;
+  let isPremiumExpired = true;
   let clickOutsideModal = false;
   let couponCode = "";
   let loading = false;
-  let initLoading = false;
+  let initLoading = true;
 
   onMount(async () => {
     getUserData();
@@ -33,6 +34,7 @@
   });
 
   function getUserData() {
+    initLoading = true;
     axiosAPI.get("/me").then((res) => {
       const response: MeEndpointResponse = res.data;
       console.log("subscription", response);
@@ -44,6 +46,9 @@
     expires = new Date(date ?? 0);
     isPremium = expires.getTime() > 0;
     isPremiumExpired = expires.getTime() > 0 && expires.getTime() < Date.now(); //is it still valid?
+    setTimeout(() => {
+      initLoading = false;
+    }, 500);
   }
 
   function submitCoupon() {
@@ -92,22 +97,26 @@
   >
 </Modal>
 
-<Card size="xl">
-  <Heading tag="h5">Subscription</Heading>
-  {#if isPremium == false || isPremiumExpired}
-    <div class="mt-4">
-      <Button color="dark" href={`/api/stripe-checkout?user=${$user?.id}`}
-        >Upgrade to GRE SE+</Button
+{#if initLoading == false}
+  <Card size="xl">
+    <Heading tag="h5">Subscription</Heading>
+    {#if isPremium == false || isPremiumExpired}
+      <div class="mt-4">
+        <Button color="dark" href={`/api/stripe-checkout?user=${$user?.id}`}
+          >Upgrade to GRE SE+</Button
+        >
+        <Button color="red" on:click={() => (clickOutsideModal = true)}
+          >I have a spacial coupon</Button
+        >
+      </div>
+    {:else}
+      <P
+        >Thanks for your support. Your subscription expires on <strong
+          class="inline">{expires.toUTCString()}</strong
+        ></P
       >
-      <Button color="red" on:click={() => (clickOutsideModal = true)}
-        >I have a spacial coupon</Button
-      >
-    </div>
-  {:else}
-    <P
-      >Thanks for your support. Your subscription expires on <strong
-        class="inline">{expires.toUTCString()}</strong
-      ></P
-    >
-  {/if}
-</Card>
+    {/if}
+  </Card>
+{:else}
+  <Heading tag="h5">Loading subscription status...&#128516;</Heading>
+{/if}

@@ -13,6 +13,7 @@
   } from "flowbite-svelte";
   import { page } from "$app/stores";
   import { user, logout } from "$lib/services/auth";
+  import CirclePlusIcon from "$lib/icons/circlePlusIcon.svelte";
   export let isLoggedIn: boolean;
 
 </script>
@@ -51,7 +52,7 @@
     >
 
     <NavLi id="nav-menu12" class="cursor-pointer"
-      ><Chevron aligned>Create</Chevron></NavLi
+      ><CirclePlusIcon/></NavLi
     >
     <Dropdown triggeredBy="#nav-menu12" class="w-44 z-20">
       <DropdownItem

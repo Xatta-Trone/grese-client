@@ -6,7 +6,7 @@
   import type { PageData } from "./$types";
   import axiosAPI from "$lib/services/customAxios";
   import { onMount } from "svelte";
-  import bot from "$lib/images/bot.jpg";
+  import bot from "$lib/images/bot.png";
   import { inview } from "svelte-inview/dist/index";
   import type { LearningStatusGetResponse } from "$lib/interfaces/learningStatus";
   import { unknown } from "zod";

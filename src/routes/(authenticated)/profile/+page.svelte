@@ -7,6 +7,7 @@
   import type { MeEndpointResponse, UserInterface } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
   import { Heading } from "flowbite-svelte";
+  import { fade } from "svelte/transition";
 
   let userData: UserInterface | null;
 
@@ -33,7 +34,7 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </svelte:head>
 
-<main class="my-6">
+<main class="my-6" in:fade>
   {#if userData == null}
     <Heading tag="h5">Loading...&#128516;</Heading>
   {:else}
