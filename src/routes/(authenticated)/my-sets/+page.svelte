@@ -4,65 +4,45 @@
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
   import { inview } from "svelte-inview/dist/index";
-  import { Avatar, Card, Heading, Input, Label, Select } from "flowbite-svelte";
+  import {
+    Avatar,
+    Button,
+    Card,
+    Heading,
+    Input,
+    Select,
+    Skeleton,
+  } from "flowbite-svelte";
   import { page } from "$app/stores";
   import bot from "$lib/images/bot.png";
+  import type { Data, SetsResponse } from "$lib/interfaces/setListData";
+  import SetActionMenu from "$lib/components/user/sets/SetActionMenu.svelte";
+  import DevComponent from "$lib/components/DevComponent.svelte";
 
-  // interfaces
-  interface SetsResponse {
-    data: Data[];
-    meta: Meta;
-  }
-
-  interface Data {
-    id: number;
-    user_id: number;
-    list_meta_id?: number;
-    name: string;
-    slug: string;
-    visibility: number;
-    status: number;
-    crated_at: Date;
-    updated_at: Date;
-    user: User;
-    word_count: number;
-  }
-
-  interface User {
-    id: number;
-    username: string;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface Meta {
-    id: number;
-    query: string;
-    order_by: string;
-    order: string;
-    page: number;
-    per_page: number;
-    user_id: number;
-    count: number;
-    filter: string;
-  }
+  export let data: PageData;
 
   // data variables
   let currentPage = 1;
   let per_page = 20;
   let sets: Data[] = [];
-  let newSets: Data[] = [];
   let loading = false;
   let hasMore = true;
   let query: string = "";
   let filter = "all";
   let filters = [
-    { value: "all", name: "Everything" },
-    { value: "created", name: "Created" },
-    { value: "saved", name: "Saved" },
+    {
+      value: "all",
+      name: "Everything",
+    },
+    {
+      value: "created",
+      name: "Created",
+    },
+    {
+      value: "saved",
+      name: "Saved",
+    },
   ];
-
-  $: sets = [...sets, ...newSets];
 
   //   export let data: PageData;
 
@@ -70,15 +50,15 @@
     loading = true;
     await axiosAPI
       .get(
-        `/lists?page=${currentPage}&per_page=${per_page}&query=${query}&filter=${filter}`
+        `/lists?page=${currentPage}&per_page=${per_page}&query=${query}&filter=${filter}&order=asc`
       )
       .then((res) => {
         const data: SetsResponse = res.data;
         // console.log(data);
 
         if (data.data.length) {
-          newSets = data.data;
-          hasMore = true;
+          sets = [...sets, ...data.data];
+          hasMore = data.data.length < per_page ? false : true;
         } else {
           hasMore = false;
         }
@@ -90,7 +70,7 @@
   }
 
   function loadMore() {
-    if (!hasMore) return;
+    if (loading || !hasMore) return;
     currentPage++;
     fetchData();
   }
@@ -105,7 +85,9 @@
     clearTimeout(timer);
     timer = setTimeout(async () => {
       await reset();
-      replaceStateWithQuery({ query: query });
+      replaceStateWithQuery({
+        query: query,
+      });
       fetchData();
     }, 500);
   };
@@ -125,7 +107,6 @@
   async function reset() {
     currentPage = 1;
     sets = [];
-    newSets = [];
     loading = false;
     hasMore = true;
   }
@@ -140,17 +121,28 @@
 
     fetchData();
   });
+
+  // handle deleted action
+  function handleDeletedAction(event: CustomEvent<Data>) {
+    console.log(event.detail);
+    sets = [...sets.filter((set) => set.id != event.detail.id)];
+  }
 </script>
 
 <main>
+  <DevComponent>
+    {sets.length}
+    {hasMore}
+    {loading}
+  </DevComponent>
   <div class="my-3">
-    <Heading tag="h4">My sets</Heading>
+    <Heading tag="h4">My Sets</Heading>
   </div>
   <div class="grid gap-6 mb-6 md:grid-cols-10">
     <div class="col-span-8">
       <Input
         id="large-input"
-        size="lg"
+        size="md"
         placeholder="Type to search...."
         bind:value={query}
         on:keyup={debounce}
@@ -160,7 +152,7 @@
       <Select
         placeholder="Filter..."
         on:change={changeFilter}
-        size="lg"
+        size="md"
         items={filters}
         bind:value={filter}
       />
@@ -168,14 +160,25 @@
   </div>
 
   {#each sets as set}
-    <Card size="xl" href="/sets/{set.id}-{set.slug}" class="mb-3">
-      <h5
-        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-      >
-        {set.name}
-      </h5>
+    <Card size="xl" class="mb-3">
+      <div class="flex justify-between items-start">
+        <a class="inline-block" href="/sets/{set.id}-{set.slug}">
+          <Heading tag="h4">
+            {set.name}
+          </Heading>
+        </a>
+
+        <div>
+          <SetActionMenu
+            on:deleted={handleDeletedAction}
+            setMetaData={set}
+            isOwner={set.user_id == data.user?.id}
+          />
+        </div>
+      </div>
+
       <div class="flex justify-between mt-2">
-        <a class="flex items-center space-x-4" href="/userprofile">
+        <a class="flex items-center space-x-4" href="/@{set.user.username}">
           <Avatar src={bot} size="xs" />
           <div class="space-y-1 font-medium dark:text-white">
             <div>{set.user.username}</div>
@@ -189,11 +192,21 @@
   <div use:inview={{}} on:change={loadMore} />
 
   {#if loading}
-    <Heading tag="h5">Loading...&#128516;</Heading>
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
   {/if}
 
   {#if sets.length == 0 && !hasMore && !loading}
     <Heading tag="h5">Nothing found. &#128532;</Heading>
+    <Button data-sveltekit-preload-data="none" class="mt-5" href="/create/sets"
+      >Create a set</Button
+    >
   {/if}
 
   {#if sets.length > 0 && !hasMore}

@@ -31,5 +31,7 @@ export interface Meta {
     order: string;
     page: number;
     per_page: number;
+    user_id?: number;
     count: number;
+    filter?: string;
 }
