@@ -1,7 +1,6 @@
 <!-- @format -->
 <script lang="ts">
   import { Button } from "flowbite-svelte";
-  import { PUBLIC_AUTH_REDIRECT } from "$env/static/public";
   import GoogleSignInButton from "$lib/components/GoogleSignInButton.svelte";
 </script>
 
