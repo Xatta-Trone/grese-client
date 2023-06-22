@@ -121,7 +121,7 @@
 
   let selected: string = "default";
   let filters = [
-    { value: "default", name: "Original" },
+    { value: "default", name: "Default" },
     { value: "az", name: "A-Z" },
     { value: "za", name: "Z-A" },
   ];
@@ -262,16 +262,17 @@
 
   {#if listMeta}
     <div class="flex flex-col md:flex-row items-center">
-      <Heading tag="h4" class="my-6"
+      <Heading tag="h4" class="my-3"
         >{listMeta.word_count}
         {listMeta.word_count > 1 ? "words" : "word"} in this set</Heading
       >
       <div>
         <Select
-          size="sm"
+          size="md"
           items={filters}
           bind:value={selected}
           on:change={handleFilter}
+          placeholder="Sort by..."
         />
       </div>
     </div>
