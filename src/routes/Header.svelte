@@ -34,8 +34,8 @@
     <NavLi href="/" active={$page.url.pathname == "/" ? true : false}
       >Home</NavLi
     >
-    <NavLi href="/about" active={$page.url.pathname == "/about" ? true : false}
-      >About</NavLi
+    <NavLi href="/pricing" active={$page.url.pathname == "/pricing" ? true : false}
+      >Pricing</NavLi
     >
     <NavLi href="/sets" active={$page.url.pathname == "/sets" ? true : false}
       >Sets</NavLi
