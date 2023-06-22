@@ -52,7 +52,7 @@
     loading = true;
     await axiosAPI
       .get(
-        `/lists/${$page.params.slug}?page=${currentPage}&per_page=${per_page}&query=${query}&order_by=asc`
+        `/lists/${$page.params.id}?page=${currentPage}&per_page=${per_page}&query=${query}&order_by=asc`
       )
       .then((res) => {
         const data: SingleSetResponse = res.data;

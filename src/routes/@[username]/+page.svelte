@@ -14,16 +14,23 @@
 </svelte:head>
 
 <main class="my-6 flex items-center flex-col" in:fade>
-  <Card size="lg" padding="lg">
+  <!-- <div class="w-100">
+    <Card img={bot} horizontal size="sm" padding="sm">
+      <h5
+        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+      >
+        {$page.params.username}'s Offerings
+      </h5>
+    </Card>
+  </div> -->
+  <Card size="md" padding="sm">
     <div class="flex flex-col items-center pb-4">
       <Avatar size="xl" src={bot} />
       <div class="my-5" />
-      <Heading tag="h3">{$page.params.username}</Heading>
+      <Heading tag="h4">{$page.params.username}</Heading>
     </div>
   </Card>
 
-
-  
   <div class="w-full">
     <Tabs style="underline" class="mt-5">
       <TabItem

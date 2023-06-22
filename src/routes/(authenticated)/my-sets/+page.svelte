@@ -6,6 +6,7 @@
   import { inview } from "svelte-inview/dist/index";
   import {
     Avatar,
+    Badge,
     Button,
     Card,
     Heading,
@@ -165,6 +166,9 @@
         <a class="inline-block" href="/sets/{set.id}-{set.slug}">
           <Heading tag="h4">
             {set.name}
+            {#if set.user_id == data.user?.id}
+               <Badge>{set.visibility == 1 ? 'Public': 'Private'}</Badge>
+            {/if}
           </Heading>
         </a>
 

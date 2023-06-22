@@ -30,6 +30,7 @@
   } from "$lib/interfaces/setData";
   import type { AxiosResponse } from "axios";
   import CloseIcon from "$lib/icons/closeIcon.svelte";
+  import DevComponent from "$lib/components/DevComponent.svelte";
 
   export let data: PageData;
 
@@ -55,7 +56,7 @@
     loading = true;
     await axiosAPI
       .get(
-        `/lists/${$page.params.slug}?page=${currentPage}&per_page=${per_page}&query=${query}&order_by=${orderDir}&order=${orderBy}`
+        `/lists/${$page.params.id}?page=${currentPage}&per_page=${per_page}&query=${query}&order_by=${orderDir}&order=${orderBy}`
       )
       .then((res) => {
         const data: SingleSetResponse = res.data;
@@ -69,8 +70,8 @@
         }
 
         if (data.words.length) {
-          newWords = data.words;
-          hasMore = data.words.length <= per_page ? true : false;
+          words = [...words, ...data.words]
+          hasMore = data.words.length < per_page ? false : true;
         } else {
           hasMore = false;
         }
@@ -199,6 +200,9 @@
 </svelte:head>
 
 <main class="my-6">
+  <DevComponent>
+    {words.length}
+  </DevComponent>
   {#if listMeta}
     <Heading tag="h2" class="my-10">{listMeta.name}</Heading>
   {/if}

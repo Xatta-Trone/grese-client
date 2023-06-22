@@ -95,8 +95,7 @@
 <MenuButton />
 <Dropdown class="w-36">
   {#if isOwner}
-    <DropdownItem>Edit {setMetaData.id}</DropdownItem>
-    <DropdownItem>Export data</DropdownItem>
+    <DropdownItem href="/sets/{setMetaData.id}-{setMetaData.slug}/edit">Edit</DropdownItem>
   {/if}
 
   <DropdownItem on:click={() => (deletePopupModal = true)}>
