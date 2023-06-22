@@ -7,10 +7,16 @@
   import { user, type UserInterface } from "$lib/services/auth";
   import type { PageData, PageServerData } from "./$types";
   import { fade } from "svelte/transition";
+  import {
+    Footer,
+    FooterCopyright,
+    FooterLink,
+    FooterLinkGroup,
+  } from "flowbite-svelte";
 
-  export let data:PageData;
+  export let data: PageData;
 
-  // let u:UserInterface|null 
+  // let u:UserInterface|null
 
   // user.subscribe(val => {
   //   u = val
@@ -32,10 +38,7 @@
   //   //   goto('/profile')
   //   // }
 
-
   // })
-
-
 </script>
 
 <div class="app">
@@ -45,11 +48,17 @@
     <slot />
   </main>
 
-  <footer class="container max-w-screen-lg mx-auto text-center clear-both">
-    <p>
-      visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit
-    </p>
-  </footer>
+  <Footer class="mt-10">
+    <FooterCopyright href="/" by="Flowbite™" year={(new Date()).getFullYear()} />
+    <FooterLinkGroup
+      ulClass="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0"
+    >
+      <FooterLink href="/">About</FooterLink>
+      <FooterLink href="/">Privacy Policy</FooterLink>
+      <FooterLink href="/">Licensing</FooterLink>
+      <FooterLink href="/">Contact</FooterLink>
+    </FooterLinkGroup>
+  </Footer>
 </div>
 
 <!-- <svelte:window on:popstate={popState} /> -->

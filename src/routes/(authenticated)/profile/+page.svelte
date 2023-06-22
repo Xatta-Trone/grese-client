@@ -6,7 +6,14 @@
   import type { PageServerData } from "./$types";
   import type { MeEndpointResponse, UserInterface } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
-  import { Heading } from "flowbite-svelte";
+  import {
+    A,
+    Card,
+    Heading,
+    P,
+    Skeleton,
+    TextPlaceholder,
+  } from "flowbite-svelte";
   import { fade } from "svelte/transition";
 
   let userData: UserInterface | null;
@@ -36,13 +43,30 @@
 
 <main class="my-6" in:fade>
   {#if userData == null}
-    <Heading tag="h5">Loading...&#128516;</Heading>
+    <TextPlaceholder size="xxl" class="mt-8" />
+    <TextPlaceholder size="xxl" class="mt-8" />
   {:else}
     <div id="username">
       <UserName username={userData?.username ?? ""} />
     </div>
     <div id="subscription" class="my-4">
       <Subscription />
+    </div>
+
+    <div>
+      <Card size="xl">
+        <Heading tag="h5" color="text-red-600 dark:text-red-500"
+          >Danger Zone</Heading
+        >
+        <P
+          >To delete your account, please send an email to <A
+            rel="external"
+            target="_blank"
+            href="mailto:monzurul.ce.buet@gmail.com"
+            >monzurul.ce.buet@gmail.com</A
+          >
+        </P>
+      </Card>
     </div>
   {/if}
 </main>
