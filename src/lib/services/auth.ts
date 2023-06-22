@@ -15,7 +15,12 @@ export const hasAuthInitialized = writable<boolean>(false);
 
 export async function logout() {
   if (browser) {
+    const colorTheme = window.localStorage.getItem('color-theme')
     window.localStorage.clear();
+    if (colorTheme != null) {
+      localStorage.setItem('color-theme', colorTheme)
+    }
+
     await fetch(`${window.location.origin}/cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER},${COOKIE_KEY_EXP}`, { method: "delete" })
       .then(() => {
         // token.set(null);
