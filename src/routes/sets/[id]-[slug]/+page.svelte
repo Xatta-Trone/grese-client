@@ -31,6 +31,7 @@
   import type { AxiosResponse } from "axios";
   import CloseIcon from "$lib/icons/closeIcon.svelte";
   import DevComponent from "$lib/components/DevComponent.svelte";
+  import SetActionMenu from "$lib/components/user/sets/SetActionMenu.svelte";
 
   export let data: PageData;
 
@@ -240,7 +241,10 @@
             >Login to save</Button
           >
         {:else if data.user?.id == listMeta.user_id}
-          <Button color="dark">Edit</Button>
+          <SetActionMenu
+            setMetaData={listMeta}
+            isOwner={listMeta.user_id == data.user?.id}
+          />
         {:else}
           <Button color="dark" on:click={handleSave} disabled={saving}
             >Save</Button
