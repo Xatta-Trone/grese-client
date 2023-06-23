@@ -1,7 +1,7 @@
 <!-- @format -->
 <script lang="ts">
+  import { logout, user, type UserInterface } from "$lib/services/auth";
   import { Alert } from "flowbite-svelte";
-  import { user, logout, type UserInterface } from "$lib/services/auth";
   import { onMount } from "svelte";
 
   let u: UserInterface|null

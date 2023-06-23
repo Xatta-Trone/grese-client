@@ -1,9 +1,10 @@
 <!-- @format -->
 <script lang="ts">
+  import DevComponent from "$lib/components/DevComponent.svelte";
+  import SetActionMenu from "$lib/components/user/sets/SetActionMenu.svelte";
+  import bot from "$lib/images/bot.png";
+  import type { Data, SetsResponse } from "$lib/interfaces/setListData";
   import axiosAPI from "$lib/services/customAxios";
-  import { onMount } from "svelte";
-  import type { PageData } from "./$types";
-  import { inview } from "svelte-inview/dist/index";
   import {
     Avatar,
     Badge,
@@ -14,11 +15,9 @@
     Select,
     Skeleton,
   } from "flowbite-svelte";
-  import { page } from "$app/stores";
-  import bot from "$lib/images/bot.png";
-  import type { Data, SetsResponse } from "$lib/interfaces/setListData";
-  import SetActionMenu from "$lib/components/user/sets/SetActionMenu.svelte";
-  import DevComponent from "$lib/components/DevComponent.svelte";
+  import { onMount } from "svelte";
+  import { inview } from "svelte-inview/dist/index";
+  import type { PageData } from "./$types";
 
   export let data: PageData;
 

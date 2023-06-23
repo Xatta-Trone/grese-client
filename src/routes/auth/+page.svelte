@@ -1,12 +1,10 @@
 <!-- @format -->
 <script lang="ts">
-  import { setUser } from "$lib/services/auth";
-  import type { PageData } from "./$types";
   import { browser } from "$app/environment";
-  import { redirectHelper } from "$lib/utils/helpers";
-  import { onMount } from "svelte";
+  import { setUser } from "$lib/services/auth";
   import { INTENDED_KEY } from "$lib/utils/constants";
-  import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
+  import type { PageData } from "./$types";
 
   export let data: PageData;
   let intended: string = "/profile";

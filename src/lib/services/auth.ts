@@ -1,11 +1,9 @@
 /** @format */
 
-import { error, redirect } from "@sveltejs/kit";
-import { writable } from "svelte/store";
 import { browser } from "$app/environment";
-import { goto, invalidateAll } from "$app/navigation";
 import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from "$lib/utils/constants";
 import { redirectHelper } from "$lib/utils/helpers";
+import { writable } from "svelte/store";
 
 
 export const token = writable<string | null>(null);

@@ -1,12 +1,11 @@
 <!-- @format -->
 <script lang="ts">
-  import { fade } from "svelte/transition";
-  import type { PageData } from "./$types";
   import { page } from "$app/stores";
-  import { Avatar, Card, Heading, TabItem, Tabs } from "flowbite-svelte";
-  import bot from "$lib/images/bot.png";
-  import PublicSets from "$lib/components/user/PublicSets.svelte";
   import PublicFolders from "$lib/components/user/PublicFolders.svelte";
+  import PublicSets from "$lib/components/user/PublicSets.svelte";
+  import bot from "$lib/images/bot.png";
+  import { Avatar, Card, Heading, TabItem, Tabs } from "flowbite-svelte";
+  import { fade } from "svelte/transition";
 </script>
 
 <svelte:head>

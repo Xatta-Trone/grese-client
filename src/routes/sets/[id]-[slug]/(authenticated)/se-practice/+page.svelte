@@ -1,16 +1,16 @@
 <!-- @format -->
 <script lang="ts">
   import { page } from "$app/stores";
-  import { P, Button, Badge, Heading } from "flowbite-svelte";
-  import axiosAPI from "$lib/services/customAxios";
-  import { onMount } from "svelte";
+  import DevComponent from "$lib/components/DevComponent.svelte";
   import type {
     ListMeta,
     Meta,
     SingleSetResponse,
     Word,
   } from "$lib/interfaces/setData";
-  import DevComponent from "$lib/components/DevComponent.svelte";
+  import axiosAPI from "$lib/services/customAxios";
+  import { Badge, Button, Heading, P } from "flowbite-svelte";
+  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   // call and get the data
   // data variables

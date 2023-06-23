@@ -1,18 +1,15 @@
 <!-- @format -->
 <script lang="ts">
-  import "../app.postcss";
-  import Header from "./Header.svelte";
-  import { page } from "$app/stores";
-  import { beforeNavigate, goto } from "$app/navigation";
-  import { user, type UserInterface } from "$lib/services/auth";
-  import type { PageData, PageServerData } from "./$types";
-  import { fade } from "svelte/transition";
   import {
     Footer,
     FooterCopyright,
     FooterLink,
     FooterLinkGroup,
   } from "flowbite-svelte";
+  import { fade } from "svelte/transition";
+  import "../app.postcss";
+  import type { PageData } from "./$types";
+  import Header from "./Header.svelte";
 
   export let data: PageData;
 

@@ -1,11 +1,11 @@
 <!-- @format -->
 <script lang="ts">
-  import axiosAPI from "$lib/services/customAxios";
-  import { onMount } from "svelte";
-  import { inview } from "svelte-inview/dist/index";
-  import { Avatar, Card, Heading, Input, Skeleton } from "flowbite-svelte";
   import bot from "$lib/images/bot.png";
   import type { Data, FoldersResponse } from "$lib/interfaces/folderListData";
+  import axiosAPI from "$lib/services/customAxios";
+  import { Avatar, Card, Heading, Input, Skeleton } from "flowbite-svelte";
+  import { onMount } from "svelte";
+  import { inview } from "svelte-inview/dist/index";
   import { fade } from "svelte/transition";
 
   // data variables

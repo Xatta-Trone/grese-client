@@ -1,8 +1,8 @@
-import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
-import Stripe from 'stripe';
-import jwt from 'jsonwebtoken';
 import { error } from '@sveltejs/kit';
+import jwt from 'jsonwebtoken';
+import Stripe from 'stripe';
+import type { RequestHandler } from './$types';
 
 const stripeKey = env.STRIPE_PRIVATE_KEY ?? ""
 const productId = env.PRODUCT_ID ?? ""
@@ -46,11 +46,4 @@ export const GET: RequestHandler = async ({ url }) => {
         throw error(400, "session could not created")
     }
 
-    return new Response(
-        JSON.stringify({ url: session.url }),
-        {
-            status: 200,
-            headers: { 'content-type': 'application/json' }
-        }
-    );
 };

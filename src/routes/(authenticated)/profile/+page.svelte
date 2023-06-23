@@ -2,8 +2,6 @@
 <script lang="ts">
   import Subscription from "$lib/components/profile/Subscription.svelte";
   import UserName from "$lib/components/profile/UserName.svelte";
-  import { onMount } from "svelte";
-  import type { PageServerData } from "./$types";
   import type { MeEndpointResponse, UserInterface } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
   import {
@@ -11,10 +9,11 @@
     Card,
     Heading,
     P,
-    Skeleton,
-    TextPlaceholder,
+    TextPlaceholder
   } from "flowbite-svelte";
+  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import type { PageServerData } from "./$types";
 
   let userData: UserInterface | null;
 

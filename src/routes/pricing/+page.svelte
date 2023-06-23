@@ -2,7 +2,7 @@
 <script lang="ts">
   import CircleCheckIcon from "$lib/icons/circleCheckIcon.svelte";
   import CircleXIcon from "$lib/icons/circleXIcon.svelte";
-  import { Card, Button, Heading, P } from "flowbite-svelte";
+  import { Button, Card, Heading } from "flowbite-svelte";
 </script>
 
 <div class="text-center">

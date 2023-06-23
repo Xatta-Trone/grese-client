@@ -1,38 +1,32 @@
 <!-- @format -->
 <script lang="ts">
   import { page } from "$app/stores";
+  import DevComponent from "$lib/components/DevComponent.svelte";
+  import CloseIcon from "$lib/icons/closeIcon.svelte";
+  import type { BadStatusErrorResponse } from "$lib/interfaces/common";
+  import type {
+    ListMeta,
+    Meta,
+    SingleSetResponse,
+    Word
+  } from "$lib/interfaces/setData";
+  import axiosAPI from "$lib/services/customAxios";
+  import type { AxiosError, AxiosResponse } from "axios";
   import {
     Alert,
     Badge,
     Button,
-    ButtonGroup,
     Heading,
     Helper,
     Input,
     Label,
-    Modal,
-    P,
     Select,
     Skeleton,
-    Textarea,
-    Toggle,
+    Textarea
   } from "flowbite-svelte";
-  import axiosAPI from "$lib/services/customAxios";
   import { onDestroy, onMount } from "svelte";
-  import SettingsIcon from "$lib/icons/settingsIcon.svelte";
-  import DevComponent from "$lib/components/DevComponent.svelte";
-  import type {
-    ListMeta,
-    Meta,
-    PartsOfSpeech,
-    SingleSetResponse,
-    Word,
-  } from "$lib/interfaces/setData";
   import { fade } from "svelte/transition";
   import { z } from "zod";
-  import type { AxiosError, AxiosResponse } from "axios";
-  import CloseIcon from "$lib/icons/closeIcon.svelte";
-  import type { BadStatusErrorResponse } from "$lib/interfaces/common";
   let textareaprops = {
     id: "words",
     name: "words",

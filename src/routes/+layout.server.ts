@@ -1,6 +1,6 @@
-import type { LayoutServerLoad } from './$types';
-import axiosAPI from '$lib/services/customAxios';
 import type { MeEndpointResponse } from '$lib/services/auth';
+import axiosAPI from '$lib/services/customAxios';
+import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals, parent }) => {
     await parent();

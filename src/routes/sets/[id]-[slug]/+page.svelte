@@ -1,6 +1,22 @@
 <!-- @format -->
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { page } from "$app/stores";
+  import DevComponent from "$lib/components/DevComponent.svelte";
+  import SetActionMenu from "$lib/components/user/sets/SetActionMenu.svelte";
+  import CloseIcon from "$lib/icons/closeIcon.svelte";
+  import bot from "$lib/images/bot.png";
+  import type { LearningStatusGetResponse } from "$lib/interfaces/learningStatus";
+  import type {
+    ListMeta,
+    Meta,
+    SingleSetResponse,
+    Word,
+  } from "$lib/interfaces/setData";
+  import axiosAPI from "$lib/services/customAxios";
+  import { INTENDED_KEY } from "$lib/utils/constants";
+  import { redirectHelper } from "$lib/utils/helpers";
+  import type { AxiosResponse } from "axios";
   import {
     Alert,
     Avatar,
@@ -10,28 +26,11 @@
     Heading,
     P,
     Select,
-    TextPlaceholder,
-    Toast,
+    TextPlaceholder
   } from "flowbite-svelte";
-  import type { PageData } from "./$types";
-  import axiosAPI from "$lib/services/customAxios";
   import { onMount } from "svelte";
-  import bot from "$lib/images/bot.png";
   import { inview } from "svelte-inview/dist/index";
-  import type { LearningStatusGetResponse } from "$lib/interfaces/learningStatus";
-  import { browser } from "$app/environment";
-  import { INTENDED_KEY } from "$lib/utils/constants";
-  import { redirectHelper } from "$lib/utils/helpers";
-  import type {
-    Word,
-    ListMeta,
-    Meta,
-    SingleSetResponse,
-  } from "$lib/interfaces/setData";
-  import type { AxiosResponse } from "axios";
-  import CloseIcon from "$lib/icons/closeIcon.svelte";
-  import DevComponent from "$lib/components/DevComponent.svelte";
-  import SetActionMenu from "$lib/components/user/sets/SetActionMenu.svelte";
+  import type { PageData } from "./$types";
 
   export let data: PageData;
 

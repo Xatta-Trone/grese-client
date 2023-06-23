@@ -1,7 +1,15 @@
 <!-- @format -->
 <script lang="ts">
   import { page } from "$app/stores";
-  import { user, type UserInterface } from "$lib/services/auth";
+  import DevComponent from "$lib/components/DevComponent.svelte";
+  import SettingsIcon from "$lib/icons/settingsIcon.svelte";
+  import type {
+    ListMeta,
+    Meta,
+    SingleSetResponse,
+    Word,
+  } from "$lib/interfaces/setData";
+  import axiosAPI from "$lib/services/customAxios";
   import {
     Button,
     ButtonGroup,
@@ -10,16 +18,7 @@
     P,
     Toggle,
   } from "flowbite-svelte";
-  import axiosAPI from "$lib/services/customAxios";
   import { onMount } from "svelte";
-  import SettingsIcon from "$lib/icons/settingsIcon.svelte";
-  import DevComponent from "$lib/components/DevComponent.svelte";
-  import type {
-    ListMeta,
-    Meta,
-    SingleSetResponse,
-    Word,
-  } from "$lib/interfaces/setData";
   import { fade } from "svelte/transition";
 
   // export let data: PageData;

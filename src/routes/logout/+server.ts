@@ -1,11 +1,6 @@
-import axiosAPI from '$lib/services/customAxios';
-import { error } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
 import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from '$lib/utils/constants';
-import { token, user } from '$lib/services/auth';
-import { redirectHelper } from '$lib/utils/helpers';
-import { invalidateAll } from '$app/navigation';
 import cookieDomain from '$lib/utils/cookieDomain';
+import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ locals, cookies, fetch }) => {
     cookies.delete(COOKIE_KEY, { domain: cookieDomain })

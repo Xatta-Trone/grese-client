@@ -1,9 +1,9 @@
-import type { RequestHandler } from './$types';
 import { env } from "$env/dynamic/private";
-import { error } from '@sveltejs/kit';
-import axiosAPI from '$lib/services/customAxios';
-import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from '$lib/utils/constants';
 import type { LoginResponse } from '$lib/services/auth';
+import axiosAPI from '$lib/services/customAxios';
+import { COOKIE_KEY, COOKIE_KEY_USER } from '$lib/utils/constants';
+import { error } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
 
 export const GET: RequestHandler = async ({ url, cookies, locals }) => {

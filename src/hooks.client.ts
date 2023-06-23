@@ -1,8 +1,3 @@
-import { browser } from "$app/environment";
-import type { CookieResponse } from "$lib/interfaces/cookiesInterface";
-import { token, user, type MeEndpointResponse, type UserInterface, logout } from "$lib/services/auth";
-import axiosAPI from "$lib/services/customAxios";
-import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from "$lib/utils/constants";
 // fetch("https://dev.gre-sentence-equivalence.com/me", { credentials: 'include' })
 // axiosAPI.get("https://dev.gre-sentence-equivalence.com/me")
 

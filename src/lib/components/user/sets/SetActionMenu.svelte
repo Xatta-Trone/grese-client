@@ -4,14 +4,14 @@
   import type { BadStatusErrorResponse } from "$lib/interfaces/common";
   import type { Data } from "$lib/interfaces/setListData";
   import axiosAPI from "$lib/services/customAxios";
-  import type { AxiosError, AxiosResponse } from "axios";
+  import type { AxiosError } from "axios";
   import {
-    MenuButton,
+    Alert,
+    Button,
     Dropdown,
     DropdownItem,
-    Button,
+    MenuButton,
     Modal,
-    Alert,
   } from "flowbite-svelte";
   import { createEventDispatcher } from "svelte";
 

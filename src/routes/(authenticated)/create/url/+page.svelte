@@ -5,15 +5,15 @@
   import axiosAPI from "$lib/services/customAxios.js";
   import type { AxiosResponse } from "axios";
   import {
-    Label,
+    A,
+    Alert,
+    Button,
+    Heading,
     Helper,
     Input,
-    Button,
-    Alert,
-    A,
-    Select,
+    Label,
     P,
-    Heading,
+    Select,
   } from "flowbite-svelte";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";

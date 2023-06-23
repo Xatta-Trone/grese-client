@@ -1,6 +1,5 @@
 <!-- @format -->
 <script lang="ts">
-  import { Button } from "flowbite-svelte";
   import GoogleSignInButton from "$lib/components/GoogleSignInButton.svelte";
 </script>
 

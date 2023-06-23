@@ -1,5 +1,10 @@
 <!-- @format -->
 <script lang="ts">
+  import { page } from "$app/stores";
+  import DevComponent from "$lib/components/DevComponent.svelte";
+  import CloseIcon from "$lib/icons/closeIcon.svelte";
+  import axiosAPI from "$lib/services/customAxios";
+  import type { AxiosResponse } from "axios";
   import {
     Alert,
     Button,
@@ -7,18 +12,12 @@
     Helper,
     Input,
     Label,
-    P,
     Select,
-    Textarea,
+    Textarea
   } from "flowbite-svelte";
   import { onMount } from "svelte";
-  import { page } from "$app/stores";
-  import { z } from "zod";
-  import DevComponent from "$lib/components/DevComponent.svelte";
-  import CloseIcon from "$lib/icons/closeIcon.svelte";
-  import axiosAPI from "$lib/services/customAxios";
-  import type { AxiosResponse } from "axios";
   import { fade } from "svelte/transition";
+  import { z } from "zod";
   let textareaprops = {
     id: "words",
     name: "words",

@@ -1,20 +1,19 @@
 <!-- @format -->
 <script lang="ts">
+  import { page } from "$app/stores";
+  import CirclePlusIcon from "$lib/icons/circlePlusIcon.svelte";
+  import { logout, type UserInterface } from "$lib/services/auth";
   import {
-    Navbar,
-    NavBrand,
-    NavLi,
-    NavUl,
-    NavHamburger,
+    Chevron,
+    DarkMode,
     Dropdown,
     DropdownItem,
-    Chevron,
-    DropdownDivider,
-    DarkMode,
+    NavBrand,
+    NavHamburger,
+    NavLi,
+    NavUl,
+    Navbar
   } from "flowbite-svelte";
-  import { page } from "$app/stores";
-  import { logout, type UserInterface } from "$lib/services/auth";
-  import CirclePlusIcon from "$lib/icons/circlePlusIcon.svelte";
   export let isLoggedIn: boolean;
   export let user: UserInterface | null;
   let btnClass =

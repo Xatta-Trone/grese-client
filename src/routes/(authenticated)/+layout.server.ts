@@ -1,4 +1,3 @@
-import { user } from '$lib/services/auth';
 import { redirectHelper } from '$lib/utils/helpers';
 import type { LayoutServerLoad } from '../$types';
 

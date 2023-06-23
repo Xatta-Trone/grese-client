@@ -1,6 +1,18 @@
 <!-- @format -->
 <script lang="ts">
   import { page } from "$app/stores";
+  import DevComponent from "$lib/components/DevComponent.svelte";
+  import FlashCard from "$lib/components/FlashCard.svelte";
+  import type { LearningStatusGetResponse } from "$lib/interfaces/learningStatus";
+  import {
+    LearningState,
+    type ListMeta,
+    type Meta,
+    type SingleSetResponse,
+    type Word,
+  } from "$lib/interfaces/setData";
+  import axiosAPI from "$lib/services/customAxios";
+  import { flipped, showNonGre } from "$lib/services/flashcard";
   import {
     ArrowKeyDown,
     ArrowKeyLeft,
@@ -11,19 +23,7 @@
     Heading,
     Kbd,
   } from "flowbite-svelte";
-  import axiosAPI from "$lib/services/customAxios";
   import { onMount } from "svelte";
-  import FlashCard from "$lib/components/FlashCard.svelte";
-  import { flipped, showNonGre } from "$lib/services/flashcard";
-  import type { LearningStatusGetResponse } from "$lib/interfaces/learningStatus";
-  import {
-    LearningState,
-    type ListMeta,
-    type Meta,
-    type SingleSetResponse,
-    type Word,
-  } from "$lib/interfaces/setData";
-  import DevComponent from "$lib/components/DevComponent.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;

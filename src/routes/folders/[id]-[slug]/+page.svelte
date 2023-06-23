@@ -1,18 +1,18 @@
 <!-- @format -->
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { page } from "$app/stores";
-  import { Alert, Avatar,  Button, Card, Heading, Select, TextPlaceholder, } from "flowbite-svelte";
-  import type { PageData } from "./$types";
-  import axiosAPI from "$lib/services/customAxios";
-  import { onMount } from "svelte";
+  import CloseIcon from "$lib/icons/closeIcon.svelte";
   import bot from "$lib/images/bot.png";
-  import { inview } from "svelte-inview/dist/index";
-  import type { Folder, Meta, SingleFolderResponse, List as FolderList } from "$lib/interfaces/folderResponse";
+  import type { Folder, List as FolderList, Meta, SingleFolderResponse } from "$lib/interfaces/folderResponse";
+  import axiosAPI from "$lib/services/customAxios";
+  import { INTENDED_KEY } from "$lib/utils/constants";
   import { redirectHelper } from "$lib/utils/helpers";
   import type { AxiosResponse } from "axios";
-  import { INTENDED_KEY } from "$lib/utils/constants";
-  import { browser } from "$app/environment";
-  import CloseIcon from "$lib/icons/closeIcon.svelte";
+  import { Alert, Avatar, Button, Card, Heading, Select, TextPlaceholder, } from "flowbite-svelte";
+  import { onMount } from "svelte";
+  import { inview } from "svelte-inview/dist/index";
+  import type { PageData } from "./$types";
 
   export let data: PageData;
 

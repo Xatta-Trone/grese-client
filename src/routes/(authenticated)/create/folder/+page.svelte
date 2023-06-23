@@ -1,21 +1,21 @@
 <!-- @format -->
 <script lang="ts">
-  import { z } from "zod";
   import {
-    Label,
+    Alert,
+    Button,
+    Heading,
     Helper,
     Input,
-    Button,
-    Alert,
+    Label,
     Select,
-    Heading,
   } from "flowbite-svelte";
+  import { z } from "zod";
 
   import DevComponent from "$lib/components/DevComponent.svelte";
-  import { onMount } from "svelte";
   import CloseIcon from "$lib/icons/closeIcon.svelte";
   import axiosAPI from "$lib/services/customAxios";
-  import type { AxiosError, AxiosResponse } from "axios";
+  import type { AxiosResponse } from "axios";
+  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
 
   interface FormData {

@@ -1,13 +1,12 @@
 /** @format */
 
-import type { PageServerLoad } from "./$types";
+import { browser } from "$app/environment";
 import { env } from "$env/dynamic/private";
 import type { LoginResponse } from "$lib/services/auth";
-import { error } from "@sveltejs/kit";
-import { browser } from "$app/environment";
 import axiosAPI from "$lib/services/customAxios";
 import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from "$lib/utils/constants";
-import { redirectHelper } from "$lib/utils/helpers";
+import { error } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ url, cookies, request }) => {
 

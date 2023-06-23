@@ -1,8 +1,6 @@
 <!-- @format -->
 <script lang="ts">
-  import PencilIcon from "$lib/icons/pencilIcon.svelte";
   import TicketIcon from "$lib/icons/ticketIcon.svelte";
-  import UserCircle from "$lib/icons/userCircle.svelte";
   import type { BadStatusErrorResponse } from "$lib/interfaces/common";
   import { user, type MeEndpointResponse } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
@@ -13,12 +11,10 @@
     Card,
     Heading,
     Input,
-    Label,
     Modal,
-    P,
+    P
   } from "flowbite-svelte";
   import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
 
   let expires: Date = new Date(0);
   let isPremium = false;
