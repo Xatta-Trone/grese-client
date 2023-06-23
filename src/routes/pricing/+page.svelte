@@ -191,7 +191,7 @@
 
     <Card padding="sm">
     <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">
-      PLUS
+      ULTRA
     </h5>
     <div class="flex items-baseline text-gray-900 dark:text-white">
       <span class="text-3xl font-semibold">$</span>
@@ -273,7 +273,7 @@
         </span>
       </li>
     </ul>
-    <Button class="w-full" >Under development</Button>
+    <Button class="w-full" >Coming soon</Button>
   </Card>
 
 </div>
