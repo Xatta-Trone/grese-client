@@ -1,55 +1,21 @@
 <!-- @format -->
 <script lang="ts">
+  import FolderActionMenu from "$lib/components/user/folders/FolderActionMenu.svelte";
   import bot from "$lib/images/bot.png";
+  import type { Data, FoldersResponse } from "$lib/interfaces/folderListData";
   import axiosAPI from "$lib/services/customAxios";
-  import { Avatar, Card, Heading, Input, Select } from "flowbite-svelte";
+  import { Avatar, Badge, Card, Heading, Input, Select, Skeleton } from "flowbite-svelte";
   import { onMount } from "svelte";
   import { inview } from "svelte-inview/dist/index";
+  import type { PageData } from "./$types";
 
+  export let data: PageData;
   // interfaces
-  interface FoldersResponse {
-    data: Data[];
-    meta: Meta;
-  }
-
-  interface Data {
-    id: number;
-    user_id: number;
-    list_meta_id?: number;
-    name: string;
-    slug: string;
-    visibility: number;
-    status: number;
-    crated_at: Date;
-    updated_at: Date;
-    user: User;
-    lists_count: number;
-  }
-
-  interface User {
-    id: number;
-    username: string;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface Meta {
-    id: number;
-    query: string;
-    order_by: string;
-    order: string;
-    page: number;
-    per_page: number;
-    user_id: number;
-    count: number;
-    filter: string;
-  }
 
   // data variables
   let currentPage = 1;
   let per_page = 20;
   let sets: Data[] = [];
-  let newSets: Data[] = [];
   let loading = false;
   let hasMore = true;
   let query: string = "";
@@ -60,23 +26,21 @@
     { value: "saved", name: "Saved" },
   ];
 
-  $: sets = [...sets, ...newSets];
-
   //   export let data: PageData;
 
   async function fetchData() {
     loading = true;
     await axiosAPI
       .get(
-        `/folders?page=${currentPage}&per_page=${per_page}&query=${query}&filter=${filter}&order=desc&order_by=id`
+        `/folders?page=${currentPage}&per_page=${per_page}&query=${query}&filter=${filter}&save_order=asc&order_by=id&order=desc`
       )
       .then((res) => {
         const data: FoldersResponse = res.data;
         // console.log(data);
 
         if (data.data.length) {
-          newSets = data.data;
-          hasMore = true;
+          sets = [...sets, ...data.data];
+          hasMore = data.data.length < per_page ? false : true;
         } else {
           hasMore = false;
         }
@@ -123,7 +87,6 @@
   async function reset() {
     currentPage = 1;
     sets = [];
-    newSets = [];
     loading = false;
     hasMore = true;
   }
@@ -138,7 +101,17 @@
 
     fetchData();
   });
+
+  // handle deleted action
+  function handleDeletedAction(event: CustomEvent<Data>) {
+    console.log(event.detail);
+    sets = [...sets.filter((set) => set.id != event.detail.id)];
+  }
 </script>
+
+<svelte:head>
+  <title>My folders</title>
+</svelte:head>
 
 <main>
   <div class="my-3">
@@ -148,7 +121,7 @@
     <div class="col-span-8">
       <Input
         id="large-input"
-        size="lg"
+        size="md"
         placeholder="Type to search...."
         bind:value={query}
         on:keyup={debounce}
@@ -158,7 +131,7 @@
       <Select
         placeholder="Filter..."
         on:change={changeFilter}
-        size="lg"
+        size="md"
         items={filters}
         bind:value={filter}
       />
@@ -166,17 +139,31 @@
   </div>
 
   {#each sets as set}
-    <Card size="xl" href="/folders/{set.id}-{set.slug}" class="mb-3">
-      <h5
-        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-      >
-        {set.name}
-      </h5>
+    <Card size="xl" class="mb-3">
+      <div class="flex justify-between items-start">
+        <a class="inline-block" href="/folders/{set.id}-{set.slug}">
+          <Heading tag="h4">
+            {set.name}
+            {#if set.user_id == data.user?.id}
+              <Badge>{set.visibility == 1 ? "Public" : "Private"}</Badge>
+            {/if}
+          </Heading>
+        </a>
+
+        <div>
+          <FolderActionMenu
+            on:deleted={handleDeletedAction}
+            folderMetaData={set}
+            isOwner={set.user_id == data.user?.id}
+          />
+        </div>
+      </div>
+
       <div class="flex justify-between mt-2">
-        <a class="flex items-center space-x-4" href="/userprofile">
+        <a class="flex items-center space-x-4" href="/@{set.user?.username}">
           <Avatar src={bot} size="sm" />
           <div class="space-y-1 font-medium dark:text-white">
-            <div>{set.user.username}</div>
+            <div>{set.user?.username}</div>
           </div>
         </a>
         <div>{set.lists_count} {set.lists_count > 1 ? "sets" : "set"}</div>
@@ -187,7 +174,14 @@
   <div use:inview={{}} on:change={loadMore} />
 
   {#if loading}
-    <Heading tag="h5">Loading...&#128516;</Heading>
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
   {/if}
 
   {#if sets.length == 0 && !hasMore && !loading}

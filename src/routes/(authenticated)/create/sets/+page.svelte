@@ -95,7 +95,7 @@
   onMount(() => {
     submitting = false;
     resetForm = <HTMLFormElement>document.getElementById("form");
-    const tempFolderId: string | null = $page.url.searchParams.get("folder_id");
+    const tempFolderId: string | null = $page.url.searchParams.get("folder");
     folder_id = tempFolderId ? parseInt(tempFolderId) : null;
   });
 

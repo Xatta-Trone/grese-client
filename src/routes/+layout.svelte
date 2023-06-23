@@ -38,6 +38,23 @@
   // })
 </script>
 
+<svelte:head>
+  <!-- Google tag (gtag.js) -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-N8BZTFYJYC"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-N8BZTFYJYC");
+  </script>
+</svelte:head>
+
 <div class="app">
   <Header isLoggedIn={data.isLoggedIn} user={data.user} />
 
@@ -46,7 +63,7 @@
   </main>
 
   <Footer class="mt-10">
-    <FooterCopyright href="/" by="Flowbite™" year={(new Date()).getFullYear()} />
+    <FooterCopyright href="/" by="Flowbite™" year={new Date().getFullYear()} />
     <FooterLinkGroup
       ulClass="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0"
     >

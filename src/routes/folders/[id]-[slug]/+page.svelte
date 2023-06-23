@@ -2,6 +2,7 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { page } from "$app/stores";
+  import FolderActionMenu from "$lib/components/user/folders/FolderActionMenu.svelte";
   import CloseIcon from "$lib/icons/closeIcon.svelte";
   import bot from "$lib/images/bot.png";
   import type { Folder, List as FolderList, Meta, SingleFolderResponse } from "$lib/interfaces/folderResponse";
@@ -166,7 +167,10 @@
         {#if data.user == null}
           <Button color="dark" on:click={handleLoginToSave}>Login to save</Button>
         {:else if data.user.id == folderMeta.user_id}
-          <Button color="dark">Edit</Button>
+          <FolderActionMenu
+            folderMetaData={folderMeta}
+            isOwner={folderMeta.user_id == data.user?.id}
+          />
         {:else}
           <Button color="dark" on:click={handleSave} disabled={saving}>Save</Button>
         {/if}
