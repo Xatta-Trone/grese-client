@@ -1,5 +1,6 @@
 import { redirectHelper } from '$lib/utils/helpers';
-import type { LayoutServerLoad } from '../$types';
+import type { LayoutServerLoad } from './$types';
+
 
 export const load = (async ({ url, locals, parent }) => {
     await parent()
