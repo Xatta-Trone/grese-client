@@ -1,5 +1,6 @@
 <!-- @format -->
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { page } from "$app/stores";
   import DevComponent from "$lib/components/DevComponent.svelte";
   import CloseIcon from "$lib/icons/closeIcon.svelte";
@@ -8,7 +9,7 @@
     ListMeta,
     Meta,
     SingleSetResponse,
-    Word
+    Word,
   } from "$lib/interfaces/setData";
   import axiosAPI from "$lib/services/customAxios";
   import type { AxiosError, AxiosResponse } from "axios";
@@ -22,7 +23,7 @@
     Label,
     Select,
     Skeleton,
-    Textarea
+    Textarea,
   } from "flowbite-svelte";
   import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
@@ -150,6 +151,7 @@
   function resetFormErrors() {
     FormErrors.name = null;
     FormErrors.visibility = null;
+    FormErrors.words = null;
     formError = null;
     formSuccess = null;
   }
@@ -225,10 +227,35 @@
   // handle delete words
   // ==============================
 
+  enum wordUpdateType {
+    WORD_ID = 1,
+    WORDS,
+  }
+
+  let handleWordUpdateType: wordUpdateType | null = null;
+
   function handleDismiss(word: Word) {
     console.log(word);
-    localStorage.setItem("lastWord", JSON.stringify(word));
+    if (browser) {
+      localStorage.setItem("lastWord", JSON.stringify(word));
+    }
     deleteWordById(word.id);
+  }
+
+  function undoWordDelete(): void {
+    // get the word from local storage
+    const wordData = localStorage.getItem("lastWord");
+
+    if (wordData == null) {
+      wordError = "Could not get the last word data";
+      return;
+    }
+
+    // parse the word
+    const word: Word = JSON.parse(wordData);
+
+    // now update the data
+    updateWords(wordUpdateType.WORD_ID, word);
   }
 
   //   send the delete request
@@ -236,6 +263,7 @@
   let wordSuccess: string | null = null;
 
   function deleteWordById(id: number) {
+    handleWordUpdateType = null;
     wordError = null;
     wordSuccess = null;
     axiosAPI
@@ -251,8 +279,83 @@
       });
   }
 
+  // ==============================
+  // handle update word
+  // ==============================
+  let wordTextArea: string = "";
+  let wordsSubmitting = false;
+  function updateWords(
+    updateType: wordUpdateType,
+    word: Word | null = null,
+    wordData: string = ""
+  ) {
+    handleWordUpdateType = updateType;
+    // reset errors
+    wordSuccess = null;
+    wordError = null;
+    FormErrors.words = null;
+    wordsSubmitting = true;
+
+    // construct the data
+    const wordsRegex = /^[a-zA-Z,\n]+$/;
+
+    if (wordData != "" && wordsRegex.test(wordData) == false) {
+      FormErrors.words = "Words not valid.";
+      return;
+    }
+    // construct the data
+    let data = {};
+    if (word != null) {
+      Object.assign(data, { word_id: word.id });
+    }
+    if (wordData != "") {
+      Object.assign(data, { words: wordData });
+    }
+
+    console.log(data);
+
+    // now submit the data
+    axiosAPI
+      .post(`/lists-word/${$page.params.id}`, data)
+      .then((res: AxiosResponse) => {
+        if (res.status == 204) {
+          wordSuccess =
+            handleWordUpdateType == wordUpdateType.WORD_ID
+              ? `Word ${word?.word} restored.`
+              : "Words added and now under processing...Please check back after some times.";
+          // restore the word
+          if (handleWordUpdateType == wordUpdateType.WORD_ID && word != null) {
+            words = [...words, word];
+          }
+        } else {
+          wordError = "Error undo/updating word(s).";
+        }
+      })
+      .catch((err: AxiosError) => {
+        if (err.response && err.response?.status == 422) {
+          // validation error
+          const data: any = err.response.data;
+          // json parse the data
+          alert(JSON.stringify(data.errors));
+          return;
+        }
+
+        if (err.response?.status && err.response.status >= 400) {
+          const errData: BadStatusErrorResponse | any = err.response.data;
+          wordError = errData.errors;
+        } else {
+          wordError = err.response?.statusText ?? "Unknown error occurred";
+        }
+      })
+      .finally(() => {
+        wordsSubmitting = false;
+      });
+  }
+
   onDestroy(() => {
-    localStorage.removeItem("lastWord");
+    // if (browser) {
+    //   localStorage.removeItem("lastWord");
+    // }
   });
 </script>
 
@@ -261,7 +364,9 @@
 </svelte:head>
 
 <main class="my-6" in:fade>
-  <DevComponent />
+  <DevComponent>
+    {JSON.stringify(formData)}
+  </DevComponent>
 
   <div class="my-3">
     <Heading tag="h4">Edit Set Metadata</Heading>
@@ -340,10 +445,20 @@
       {/if}
 
       {#if wordSuccess}
-        <Alert color="green" dismissable class="my-1">
-          <span slot="icon"><CloseIcon /></span>
-          {wordSuccess}
-        </Alert>
+        {#if handleWordUpdateType == null}
+          <Alert color="green" dismissable class="my-1">
+            <span slot="icon"><CloseIcon /></span>
+            {wordSuccess}
+            <Button size="xs" color="dark" on:click={undoWordDelete}
+              >Undo</Button
+            >
+          </Alert>
+        {:else}
+          <Alert color="green" dismissable class="my-1">
+            <span slot="icon"><CloseIcon /></span>
+            {wordSuccess}
+          </Alert>
+        {/if}
       {/if}
       {#each words as word}
         <Badge
@@ -360,12 +475,12 @@
           color={FormErrors.words ? "red" : undefined}
           class="block mb-2">Add new words</Label
         >
-        <Textarea {...textareaprops} />
+        <Textarea {...textareaprops} bind:value={wordTextArea} />
         {#if FormErrors.words}
           <Helper class="mt-2" color="red">
             {FormErrors.words}</Helper
           >{/if}
-        <Button disable={submitting} class="mt-3" type="submit"
+        <Button disable={wordsSubmitting} class="mt-3" type="submit"
           >Add new words</Button
         >
       </div>
