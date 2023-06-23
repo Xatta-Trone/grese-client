@@ -239,7 +239,7 @@
     if (browser) {
       localStorage.setItem("lastWord", JSON.stringify(word));
     }
-    deleteWordById(word.id);
+    deleteWordById(word);
   }
 
   function undoWordDelete(): void {
@@ -258,18 +258,25 @@
     updateWords(wordUpdateType.WORD_ID, word);
   }
 
+  function handleUpdateWords() {
+    const words = wordTextArea.trim();
+    // now update the data
+    updateWords(wordUpdateType.WORDS, null, words);
+  }
+
   //   send the delete request
   let wordError: string | null = null;
   let wordSuccess: string | null = null;
 
-  function deleteWordById(id: number) {
+  function deleteWordById(word: Word) {
     handleWordUpdateType = null;
     wordError = null;
     wordSuccess = null;
     axiosAPI
-      .delete(`/lists-word/${$page.params.id}?word_id=${id}`)
+      .delete(`/lists-word/${$page.params.id}?word_id=${word.id}`)
       .then(() => {
-        wordSuccess = "Word deleted.";
+        words = [...words.filter(w => w.id != word.id)];
+        wordSuccess = `Word ${word.word} deleted.`;
       })
       .catch((err: AxiosError) => {
         if (err.response?.status && err.response.status >= 400) {
@@ -326,6 +333,9 @@
           // restore the word
           if (handleWordUpdateType == wordUpdateType.WORD_ID && word != null) {
             words = [...words, word];
+          }
+          if (handleWordUpdateType == wordUpdateType.WORDS) {
+            wordTextArea = "";
           }
         } else {
           wordError = "Error undo/updating word(s).";
@@ -432,7 +442,7 @@
   {/if}
 
   <div class="my-3">
-    <Heading tag="h4">Edit words</Heading>
+    <Heading tag="h4">Edit words [{words.length ?? 0} total]</Heading>
   </div>
 
   {#if words.length > 0}
@@ -480,8 +490,11 @@
           <Helper class="mt-2" color="red">
             {FormErrors.words}</Helper
           >{/if}
-        <Button disable={wordsSubmitting} class="mt-3" type="submit"
-          >Add new words</Button
+        <Button
+          disable={wordsSubmitting}
+          on:click={handleUpdateWords}
+          class="mt-3"
+          type="submit">Add new words</Button
         >
       </div>
     </div>
