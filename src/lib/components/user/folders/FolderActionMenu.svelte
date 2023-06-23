@@ -3,6 +3,7 @@
   import InfoCircle from "$lib/icons/infoCircle.svelte";
   import type { BadStatusErrorResponse } from "$lib/interfaces/common";
   import type { Data } from "$lib/interfaces/folderListData";
+  import type { Folder } from "$lib/interfaces/folderResponse";
   import axiosAPI from "$lib/services/customAxios";
   import type { AxiosError } from "axios";
   import {
@@ -13,7 +14,7 @@
     MenuButton,
     Modal,
   } from "flowbite-svelte";
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
 
   const dispatch = createEventDispatcher<{ deleted: Data }>();
 
@@ -30,7 +31,9 @@
     axiosAPI
       .delete(`/saved-folders/${folderMetaData.id}`)
       .then(() => {
-        deletedResponseMessage = isOwner ? "Folder Deleted." : "Folder removed.";
+        deletedResponseMessage = isOwner
+          ? "Folder Deleted."
+          : "Folder removed.";
         isDeletedSuccess = true;
       })
       .catch((err: AxiosError) => {
@@ -55,7 +58,19 @@
       dispatch("deleted", folderMetaData);
     }
   }
+  let listFoldersModal = false;
+  let folderMetaForFolderListComponent: Folder;
+  onMount(() => {
+    folderMetaForFolderListComponent = JSON.parse(
+      JSON.stringify(folderMetaData)
+    ) as Folder;
+  });
 </script>
+
+<!-- delete message modal -->
+<!-- <Modal bind:open={listFoldersModal} title={folderMetaData.name} autoclose>
+  <FolderListsComponent listMeta={folderMetaForFolderListComponent} />
+</Modal> -->
 
 <!-- delete message modal -->
 <Modal bind:open={deleteMessageModal} size="xs" autoclose>
@@ -81,7 +96,8 @@
     </h3>
     {#if isOwner}
       <Alert color="red" class="text-center">
-        <span class="font-medium">Others</span> who have saved this folder will also lose access.
+        <span class="font-medium">Others</span> who have saved this folder will also
+        lose access.
       </Alert>
     {/if}
 
@@ -95,8 +111,14 @@
 <MenuButton />
 <Dropdown class="w-36">
   {#if isOwner}
-    <DropdownItem href="/folders/{folderMetaData.id}-{folderMetaData.slug}/edit">Edit</DropdownItem>
+    <DropdownItem href="/folders/{folderMetaData.id}-{folderMetaData.slug}/edit"
+      >Edit</DropdownItem
+    >
   {/if}
+
+  <!-- <DropdownItem on:click={() => (listFoldersModal = true)}>
+    Add to list
+  </DropdownItem> -->
 
   <DropdownItem on:click={() => (deletePopupModal = true)}>
     {isOwner ? "Delete" : "Remove"}

@@ -14,6 +14,7 @@
     Modal,
   } from "flowbite-svelte";
   import { createEventDispatcher } from "svelte";
+  import ListFolderComponent from "./ListFolderComponent.svelte";
 
   const dispatch = createEventDispatcher<{ deleted: Data }>();
 
@@ -55,7 +56,18 @@
       dispatch("deleted", setMetaData);
     }
   }
+
+  // folders 
+  let listFoldersModal = false
+
+
+
 </script>
+
+<!-- delete message modal -->
+<Modal bind:open={listFoldersModal} title={setMetaData.name} autoclose>
+  <ListFolderComponent listMeta={setMetaData} />
+</Modal>
 
 <!-- delete message modal -->
 <Modal bind:open={deleteMessageModal} size="xs" autoclose>
@@ -97,6 +109,10 @@
   {#if isOwner}
     <DropdownItem href="/sets/{setMetaData.id}-{setMetaData.slug}/edit">Edit</DropdownItem>
   {/if}
+
+  <DropdownItem on:click={() => (listFoldersModal = true)}>
+    Add to folder
+  </DropdownItem>
 
   <DropdownItem on:click={() => (deletePopupModal = true)}>
     {isOwner ? "Delete" : "Remove"}
