@@ -13,29 +13,6 @@
 
   export let data: PageData;
 
-  // let u:UserInterface|null
-
-  // user.subscribe(val => {
-  //   u = val
-  // })
-  // // import "./styles.css";
-  // // @ts-ignore
-  // function popState(event) {
-  //   console.log(event, $page);
-
-  //   if (window.location.pathname == "/auth") {
-  //     history.go(-2);
-  //   }
-  // }
-
-  // beforeNavigate(() => {
-  //   console.log("before navigate called")
-
-  //   // if(window.location.pathname == '/auth' && u != null) {
-  //   //   goto('/profile')
-  //   // }
-
-  // })
 </script>
 
 <svelte:head>
@@ -58,7 +35,7 @@
 <div class="app">
   <Header isLoggedIn={data.isLoggedIn} user={data.user} />
 
-  <main class="container max-w-screen-lg mx-auto" in:fade>
+  <main class="container max-w-screen-lg mx-auto " in:fade>
     <slot />
   </main>
 
