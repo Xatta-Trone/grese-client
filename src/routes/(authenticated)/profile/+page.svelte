@@ -61,6 +61,11 @@
           >To delete your account, please send an email to <A
             rel="external"
             target="_blank"
+            href="mailto:support@gre-sentence-equivalence.com"
+            >support@gre-sentence-equivalence.com</A
+          > or <A
+            rel="external"
+            target="_blank"
             href="mailto:monzurul.ce.buet@gmail.com"
             >monzurul.ce.buet@gmail.com</A
           >

@@ -12,10 +12,10 @@
   import Header from "./Header.svelte";
 
   export let data: PageData;
-
 </script>
 
 <svelte:head>
+  <!-- Google tag (gtag.js) -->
   <!-- Google tag (gtag.js) -->
   <script
     async
@@ -33,9 +33,11 @@
 </svelte:head>
 
 <div class="app">
-  <Header isLoggedIn={data.isLoggedIn} user={data.user} />
+  <div class="container">
+    <Header isLoggedIn={data.isLoggedIn} />
+  </div>
 
-  <main class="container max-w-screen-lg mx-auto " in:fade>
+  <main class="container max-w-screen-lg mx-auto" in:fade>
     <slot />
   </main>
 
