@@ -110,7 +110,7 @@
 </script>
 
 <svelte:head>
-  <title>My folders</title>
+  <title>My folders: GRE SE</title>
 </svelte:head>
 
 <main>

@@ -35,9 +35,7 @@
 </script>
 
 <svelte:head>
-  <title>Home</title>
-  <meta name="description" content="Svelte demo app" />
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <title>{(userData?.username ?? "My profile").toUpperCase()}: GRE SE</title>
 </svelte:head>
 
 <main class="my-6" in:fade>

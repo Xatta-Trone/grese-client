@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-  <title>@{$page.params.username}</title>
+  <title>@{$page.params.username}: GRE SE</title>
 </svelte:head>
 
 <main class="my-6 flex items-center flex-col" in:fade>

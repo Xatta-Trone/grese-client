@@ -27,6 +27,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Auth Success: GRE SE</title>
+</svelte:head>
+
 <h1>Auth Success. Redirecting.....</h1>
 
 {#if data.success && browser}

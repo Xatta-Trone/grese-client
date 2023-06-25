@@ -4,6 +4,10 @@
   import { Heading } from "flowbite-svelte";
 </script>
 
+<svelte:head>
+  <title>Pricing: GRE SE</title>
+</svelte:head>
+
 <div class="text-center">
   <Heading
     tag="h3"

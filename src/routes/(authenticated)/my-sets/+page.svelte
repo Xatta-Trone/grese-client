@@ -129,6 +129,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>My Sets: GRE SE</title>
+</svelte:head>
+
 <main>
   <DevComponent>
     {sets.length}

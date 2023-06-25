@@ -164,6 +164,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Import Set & Folder: GRE SE</title>
+</svelte:head>
+
 <div class="mt-5" in:fade>
   <DevComponent>
     <p>URL: {formData.url}</p>

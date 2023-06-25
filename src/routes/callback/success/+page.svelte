@@ -6,6 +6,10 @@
   export let data: PageData;
 </script>
 
+<svelte:head>
+  <title>Trx Success: GRE SE</title>
+</svelte:head>
+
 <main>
   {#if data.success == true}
     Thank you for your Subscription.

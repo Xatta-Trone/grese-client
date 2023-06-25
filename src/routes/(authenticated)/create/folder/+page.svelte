@@ -146,6 +146,11 @@
   }
 </script>
 
+<svelte:head>
+  <title>Create Folder: GRE SE</title>
+</svelte:head>
+
+
 <div class="mt-5" in:fade>
   <DevComponent>
     <p>Name: {formData.name}</p>

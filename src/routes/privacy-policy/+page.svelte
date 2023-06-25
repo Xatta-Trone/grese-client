@@ -1,7 +1,4 @@
-<script lang="ts">
-    import type { PageData } from './$types';
-    
-    export let data: PageData;
-</script>
-
+<svelte:head>
+  <title>Privacy Policy: GRE SE</title>
+</svelte:head>
 <h1>Privacy policy</h1>
