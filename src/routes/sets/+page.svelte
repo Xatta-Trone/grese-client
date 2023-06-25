@@ -3,6 +3,7 @@
   import bot from "$lib/images/bot.png";
   import type { Data, SetsResponse } from "$lib/interfaces/setListData";
   import axiosAPI from "$lib/services/customAxios";
+  import { error } from "@sveltejs/kit";
   import { Avatar, Card, Heading, Input, Skeleton } from "flowbite-svelte";
   import { onMount } from "svelte";
   import { inview } from "svelte-inview/dist/index";
@@ -25,6 +26,7 @@
 
   async function fetchData() {
     loading = true;
+
     await axiosAPI
       .get(
         `/public-lists?page=${currentPage}&per_page=${per_page}&query=${query}`
