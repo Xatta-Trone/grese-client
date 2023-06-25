@@ -416,7 +416,11 @@
 </script>
 
 <svelte:head>
-  <title>{listMeta ? `Sentence Equivalence Practice: ${listMeta.name}` : "Sentence Equivalence Practice"}</title>
+  <title
+    >{listMeta
+      ? `Sentence Equivalence Practice: ${listMeta.name}`
+      : "Sentence Equivalence Practice"}</title
+  >
 </svelte:head>
 
 <main class="my-6" in:fade>
@@ -440,73 +444,75 @@
     </p>
   </DevComponent>
 
-  {#if completedQuiz == true}
-    <Heading tag="h5" class="mb-5">Completed Quiz...&#128516;</Heading>
-    <Button on:click={resetQuiz}>Reset Quiz</Button>
-    <!-- content here -->
-  {:else}
-    <!-- practice question -->
-    {#if synonymsQuestion}
-      <P class="my-3">
-        <span class="font-bold">Q.</span> Select the synonyms of
-        <strong class="uppercase">
-          {synonymsQuestion.question}
-        </strong>.
-      </P>
-      <!-- display options -->
-      <div class="flex flex-col">
-        {#each synonymsQuestion.options as option}
-          <button
-            class:cDisable={showCorrectAns}
-            on:click={() =>
-              synonymsQuestion && !showCorrectAns ? setSynAns(option) : ""}
-            class={synonymsQuestion.selectedAns
-              ? showCorrectAns
-                ? synonymsQuestion.selectedAns.includes(option)
-                  ? checkCorrectAns(option)
+  <div class="my-28">
+    {#if completedQuiz == true}
+      <Heading tag="h5" class="mb-5">Completed Quiz...&#128516;</Heading>
+      <Button on:click={resetQuiz}>Reset Quiz</Button>
+      <!-- content here -->
+    {:else}
+      <!-- practice question -->
+      {#if synonymsQuestion}
+        <P class="my-3">
+          <span class="font-bold">Q.</span> Select the synonyms of
+          <strong class="uppercase">
+            {synonymsQuestion.question}
+          </strong>.
+        </P>
+        <!-- display options -->
+        <div class="flex flex-col">
+          {#each synonymsQuestion.options as option}
+            <button
+              class:cDisable={showCorrectAns}
+              on:click={() =>
+                synonymsQuestion && !showCorrectAns ? setSynAns(option) : ""}
+              class={synonymsQuestion.selectedAns
+                ? showCorrectAns
+                  ? synonymsQuestion.selectedAns.includes(option)
+                    ? checkCorrectAns(option)
+                      ? "bg-green-300"
+                      : "bg-red-300"
+                    : checkCorrectAns(option)
                     ? "bg-green-300"
-                    : "bg-red-300"
-                  : checkCorrectAns(option)
-                  ? "bg-green-300"
+                    : ""
+                  : synonymsQuestion.selectedAns.includes(option)
+                  ? "bg-slate-200"
                   : ""
-                : synonymsQuestion.selectedAns.includes(option)
-                ? "bg-slate-200"
-                : ""
-              : ""}
+                : ""}
+            >
+              <P
+                size="base"
+                weight="medium"
+                class="px-4 py-2 rounded border border-gray-200 dark:border-gray-700"
+                color="text-gray-900 dark:text-gray-900 "
+                >{option.charAt(0).toUpperCase() + option.slice(1)}
+
+                {#if getIndex(option) != -1}
+                  <Badge rounded>Pair {getIndex(option)}</Badge>
+                {/if}
+              </P>
+            </button>
+            <div class="mb-2" />
+          {/each}
+        </div>
+        <!-- <Button class="mt-3" on:click={checkAnswer}>Check</Button> -->
+        {#if showNextQuestionButton}
+          <Button class="mt-3" on:click={buildQuestion}>Next</Button>
+          <span class="ml-2 mr-1">Correct pairs: </span>
+
+          {#each synonymsQuestion.correctAns as item}
+            <Badge large color="green" class="mx-1">{item[0]}, {item[1]}</Badge>
+          {/each}
+        {:else}
+          <Button
+            class="mt-3"
+            disabled={synonymsQuestion.selectedAns.length == 0 ||
+              synonymsQuestion.selectedAns.length % 2 == 1}
+            on:click={checkAnswer}>Check</Button
           >
-            <P
-              size="base"
-              weight="medium"
-              class="px-4 py-2 rounded border border-gray-200 dark:border-gray-700"
-              color="text-gray-900 dark:text-gray-900 "
-              >{option.charAt(0).toUpperCase() + option.slice(1)}
-
-              {#if getIndex(option) != -1}
-                <Badge rounded>Pair {getIndex(option)}</Badge>
-              {/if}
-            </P>
-          </button>
-          <div class="mb-2" />
-        {/each}
-      </div>
-      <!-- <Button class="mt-3" on:click={checkAnswer}>Check</Button> -->
-      {#if showNextQuestionButton}
-        <Button class="mt-3" on:click={buildQuestion}>Next</Button>
-        <span class="ml-2 mr-1">Correct pairs: </span>
-
-        {#each synonymsQuestion.correctAns as item}
-          <Badge large color="green" class="mx-1">{item[0]}, {item[1]}</Badge>
-        {/each}
-      {:else}
-        <Button
-          class="mt-3"
-          disabled={synonymsQuestion.selectedAns.length == 0 ||
-            synonymsQuestion.selectedAns.length % 2 == 1}
-          on:click={checkAnswer}>Check</Button
-        >
+        {/if}
       {/if}
     {/if}
-  {/if}
+  </div>
 </main>
 
 <style>

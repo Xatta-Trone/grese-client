@@ -355,7 +355,11 @@
 </Modal>
 
 <svelte:head>
-  <title>{listMeta ? `Practice definition: ${listMeta.name}` : "Practice definition"}</title>
+  <title
+    >{listMeta
+      ? `Practice definition: ${listMeta.name}`
+      : "Practice definition"}</title
+  >
 </svelte:head>
 
 <main class="my-6" in:fade>
@@ -374,76 +378,77 @@
     </p>
   </DevComponent>
 
-  {#if completedQuiz == false}
-    {#if words.length > 0}
-      <!-- print stats -->
+  <div class="my-28">
+    {#if completedQuiz == false}
+      {#if words.length > 0}
+        <!-- print stats -->
 
-      <div class="flex justify-between">
-        <div>
-          Correct: {correctQuestion} / {totalQuestion}
-        </div>
-        <div>
-          <button on:click={() => (clickOutsideModal = true)}>
-            <SettingsIcon />
-          </button>
-        </div>
-      </div>
-
-      {#if question}
-        <P class="my-3">
-          {#if question.questionType == QuestionType.WORD}
-            <span class="font-bold">Q.</span> Select the best definition of
-            <strong class="uppercase">
-              {question.question}
-            </strong>.
-          {:else}
-            <span class="font-bold">Q.</span>
-            <strong class="">
-              {question.question.charAt(0).toUpperCase() +
-                question.question.slice(1)}
-            </strong>
-          {/if}
-        </P>
-        <div class="flex flex-col">
-          {#each question.options as option}
-            <button
-              class={question.selectedAns
-                ? question.selectedAns == option
-                  ? question.selectedAns == question.correctAns
-                    ? " bg-green-300"
-                    : "bg-red-300"
-                  : question.correctAns == option
-                  ? "bg-green-300"
-                  : ""
-                : ""}
-              class:cDisable={question.selectedAns != null &&
-                question.selectedAns != option}
-              class:cPointer={question.selectedAns != null &&
-                question.selectedAns == option}
-              disabled={question.selectedAns != null ? true : false}
-              on:click={() => (question ? setAns(option) : "")}
-            >
-              <P
-                size="base"
-                weight="medium"
-                class="px-4 py-2 rounded border border-gray-200 dark:border-gray-700"
-                color="text-gray-900 dark:text-gray-900 "
-              >
-                {option}</P
-              >
+        <div class="flex justify-between">
+          <div>
+            Correct: {correctQuestion} / {totalQuestion}
+          </div>
+          <div>
+            <button on:click={() => (clickOutsideModal = true)}>
+              <SettingsIcon />
             </button>
-            <div class="mb-2" />
-          {/each}
+          </div>
         </div>
-        <Button
-          class="mt-3"
-          disabled={question.selectedAns == null}
-          on:click={buildQuestion}>Next</Button
-        >
+
+        {#if question}
+          <P class="my-3">
+            {#if question.questionType == QuestionType.WORD}
+              <span class="font-bold">Q.</span> Select the best definition of
+              <strong class="uppercase">
+                {question.question}
+              </strong>.
+            {:else}
+              <span class="font-bold">Q.</span>
+              <strong class="">
+                {question.question.charAt(0).toUpperCase() +
+                  question.question.slice(1)}
+              </strong>
+            {/if}
+          </P>
+          <div class="flex flex-col">
+            {#each question.options as option}
+              <button
+                class={question.selectedAns
+                  ? question.selectedAns == option
+                    ? question.selectedAns == question.correctAns
+                      ? " bg-green-300"
+                      : "bg-red-300"
+                    : question.correctAns == option
+                    ? "bg-green-300"
+                    : ""
+                  : ""}
+                class:cDisable={question.selectedAns != null &&
+                  question.selectedAns != option}
+                class:cPointer={question.selectedAns != null &&
+                  question.selectedAns == option}
+                disabled={question.selectedAns != null ? true : false}
+                on:click={() => (question ? setAns(option) : "")}
+              >
+                <P
+                  size="base"
+                  weight="medium"
+                  class="px-4 py-2 rounded border border-gray-200 dark:border-gray-700"
+                  color="text-gray-900 dark:text-gray-900 "
+                >
+                  {option}</P
+                >
+              </button>
+              <div class="mb-2" />
+            {/each}
+          </div>
+          <Button
+            class="mt-3"
+            disabled={question.selectedAns == null}
+            on:click={buildQuestion}>Next</Button
+          >
+        {/if}
       {/if}
     {/if}
-  {/if}
-
+  </div>
   {#if loading && words.length == 0}
     <Heading tag="h5">Loading...&#128516;</Heading>
   {/if}

@@ -389,73 +389,75 @@
     </p>
   </DevComponent>
 
-  {#if completedQuiz == false}
-    {#if words.length > 0}
-      <!-- print stats -->
+  <div class="my-28">
+    {#if completedQuiz == false}
+      {#if words.length > 0}
+        <!-- print stats -->
 
-      <div class="flex justify-between">
-        <div>
-          Correct: {correctQuestion} / {totalQuestion}
-        </div>
-        <div>
-          <button on:click={() => (clickOutsideModal = true)}>
-            <SettingsIcon />
-          </button>
-        </div>
-      </div>
-
-      <!-- practice question -->
-      {#if synonymsQuestion}
-        <P class="my-3">
-          <span class="font-bold">Q.</span> Select the synonyms of
-          <strong class="uppercase">
-            {synonymsQuestion.question}
-          </strong>.
-        </P>
-        <!-- display options -->
-        <div class="flex flex-col">
-          {#each synonymsQuestion.options as option}
-            <button
-              class:cDisable={showCorrectAns}
-              on:click={() =>
-                synonymsQuestion && !showCorrectAns ? setSynAns(option) : ""}
-              class={synonymsQuestion.selectedAns
-                ? showCorrectAns
-                  ? synonymsQuestion.selectedAns.includes(option)
-                    ? synonymsQuestion.correctAns.includes(option)
-                      ? "bg-green-300"
-                      : "bg-red-300"
-                    : synonymsQuestion.correctAns.includes(option)
-                    ? "bg-green-300"
-                    : ""
-                  : synonymsQuestion.selectedAns.includes(option)
-                  ? "bg-slate-200"
-                  : ""
-                : ""}
-            >
-              <P
-                size="base"
-                weight="medium"
-                class="px-4 py-2 rounded border border-gray-200 dark:border-gray-700"
-                color="text-gray-900 dark:text-gray-900 "
-                >{option.charAt(0).toUpperCase() + option.slice(1)}</P
-              >
+        <div class="flex justify-between">
+          <div>
+            Correct: {correctQuestion} / {totalQuestion}
+          </div>
+          <div>
+            <button on:click={() => (clickOutsideModal = true)}>
+              <SettingsIcon />
             </button>
-            <div class="mb-2" />
-          {/each}
+          </div>
         </div>
-        {#if showNextQuestionButton}
-          <Button class="mt-3" on:click={buildQuestion}>Next</Button>
-        {:else}
-          <Button
-            class="mt-3"
-            disabled={synonymsQuestion.selectedAns.length == 0}
-            on:click={checkAnswer}>Check</Button
-          >
+
+        <!-- practice question -->
+        {#if synonymsQuestion}
+          <P class="my-3">
+            <span class="font-bold">Q.</span> Select the synonyms of
+            <strong class="uppercase">
+              {synonymsQuestion.question}
+            </strong>.
+          </P>
+          <!-- display options -->
+          <div class="flex flex-col">
+            {#each synonymsQuestion.options as option}
+              <button
+                class:cDisable={showCorrectAns}
+                on:click={() =>
+                  synonymsQuestion && !showCorrectAns ? setSynAns(option) : ""}
+                class={synonymsQuestion.selectedAns
+                  ? showCorrectAns
+                    ? synonymsQuestion.selectedAns.includes(option)
+                      ? synonymsQuestion.correctAns.includes(option)
+                        ? "bg-green-300"
+                        : "bg-red-300"
+                      : synonymsQuestion.correctAns.includes(option)
+                      ? "bg-green-300"
+                      : ""
+                    : synonymsQuestion.selectedAns.includes(option)
+                    ? "bg-slate-200"
+                    : ""
+                  : ""}
+              >
+                <P
+                  size="base"
+                  weight="medium"
+                  class="px-4 py-2 rounded border border-gray-200 dark:border-gray-700"
+                  color="text-gray-900 dark:text-gray-900 "
+                  >{option.charAt(0).toUpperCase() + option.slice(1)}</P
+                >
+              </button>
+              <div class="mb-2" />
+            {/each}
+          </div>
+          {#if showNextQuestionButton}
+            <Button class="mt-3" on:click={buildQuestion}>Next</Button>
+          {:else}
+            <Button
+              class="mt-3"
+              disabled={synonymsQuestion.selectedAns.length == 0}
+              on:click={checkAnswer}>Check</Button
+            >
+          {/if}
         {/if}
       {/if}
     {/if}
-  {/if}
+  </div>
 
   {#if loading && words.length == 0}
     <Heading tag="h5">Loading...&#128516;</Heading>
