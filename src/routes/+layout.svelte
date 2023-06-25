@@ -47,7 +47,7 @@
     <slot />
   </main>
 
-  <Footer class="mt-10">
+  <Footer class="mt-10 bg-slate-50 dark:bg-gray-800">
     <FooterCopyright href="/" by="GRE SE" year={new Date().getFullYear()} />
     <FooterLinkGroup
       ulClass="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0"
