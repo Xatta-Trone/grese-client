@@ -58,7 +58,7 @@
     <div class="text-center">
       <Heading
         tag="h5"
-        class="mb-16 mt-10"
+        class="mb-6 mt-10"
         customSize="text-4xl font-extrabold  md:text-5xl lg:text-6xl"
         >Pricing Plans</Heading
       >

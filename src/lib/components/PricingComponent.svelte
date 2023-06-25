@@ -2,9 +2,12 @@
 <script>
   import CircleCheckIcon from "$lib/icons/circleCheckIcon.svelte";
   import CircleXIcon from "$lib/icons/circleXIcon.svelte";
-  import { Button, Card } from "flowbite-svelte";
+  import { Button, Card, Heading } from "flowbite-svelte";
 </script>
 
+<div class="text-center mb-16">
+  <Heading tag="h4">Grab the offer before it price goes up.</Heading>
+</div>
 <div class="grid gap-4 grid-cols-1 md:grid-cols-3  mb-20">
   <Card padding="sm">
     <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">
@@ -51,6 +54,15 @@
           class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"
         >
           Access to 3/4 practice modules
+        </span>
+      </li>
+      
+      <li class="flex space-x-2">
+        <CircleXIcon />
+        <span
+          class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"
+        >
+          Import Set & Folder
         </span>
       </li>
 
@@ -142,6 +154,15 @@
       </li>
 
       <li class="flex space-x-2">
+        <CircleCheckIcon />
+        <span
+          class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"
+        >
+          Import Set & Folder
+        </span>
+      </li>
+
+      <li class="flex space-x-2">
         <CircleXIcon />
         <span
           class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"
@@ -225,6 +246,15 @@
           class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"
         >
           Access to all practice modules
+        </span>
+      </li>
+
+      <li class="flex space-x-2">
+        <CircleCheckIcon />
+        <span
+          class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"
+        >
+          Import Set & Folder
         </span>
       </li>
 

@@ -7,7 +7,7 @@
 <div class="text-center">
   <Heading
     tag="h3"
-    class="mb-10 mt-10"
+    class="mt-10 mb-6"
     customSize="text-4xl font-extrabold  md:text-5xl lg:text-6xl"
     >Pricing Plans</Heading
   >
