@@ -10,6 +10,7 @@
   import "../app.postcss";
   import type { PageData } from "./$types";
   import Header from "./Header.svelte";
+  import './styles.css';
 
   export let data: PageData;
 </script>
@@ -32,8 +33,8 @@
   </script>
 </svelte:head>
 
-<div class="app">
-  <div class="container">
+<div class="app ">
+  <div class="">
     <Header isLoggedIn={data.isLoggedIn} />
   </div>
 
@@ -42,19 +43,12 @@
   </main>
 
   <Footer class="mt-10">
-    <FooterCopyright href="/" by="Flowbite™" year={new Date().getFullYear()} />
+    <FooterCopyright href="/" by="GRE SE" year={new Date().getFullYear()} />
     <FooterLinkGroup
       ulClass="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0"
     >
-      <FooterLink href="/">About</FooterLink>
-      <FooterLink href="/">Privacy Policy</FooterLink>
-      <FooterLink href="/">Licensing</FooterLink>
-      <FooterLink href="/">Contact</FooterLink>
+      <FooterLink href="/privacy-policy">Privacy Policy</FooterLink>
+      <FooterLink href="/terms-and-conditions">Terms & Conditions</FooterLink>
     </FooterLinkGroup>
   </Footer>
 </div>
-
-<!-- <svelte:window on:popstate={popState} /> -->
-
-<style>
-</style>

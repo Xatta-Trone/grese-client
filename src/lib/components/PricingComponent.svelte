@@ -4,7 +4,8 @@
   import CircleXIcon from "$lib/icons/circleXIcon.svelte";
   import { Button, Card } from "flowbite-svelte";
 </script>
-<div class="grid gap-4 grid-cols-3 mb-20">
+
+<div class="grid gap-4 grid-cols-1 md:grid-cols-3  mb-20">
   <Card padding="sm">
     <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">
       FREE

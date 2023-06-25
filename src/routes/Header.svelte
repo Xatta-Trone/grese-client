@@ -14,13 +14,18 @@
     NavLi,
     NavUl,
   } from "flowbite-svelte";
-  export let isLoggedIn: boolean
+  export let isLoggedIn: boolean;
   let btnClass =
     "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-md";
 </script>
 
 <Navbar let:hidden let:toggle color="form">
   <NavBrand href="/">
+    <img
+      src="/logo/logo.png"
+      class="mr-3 h-6 sm:h-9"
+      alt="GRE SE Logo"
+    />
     <span
       class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
     >
@@ -120,4 +125,3 @@
     </Dropdown>
   </NavUl>
 </Navbar>
-
