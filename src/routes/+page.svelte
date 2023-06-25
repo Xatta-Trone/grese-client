@@ -16,7 +16,7 @@
 <section>
   <!-- hero section -->
 
-  <section class="mt-16 mb-10">
+  <section class="my-28">
     <div
       class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12"
     >
