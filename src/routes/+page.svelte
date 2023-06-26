@@ -1,16 +1,21 @@
 <!-- @format -->
 <script lang="ts">
-  import { page } from "$app/stores";
-  import PricingComponent from "$lib/components/PricingComponent.svelte";
-  import ChevronRightIcon from "$lib/icons/chevronRightIcon.svelte";
-  import LoginIcon from "$lib/icons/loginIcon.svelte";
-  import { Heading, Mark } from "flowbite-svelte";
-  
+import {
+    page
+} from "$app/stores";
+import PricingComponent from "$lib/components/PricingComponent.svelte";
+import ChevronRightIcon from "$lib/icons/chevronRightIcon.svelte";
+import LoginIcon from "$lib/icons/loginIcon.svelte";
+import {
+    Button,
+    Heading,
+    Mark,
+    P
+} from "flowbite-svelte";
 </script>
 
 <svelte:head>
   <title>Home: GRE SE</title>
-  <meta name="description" content="Svelte demo app" />
 </svelte:head>
 
 <section>
@@ -46,10 +51,93 @@
           class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
         >
           <LoginIcon />
-          <span class="inline-block ml-2">{$page.data.isLoggedIn ? 'Profile' : 'JOIN'}</span>
+          <span class="inline-block ml-2"
+            >{$page.data.isLoggedIn ? "Profile" : "JOIN"}</span
+          >
         </a>
       </div>
     </div>
+  </section>
+
+  <!-- demo -->
+
+  <section id="demo">
+    <div class="text-center">
+      <Heading
+        tag="h5"
+        class="mb-10 mt-10"
+        customSize="text-4xl font-extrabold  md:text-5xl lg:text-6xl"
+        >What Do You Get</Heading
+      >
+    </div>
+    <!-- contents -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 py-20">
+      <div>
+        <Heading tag="h2">Flash Cards</Heading>
+        <P class="mt-6 mb-8 text-justify"
+          >Your good old friend flash card. In the flash card section, you can
+          learn and mark words (in a group) as unknown, learning, mastered.
+          These groups is used in the other sections as practice modules.
+        </P>
+        <Button>Try Demo</Button>
+      </div>
+      <div>
+        <video autoplay muted loop playsinline>
+          <source src="./videos/flashcards.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 py-20">
+
+      <div>
+        <video autoplay muted loop playsinline>
+          <source src="./videos/definition-match.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <div>
+        <Heading tag="h2">Definition Match</Heading>
+        <P class="mt-6 mb-8 text-justify"
+          >In the definition match you can practice your verbal skills by selecting the best definition for a given word. Moreover, you can flip the question type where you will be given the definition and will be asked to select the best word. Here, you can also set  the number of words you want to practice.
+        </P>
+        <Button>Try Demo</Button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 py-20">
+      <div>
+        <Heading tag="h2">Synonyms Practice</Heading>
+        <P class="mt-6 mb-8 text-justify"
+          >In synonyms practice, you will be given a word and 6 options to choose from. The correct answer could be from at least one to at most 6 options. In here, you can choose the questions randomly and set the number of questions you want to practice.
+        </P>
+        <Button>Try Demo</Button>
+      </div>
+      <div>
+        <video autoplay muted loop playsinline>
+          <source src="./videos/synonym.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 py-20">
+
+      <div>
+        <video autoplay muted loop playsinline>
+          <source src="./videos/definition-match.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <div>
+        <Heading tag="h2">Sentence Equivalence</Heading>
+        <P class="mt-6 mb-8 text-justify"
+          >In this module you will be given 3 pairs of options and no questions. You will be asked to select the options in correct pairs. The main objective of this section is to enhance your capability of word pairing. Selecting all the correct pairs gives you one point and vice versa. 
+        </P>
+        <Button>Try Demo</Button>
+      </div>
+    </div>
+
+    <!-- end contents -->
   </section>
 
   <!-- pricing -->

@@ -35,7 +35,10 @@
     name="description"
     content="Welcome to GRE SE, your go-to platform for mastering sentence equivalence and expanding your vocabulary. Create custom word sets, practice with flashcards, and enhance your language skills with engaging exercises. Join GRE SE today and excel in the GRE with confidence."
   />
-  <meta name="keywords" content="GRE, GEE-SE, sentence equivalence, text completion, graduate record exam, gre sentence equivalence, " />
+  <meta
+    name="keywords"
+    content="GRE, GEE-SE, sentence equivalence, text completion, graduate record exam, gre sentence equivalence, "
+  />
 </svelte:head>
 
 <div class="app">
@@ -48,12 +51,13 @@
   </main>
 
   <Footer class="mt-10 bg-slate-50 dark:bg-gray-800">
-    <FooterCopyright href="/" by="GRE SE" year={new Date().getFullYear()} />
+    <FooterCopyright by="GRE SE" year={new Date().getFullYear()} />
     <FooterLinkGroup
       ulClass="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0"
     >
       <FooterLink href="/privacy-policy">Privacy Policy</FooterLink>
       <FooterLink href="/terms-and-conditions">Terms & Conditions</FooterLink>
+      <FooterLink href="/support">Support</FooterLink>
     </FooterLinkGroup>
   </Footer>
 </div>
