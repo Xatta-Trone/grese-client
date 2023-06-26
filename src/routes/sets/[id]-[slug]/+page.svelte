@@ -170,6 +170,8 @@
   let saveSuccess: string | null = null;
   let saveError: string | null = null;
   function handleSave() {
+    saveSuccess = null;
+    saveError = null;
     saving = true;
     console.log("handle save");
 
@@ -196,7 +198,7 @@
       })
       .catch((err) => {
         console.log(err.response);
-        saveError = "Error saving the set.";
+        saveError = err.response.data.errors ?? "Error saving the set.";
       })
       .finally(() => {
         saving = false;
