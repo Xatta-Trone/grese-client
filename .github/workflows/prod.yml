@@ -37,7 +37,7 @@ jobs:
         script: |
           cd /var/www/grese-client
           sudo git checkout main 
-          sudo git pull --rebase
+          sudo git pull origin main --rebase
           sudo rm -rf ./node_modules
           sudo npm ci --force
           sudo npm run build
