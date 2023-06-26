@@ -7,6 +7,8 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
+    types:
+    - closed
     branches: [ "main" ]
 
 jobs:
@@ -29,13 +31,13 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.PORT }}
+        key: ${{ secrets.SSHKEY }}
         script: |
           cd /var/www/grese-client
           sudo git checkout main 
-          sudo git pull --rebase
+          sudo git pull origin main --rebase
           sudo rm -rf ./node_modules
           sudo npm ci --force
           sudo npm run build
