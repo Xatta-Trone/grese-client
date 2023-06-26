@@ -5,12 +5,26 @@
   import FolderActionMenu from "$lib/components/user/folders/FolderActionMenu.svelte";
   import CloseIcon from "$lib/icons/closeIcon.svelte";
   import bot from "$lib/images/bot.png";
-  import type { Folder, List as FolderList, Meta, SingleFolderResponse } from "$lib/interfaces/folderResponse";
+  import type { BadStatusErrorResponse } from "$lib/interfaces/common";
+  import type {
+    Folder,
+    List as FolderList,
+    Meta,
+    SingleFolderResponse,
+  } from "$lib/interfaces/folderResponse";
   import axiosAPI from "$lib/services/customAxios";
   import { INTENDED_KEY } from "$lib/utils/constants";
   import { redirectHelper } from "$lib/utils/helpers";
-  import type { AxiosResponse } from "axios";
-  import { Alert, Avatar, Button, Card, Heading, Select, TextPlaceholder, } from "flowbite-svelte";
+  import type { AxiosError, AxiosResponse } from "axios";
+  import {
+    Alert,
+    Avatar,
+    Button,
+    Card,
+    Heading,
+    Select,
+    TextPlaceholder,
+  } from "flowbite-svelte";
   import { onMount } from "svelte";
   import { inview } from "svelte-inview/dist/index";
   import type { PageData } from "./$types";
@@ -29,11 +43,13 @@
   let query: string = "";
   let orderBy = "id";
   let orderDir = "asc";
+  let errorMessage: string | null = null;
 
   $: lists = [...lists, ...newLists];
 
   // fetch data
   async function fetchData() {
+    errorMessage = null;
     loading = true;
     await axiosAPI
       .get(
@@ -56,6 +72,12 @@
           hasMore = false;
         }
       })
+      .catch((err: AxiosError) => {
+        console.log(err.response?.data);
+        const e: BadStatusErrorResponse | any = err.response?.data;
+
+        errorMessage = e.errors;
+      })
       .finally(() => (loading = false));
   }
 
@@ -77,7 +99,7 @@
     redirectHelper("/login");
   }
 
-   // =========================
+  // =========================
   // sorting
   // =========================
 
@@ -151,13 +173,23 @@
 </script>
 
 <main class="my-6">
+  {#if errorMessage}
+    <Alert color="red">
+      <span class="font-medium">
+        {errorMessage}
+      </span>
+    </Alert>
+  {/if}
   {#if folderMeta}
     <Heading tag="h2" class="my-10">{folderMeta.name}</Heading>
   {/if}
 
   {#if folderMeta}
     <div class="flex justify-between my-8">
-      <a class="flex items-center space-x-4" href="/@{folderMeta.user.username}">
+      <a
+        class="flex items-center space-x-4"
+        href="/@{folderMeta.user.username}"
+      >
         <Avatar src={bot} size="sm" />
         <div class="space-y-1 font-medium dark:text-white">
           <div class="font-bold">{folderMeta.user.username}</div>
@@ -165,20 +197,24 @@
       </a>
       <div class="font-bold">
         {#if data.user == null}
-          <Button color="dark" on:click={handleLoginToSave}>Login to save</Button>
+          <Button color="dark" on:click={handleLoginToSave}
+            >Login to save</Button
+          >
         {:else if data.user.id == folderMeta.user_id}
           <FolderActionMenu
             folderMetaData={folderMeta}
             isOwner={folderMeta.user_id == data.user?.id}
           />
         {:else}
-          <Button color="dark" on:click={handleSave} disabled={saving}>Save</Button>
+          <Button color="dark" on:click={handleSave} disabled={saving}
+            >Save</Button
+          >
         {/if}
       </div>
     </div>
   {/if}
 
-     {#if saveError}
+  {#if saveError}
     <Alert color="red" dismissable class="my-1">
       <span slot="icon"><CloseIcon /></span>
       {saveError}
@@ -195,9 +231,9 @@
   {#if folderMeta}
     <div class="flex flex-col md:flex-row items-center">
       <Heading tag="h4" class="my-6"
-      >{folderMeta.lists_count ?? 0}
-      {folderMeta.lists_count > 1 ? "sets" : "set"} in this folder</Heading
-    >
+        >{folderMeta.lists_count ?? 0}
+        {folderMeta.lists_count > 1 ? "sets" : "set"} in this folder</Heading
+      >
       <div>
         <Select
           size="md"
@@ -230,13 +266,11 @@
   {/each}
   <div use:inview={{}} on:change={loadMore} />
 
-
-   {#if loading}
+  {#if loading}
     {#each Array(10) as _, index (index)}
       <TextPlaceholder size="xxl" class="mt-8" />
     {/each}
   {/if}
-
 
   {#if lists.length == 0 && !hasMore && !loading}
     <Heading tag="h5">Nothing found. &#128532;</Heading>
