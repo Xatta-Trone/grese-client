@@ -1,9 +1,6 @@
 <!-- @format -->
 <script lang="ts">
   import { A, Heading, P } from "flowbite-svelte";
-
-  export const prerender = "auto";
-
   
 </script>
 <svelte:head>
