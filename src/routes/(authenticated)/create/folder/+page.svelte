@@ -14,6 +14,7 @@
   import DevComponent from "$lib/components/DevComponent.svelte";
   import CloseIcon from "$lib/icons/closeIcon.svelte";
   import axiosAPI from "$lib/services/customAxios";
+  import { redirectHelper } from "$lib/utils/helpers";
   import type { AxiosResponse } from "axios";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
@@ -111,7 +112,9 @@
           if (res.status == 201) {
             resetForm.reset();
             const responseData: FolderCreateSuccessResponse = res.data;
+            redirectHelper(`/create/sets?folder=${responseData.data.id}&name=${responseData.data.name}`)
             formSuccess = responseData.message;
+            
           } else {
             formError = "Some error occurred.";
           }

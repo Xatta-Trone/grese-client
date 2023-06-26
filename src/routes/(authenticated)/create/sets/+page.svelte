@@ -210,6 +210,13 @@
     </Alert>
   {/if}
 
+  {#if $page.url.searchParams.get('folder') != null}
+    <Alert color="green" dismissable class="my-1">
+      <span slot="icon"><CloseIcon /></span>
+      Folder <strong>{$page.url.searchParams.get('name') ?? ''}</strong>  created. Now create a set for this folder.
+    </Alert>
+  {/if}
+
   <form id="form" on:submit|preventDefault={handleSubmit} class="mb-9">
     <div class="mb-6">
       <Label

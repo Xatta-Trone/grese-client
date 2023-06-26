@@ -4,7 +4,7 @@
   import bot from "$lib/images/bot.png";
   import type { Data, FoldersResponse } from "$lib/interfaces/folderListData";
   import axiosAPI from "$lib/services/customAxios";
-  import { Avatar, Badge, Card, Heading, Input, Select, Skeleton } from "flowbite-svelte";
+  import { Avatar, Badge, Button, Card, Heading, Input, Select, Skeleton } from "flowbite-svelte";
   import { onMount } from "svelte";
   import { inview } from "svelte-inview/dist/index";
   import type { PageData } from "./$types";
@@ -186,6 +186,9 @@
 
   {#if sets.length == 0 && !hasMore && !loading}
     <Heading tag="h5">Nothing found. &#128532;</Heading>
+    <Button data-sveltekit-preload-data="none" class="mt-5" href="/create/folder"
+      >Create a folder</Button
+    >
   {/if}
 
   {#if sets.length > 0 && !hasMore}
