@@ -1,6 +1,6 @@
 import type { HandleClientError } from '@sveltejs/kit';
 
-export const handleError = (async ({ error, event }) => {
+export const handleError = (async () => {
     return {
         message: 'Whoops!',
     };

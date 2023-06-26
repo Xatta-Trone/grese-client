@@ -1,7 +1,5 @@
 <!-- @format -->
 <script lang="ts">
-  import { page } from "$app/stores";
-  import DevComponent from "$lib/components/DevComponent.svelte";
   import SettingsIcon from "$lib/icons/settingsIcon.svelte";
   import type {
     ListMeta,
@@ -10,7 +8,6 @@
     SingleSetResponse,
     Word,
   } from "$lib/interfaces/setData";
-  import axiosAPI from "$lib/services/customAxios";
   import singleSetData from "$lib/utils/dummyData.json";
   import {
     Button,
@@ -37,8 +34,8 @@
   }
 
   // data variables
-  let currentPage = 1;
-  let per_page = 50;
+  // let currentPage = 1;
+  // let per_page = 50;
   let words: Word[] = [];
   let backupWords: Word[] = [];
   let newWords: Word[] = [];
@@ -46,7 +43,7 @@
   let meta: Meta;
   let loading = false;
   let hasMore = true;
-  let query: string = "";
+  // let query: string = "";
 
   $: words = [...words, ...newWords];
 
@@ -79,8 +76,8 @@
   });
 
   let currentIndex: number = 0;
-  let isRandom: boolean = false;
-  let completedQuiz: boolean = false;
+  let isRandom = false;
+  let completedQuiz = false;
   let questionType: QuestionType = QuestionType.WORD;
   let question: Question | null = null;
   let totalQuestion: number = 0;
@@ -285,8 +282,6 @@
   }
 
   function handleQuestionRemainingInc() {
-    const val = questionRemaining ?? 0;
-
     if (questionRemaining >= backupWords.length) {
       totalQuestion = backupWords.length;
       questionRemaining = totalQuestion;

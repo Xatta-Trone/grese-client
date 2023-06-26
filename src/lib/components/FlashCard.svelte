@@ -1,12 +1,12 @@
 <!-- @format -->
 <script lang="ts">
   import { browser } from "$app/environment";
-  import SpeakerIcon from "$lib/icons/speakerIcon.svelte";
   import SettingsIcon from "$lib/icons/settingsIcon.svelte";
+  import SpeakerIcon from "$lib/icons/speakerIcon.svelte";
+  import { LearningState } from "$lib/interfaces/setData";
   import { autoSpeak, flipped, showNonGre } from "$lib/services/flashcard";
   import { Badge, Button, Modal, P, Toggle } from "flowbite-svelte";
   import { onMount } from "svelte";
-  import { LearningState } from "$lib/interfaces/setData";
   import { fade } from "svelte/transition";
   interface Word {
     id: number;
@@ -41,13 +41,13 @@
     // showBack = !showBack;
   }
 
-  let showNonGreWords: boolean = false;
+  let showNonGreWords = false;
   showNonGre.subscribe((val) => (showNonGreWords = val));
   function toggleNonGre() {
     showNonGre.set(!showNonGreWords);
   }
 
-  let autoSpeakValue: boolean = false;
+  let autoSpeakValue = false;
   autoSpeak.subscribe((val) => (autoSpeakValue = val));
   function toggleAutoSpeak() {
     autoSpeak.set(!autoSpeakValue);
