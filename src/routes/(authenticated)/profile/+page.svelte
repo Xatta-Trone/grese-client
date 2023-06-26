@@ -43,14 +43,14 @@
     <TextPlaceholder size="xxl" class="mt-8" />
     <TextPlaceholder size="xxl" class="mt-8" />
   {:else}
-    <div id="username" class="my-10">
+    <div id="username" class="my-8">
       <UserName username={userData?.username ?? ""} />
     </div>
-    <div id="subscription" class="my-10">
+    <div id="subscription" class="my-8">
       <Subscription />
     </div>
 
-    <div class="my-10">
+    <div class="my-8">
       <Card size="xl">
         <Heading tag="h5" color="text-red-600 dark:text-red-500"
           >Danger Zone</Heading
@@ -61,11 +61,6 @@
             target="_blank"
             href="mailto:support@gre-sentence-equivalence.com"
             >support@gre-sentence-equivalence.com</A
-          > or <A
-            rel="external"
-            target="_blank"
-            href="mailto:monzurul.ce.buet@gmail.com"
-            >monzurul.ce.buet@gmail.com</A
           >
         </P>
       </Card>
