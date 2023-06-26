@@ -2,7 +2,7 @@
 <script>
   import CircleCheckIcon from "$lib/icons/circleCheckIcon.svelte";
   import CircleXIcon from "$lib/icons/circleXIcon.svelte";
-  import { Button, Card, Heading } from "flowbite-svelte";
+  import { Button, Card, Heading, P } from "flowbite-svelte";
 </script>
 
 <div class="text-center mb-16">
@@ -102,6 +102,7 @@
         </span>
       </li>
     </ul>
+    <P class="mb-1">Free forever</P>
     <Button class="w-full" href="/profile">Choose plan</Button>
   </Card>
 
@@ -198,6 +199,7 @@
         </span>
       </li>
     </ul>
+    <P class="mb-1">Non-refundable</P>
     <Button class="w-full" href="/profile">Choose plan</Button>
   </Card>
 
@@ -294,6 +296,7 @@
         </span>
       </li>
     </ul>
+    <P class="mb-1">Non-refundable</P>
     <Button class="w-full">Coming soon</Button>
   </Card>
 </div>
