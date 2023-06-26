@@ -43,14 +43,14 @@
     <TextPlaceholder size="xxl" class="mt-8" />
     <TextPlaceholder size="xxl" class="mt-8" />
   {:else}
-    <div id="username">
+    <div id="username" class="my-10">
       <UserName username={userData?.username ?? ""} />
     </div>
-    <div id="subscription" class="my-4">
+    <div id="subscription" class="my-10">
       <Subscription />
     </div>
 
-    <div>
+    <div class="my-10">
       <Card size="xl">
         <Heading tag="h5" color="text-red-600 dark:text-red-500"
           >Danger Zone</Heading

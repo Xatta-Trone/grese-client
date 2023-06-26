@@ -1,17 +1,19 @@
 <!-- @format -->
 <script lang="ts">
-import {
-    page
-} from "$app/stores";
-import PricingComponent from "$lib/components/PricingComponent.svelte";
-import ChevronRightIcon from "$lib/icons/chevronRightIcon.svelte";
-import LoginIcon from "$lib/icons/loginIcon.svelte";
-import {
-    Button,
-    Heading,
-    Mark,
-    P
-} from "flowbite-svelte";
+  import PricingComponent from "$lib/components/PricingComponent.svelte";
+  import DefinitionMatchDemo from "$lib/components/demo-components/DefinitionMatchDemo.svelte";
+  import FlashCardDemoComponent from "$lib/components/demo-components/FlashCardDemoComponent.svelte";
+  import SePractice from "$lib/components/demo-components/SePractice.svelte";
+  import SynonymPractice from "$lib/components/demo-components/SynonymPractice.svelte";
+  import ChevronRightIcon from "$lib/icons/chevronRightIcon.svelte";
+  import DashboardIcon from "$lib/icons/dashboardIcon.svelte";
+  import { Badge, Button, Heading, Mark, Modal, P } from "flowbite-svelte";
+
+  // modals
+  let flashCardModal = false;
+  let definitionMatchModal = false;
+  let synonymPracticeModal = false;
+  let sEPracticeModal = false;
 </script>
 
 <svelte:head>
@@ -47,13 +49,11 @@ import {
           <ChevronRightIcon />
         </a>
         <a
-          href="/profile"
+          href="#demo"
           class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
         >
-          <LoginIcon />
-          <span class="inline-block ml-2"
-            >{$page.data.isLoggedIn ? "Profile" : "JOIN"}</span
-          >
+          <DashboardIcon />
+          <span class="inline-block ml-2">VIEW DETAILS</span>
         </a>
       </div>
     </div>
@@ -79,7 +79,7 @@ import {
           learn and mark words (in a group) as unknown, learning, mastered.
           These groups is used in the other sections as practice modules.
         </P>
-        <Button>Try Demo</Button>
+        <Button on:click={() => (flashCardModal = true)}>Try Demo</Button>
       </div>
       <div>
         <video autoplay muted loop playsinline>
@@ -87,9 +87,16 @@ import {
         </video>
       </div>
     </div>
+    <Modal
+      size="xl"
+      title="Flash Card Demo"
+      bind:open={flashCardModal}
+      outsideclose
+    >
+      <FlashCardDemoComponent />
+    </Modal>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 py-20">
-
       <div>
         <video autoplay muted loop playsinline>
           <source src="./videos/definition-match.mp4" type="video/mp4" />
@@ -99,19 +106,34 @@ import {
       <div>
         <Heading tag="h2">Definition Match</Heading>
         <P class="mt-6 mb-8 text-justify"
-          >In the definition match you can practice your verbal skills by selecting the best definition for a given word. Moreover, you can flip the question type where you will be given the definition and will be asked to select the best word. Here, you can also set  the number of words you want to practice.
+          >In the definition match you can practice your verbal skills by
+          selecting the best definition for a given word. Moreover, you can flip
+          the question type where you will be given the definition and will be
+          asked to select the best word. Here, you can also set the number of
+          words you want to practice.
         </P>
-        <Button>Try Demo</Button>
+        <Button on:click={() => (definitionMatchModal = true)}>Try Demo</Button>
       </div>
     </div>
+    <Modal
+      size="xl"
+      title="Definition Match Demo"
+      bind:open={definitionMatchModal}
+      outsideclose
+    >
+      <DefinitionMatchDemo />
+    </Modal>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 py-20">
       <div>
         <Heading tag="h2">Synonyms Practice</Heading>
         <P class="mt-6 mb-8 text-justify"
-          >In synonyms practice, you will be given a word and 6 options to choose from. The correct answer could be from at least one to at most 6 options. In here, you can choose the questions randomly and set the number of questions you want to practice.
+          >In synonyms practice, you will be given a word and 6 options to
+          choose from. The correct answer could be from at least one to at most
+          6 options. In here, you can choose the questions randomly and set the
+          number of questions you want to practice.
         </P>
-        <Button>Try Demo</Button>
+        <Button on:click={() => (synonymPracticeModal = true)}>Try Demo</Button>
       </div>
       <div>
         <video autoplay muted loop playsinline>
@@ -119,9 +141,16 @@ import {
         </video>
       </div>
     </div>
+    <Modal
+      size="xl"
+      title="Synonyms Demo"
+      bind:open={synonymPracticeModal}
+      outsideclose
+    >
+      <SynonymPractice />
+    </Modal>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 py-20">
-
       <div>
         <video autoplay muted loop playsinline>
           <source src="./videos/definition-match.mp4" type="video/mp4" />
@@ -129,13 +158,26 @@ import {
       </div>
 
       <div>
-        <Heading tag="h2">Sentence Equivalence</Heading>
+        <Heading tag="h2">Sentence Equivalence <Badge>Plus</Badge></Heading>
         <P class="mt-6 mb-8 text-justify"
-          >In this module you will be given 3 pairs of options and no questions. You will be asked to select the options in correct pairs. The main objective of this section is to enhance your capability of word pairing. Selecting all the correct pairs gives you one point and vice versa. 
+          >In this module you will be given 3 pairs of options and no questions.
+          You will be asked to select the options in correct pairs. The main
+          objective of this section is to enhance your capability of word
+          pairing. Selecting all the correct pairs gives you one point and vice
+          versa.
         </P>
-        <Button>Try Demo</Button>
+        <Button on:click={() => (sEPracticeModal = true)}>Try Demo</Button>
       </div>
     </div>
+
+    <Modal
+      size="xl"
+      title="Sentence Equivalence Demo"
+      bind:open={sEPracticeModal}
+      outsideclose
+    >
+      <SePractice />
+    </Modal>
 
     <!-- end contents -->
   </section>

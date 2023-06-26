@@ -6,6 +6,7 @@
   import SetActionMenu from "$lib/components/user/sets/SetActionMenu.svelte";
   import CloseIcon from "$lib/icons/closeIcon.svelte";
   import bot from "$lib/images/bot.png";
+  import type { BadStatusErrorResponse } from "$lib/interfaces/common";
   import type { LearningStatusGetResponse } from "$lib/interfaces/learningStatus";
   import type {
     ListMeta,
@@ -16,7 +17,7 @@
   import axiosAPI from "$lib/services/customAxios";
   import { INTENDED_KEY } from "$lib/utils/constants";
   import { redirectHelper } from "$lib/utils/helpers";
-  import type { AxiosResponse } from "axios";
+  import type { AxiosError, AxiosResponse } from "axios";
   import {
     Alert,
     Avatar,
@@ -26,7 +27,7 @@
     Heading,
     P,
     Select,
-    TextPlaceholder
+    TextPlaceholder,
   } from "flowbite-svelte";
   import { onMount } from "svelte";
   import { inview } from "svelte-inview/dist/index";
@@ -47,11 +48,13 @@
   let learningStatusCount: LearningStatusGetResponse;
   let orderBy = "id";
   let orderDir = "asc";
+  let errorMessage: string | null = null;
 
   $: words = [...words, ...newWords];
 
   // fetch data
   async function fetchData() {
+    errorMessage = null;
     if (loading) return;
     loading = true;
     await axiosAPI
@@ -70,11 +73,17 @@
         }
 
         if (data.words.length) {
-          words = [...words, ...data.words]
+          words = [...words, ...data.words];
           hasMore = data.words.length < per_page ? false : true;
         } else {
           hasMore = false;
         }
+      })
+      .catch((err: AxiosError) => {
+        console.log(err.response?.data);
+        const e: BadStatusErrorResponse | any = err.response?.data;
+
+        errorMessage = e.errors;
       })
       .finally(() => (loading = false));
   }
@@ -205,6 +214,14 @@
   </DevComponent>
   {#if listMeta}
     <Heading tag="h2" class="my-10">{listMeta.name}</Heading>
+  {/if}
+
+  {#if errorMessage}
+    <Alert color="red">
+      <span class="font-medium">
+        {errorMessage}
+      </span>
+    </Alert>
   {/if}
 
   {#if words.length > 0}
