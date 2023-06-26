@@ -1,21 +1,31 @@
 /** @format */
 
-import type { PageServerLoad } from "./$types";
+import { browser } from "$app/environment";
 import { env } from "$env/dynamic/private";
 import type { LoginResponse } from "$lib/services/auth";
-import { error } from "@sveltejs/kit";
-import { browser } from "$app/environment";
 import axiosAPI from "$lib/services/customAxios";
-import { COOKIE_KEY, COOKIE_KEY_EXP } from "$lib/utils/constants";
-import { redirectHelper } from "$lib/utils/helpers";
+import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from "$lib/utils/constants";
+import { error } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
 
-export const load = (async ({ url, cookies }) => {
+export const load = (async ({ url, cookies, request }) => {
 
   // user.subscribe(val => {
   //   if (val != null) {
   //     redirectHelper("/profile")
   //   }
   // })
+
+  // cookie domain 
+  const cookieDomainEnv = env.APP_URL
+  const u = new URL(cookieDomainEnv)
+  let cookieDomain = u.hostname
+
+
+  if (cookieDomain.includes("gre-sentence-equivalence.com")) {
+    cookieDomain = "gre-sentence-equivalence.com"
+  }
+
 
 
   try {
@@ -91,8 +101,9 @@ export const load = (async ({ url, cookies }) => {
 
     const exp: Date = new Date(data.exp)
 
-    cookies.set(COOKIE_KEY, data.token, { expires: exp })
-    cookies.set(COOKIE_KEY_EXP, JSON.stringify(data.exp), { expires: exp })
+    cookies.set(COOKIE_KEY, data.token, { expires: exp, domain: cookieDomain })
+    cookies.set(COOKIE_KEY_EXP, JSON.stringify(data.exp), { expires: exp, domain: cookieDomain })
+    cookies.set(COOKIE_KEY_USER, JSON.stringify(data.user), { expires: exp, domain: cookieDomain })
 
 
     return {

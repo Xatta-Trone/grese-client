@@ -1,14 +1,13 @@
 <!-- @format -->
 <script lang="ts">
-  import { setUser } from "$lib/services/auth";
-  import type { PageData } from "./$types";
   import { browser } from "$app/environment";
-  import { redirectHelper } from "$lib/utils/helpers";
-  import { onMount } from "svelte";
+  import { setUser } from "$lib/services/auth";
   import { INTENDED_KEY } from "$lib/utils/constants";
+  import { onMount } from "svelte";
+  import type { PageData } from "./$types";
 
   export let data: PageData;
-  let intended: string = "/";
+  let intended: string = "/profile";
 
   if (data.success) {
     console.log("data success", browser);
@@ -25,14 +24,16 @@
     }
 
     localStorage.removeItem(INTENDED_KEY);
-
-
-
   });
 </script>
+
+<svelte:head>
+  <title>Auth Success: GRE SE</title>
+</svelte:head>
 
 <h1>Auth Success. Redirecting.....</h1>
 
 {#if data.success && browser}
-  Magic number: {setTimeout(() => redirectHelper(intended), 0)}
+  <!-- Magic number: {setTimeout(() => redirectHelper(intended), 0)} -->
+  Magic number: {setTimeout(() => window.location.href = intended, 0)}
 {/if}

@@ -8,23 +8,37 @@ const config = {
     "./src/**/*.{html,js,svelte,ts}",
     "./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}",
   ],
-
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
         // flowbite-svelte
+        // primary: {
+        //   50: "#ebf5ff",
+        //   100: "#fff1ee",
+        //   200: "#ffe4de",
+        //   300: "#ffd5cc",
+        //   400: "#ffbcad",
+        //   500: "#fe795d",
+        //   600: "#ef562f",
+        //   700: "#eb4f27",
+        //   800: "#d3330a",
+        //   900: "#d3330a",
+        // },
+        // blue
         primary: {
-          50: "#ebf5ff",
-          100: "#fff1ee",
-          200: "#ffe4de",
-          300: "#ffd5cc",
-          400: "#ffbcad",
-          500: "#fe795d",
-          600: "#ef562f",
-          700: "#eb4f27",
-          800: "#d3330a",
-          900: "#d3330a",
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
         },
+
         // // teal
         // primary: {
         //   50: "#f0fdfa",
@@ -38,6 +52,9 @@ const config = {
         //   800: "#115e59",
         //   900: "#134e4a",
         // },
+
+        // indigo
+        // primary: {"50":"#eef2ff","100":"#e0e7ff","200":"#c7d2fe","300":"#a5b4fc","400":"#818cf8","500":"#6366f1","600":"#4f46e5","700":"#4338ca","800":"#3730a3","900":"#312e81"}
       },
     },
   },

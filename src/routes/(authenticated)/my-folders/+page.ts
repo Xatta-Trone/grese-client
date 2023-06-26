@@ -1,11 +1,7 @@
-import { browser } from '$app/environment';
-import { user } from '$lib/services/auth';
-import { INTENDED_KEY } from '$lib/utils/constants';
-import { redirectHelper } from '$lib/utils/helpers';
 import type { PageLoad } from './$types';
 
 export const load = (async ({ url }) => {
-    console.log(url)
+    // console.log(url)
 
     // user.subscribe((value) => {
     //     console.log(value);

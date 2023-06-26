@@ -1,49 +1,15 @@
 <!-- @format -->
 <script lang="ts">
+  import bot from "$lib/images/bot.png";
+  import type { Data, SetsResponse } from "$lib/interfaces/setListData";
   import axiosAPI from "$lib/services/customAxios";
+  import { error } from "@sveltejs/kit";
+  import { Avatar, Card, Heading, Input, Skeleton } from "flowbite-svelte";
   import { onMount } from "svelte";
-  import type { PageData } from "./$types";
   import { inview } from "svelte-inview/dist/index";
-  import { Avatar, Card, Heading, Input } from "flowbite-svelte";
-  import { page } from "$app/stores";
-  import bot from "$lib/images/bot.jpg";
+  import { fade } from "svelte/transition";
 
   // interfaces
-  interface SetsResponse {
-    data: Data[];
-    meta: Meta;
-  }
-
-  interface Data {
-    id: number;
-    user_id: number;
-    list_meta_id?: number;
-    name: string;
-    slug: string;
-    visibility: number;
-    status: number;
-    crated_at: Date;
-    updated_at: Date;
-    user: User;
-    word_count: number;
-  }
-
-  interface User {
-    id: number;
-    username: string;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface Meta {
-    id: number;
-    query: string;
-    order_by: string;
-    order: string;
-    page: number;
-    per_page: number;
-    count: number;
-  }
 
   // data variables
   let currentPage = 1;
@@ -56,10 +22,11 @@
 
   $: sets = [...sets, ...newSets];
 
-  //   export let data: PageData;
+  // export let data: PageData;
 
   async function fetchData() {
     loading = true;
+
     await axiosAPI
       .get(
         `/public-lists?page=${currentPage}&per_page=${per_page}&query=${query}`
@@ -70,7 +37,7 @@
 
         if (data.data.length) {
           newSets = data.data;
-          hasMore = true;
+          hasMore = data.data.length <= per_page ? true : false;
         } else {
           hasMore = false;
         }
@@ -127,43 +94,55 @@
   });
 </script>
 
-<main>
+<svelte:head>
+  <title>Available Sets</title>
+</svelte:head>
+
+<main in:fade>
   <div class="my-3">
-    <Heading tag="h4">Pubic sets</Heading>
+    <Heading tag="h4">Available Sets</Heading>
   </div>
   <div class="mb-6">
     <Input
       id="large-input"
-      size="lg"
+      size="md"
       placeholder="Type to search...."
       bind:value={query}
       on:keyup={debounce}
     />
   </div>
 
-  {#each sets as set}
-    <Card size="xl" href="/sets/{set.id}-{set.slug}" class="mb-3">
-      <h5
-        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-      >
-        {set.name}
-      </h5>
-      <div class="flex justify-between mt-2">
-        <a class="flex items-center space-x-4" href="/userprofile">
-          <Avatar src={bot} size="xs" />
-          <div class="space-y-1 font-medium dark:text-white">
-            <div>{set.user.username}</div>
-          </div>
-        </a>
-        <div>{set.word_count} {set.word_count > 1 ? "words" : "word"}</div>
-      </div>
-    </Card>
-  {/each}
-
+  <div in:fade>
+    {#each sets as set}
+      <Card size="xl" href="/sets/{set.id}-{set.slug}" class="mb-3">
+        <h5
+          class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+        >
+          {set.name}
+        </h5>
+        <div class="flex justify-between mt-2">
+          <a class="flex items-center space-x-4" href="/@{set.user.username}">
+            <Avatar src={bot} size="xs" />
+            <div class="space-y-1 font-medium dark:text-white">
+              <div>{set.user.username}</div>
+            </div>
+          </a>
+          <div>{set.word_count} {set.word_count > 1 ? "words" : "word"}</div>
+        </div>
+      </Card>
+    {/each}
+  </div>
   <div use:inview={{}} on:change={loadMore} />
 
   {#if loading}
-    <Heading tag="h5">Loading...&#128516;</Heading>
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
   {/if}
 
   {#if sets.length == 0 && !hasMore && !loading}

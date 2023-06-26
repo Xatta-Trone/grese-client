@@ -13,8 +13,6 @@ export function redirectHelper(to = '/', u?: URL) {
     }
 
 
-    const url = `${to}`;
-
     if (browser) {
         goto(to);
     } else {

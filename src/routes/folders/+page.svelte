@@ -1,49 +1,12 @@
 <!-- @format -->
 <script lang="ts">
+  import bot from "$lib/images/bot.png";
+  import type { Data, FoldersResponse } from "$lib/interfaces/folderListData";
   import axiosAPI from "$lib/services/customAxios";
+  import { Avatar, Card, Heading, Input, Skeleton } from "flowbite-svelte";
   import { onMount } from "svelte";
-  import type { PageData } from "./$types";
   import { inview } from "svelte-inview/dist/index";
-  import { Avatar, Card, Heading, Input } from "flowbite-svelte";
-  import { page } from "$app/stores";
-  import bot from "$lib/images/bot.jpg";
-
-  // interfaces
-  interface FoldersResponse {
-    data: Data[];
-    meta: Meta;
-  }
-
-  interface Data {
-    id: number;
-    user_id: number;
-    list_meta_id?: number;
-    name: string;
-    slug: string;
-    visibility: number;
-    status: number;
-    crated_at: Date;
-    updated_at: Date;
-    user?: User;
-    lists_count: number;
-  }
-
-  interface User {
-    id: number;
-    username: string;
-    created_at: Date;
-    updated_at: Date;
-  }
-
-  interface Meta {
-    id: number;
-    query: string;
-    order_by: string;
-    order: string;
-    page: number;
-    per_page: number;
-    count: number;
-  }
+  import { fade } from "svelte/transition";
 
   // data variables
   let currentPage = 1;
@@ -71,7 +34,7 @@
 
         if (data.data.length) {
           newSets = data.data;
-          hasMore = true;
+          hasMore = data.data.length <= per_page ? true : false;
         } else {
           hasMore = false;
         }
@@ -128,14 +91,18 @@
   });
 </script>
 
-<main>
+<svelte:head>
+  <title>Available Set Folders</title>
+</svelte:head>
+
+<main class="my-6" in:fade>
   <div class="my-3">
-    <Heading tag="h4">Pubic folders</Heading>
+    <Heading tag="h4">Available Set Folders</Heading>
   </div>
   <div class="mb-6">
     <Input
       id="large-input"
-      size="lg"
+      size="md"
       placeholder="Type to search...."
       bind:value={query}
       on:keyup={debounce}
@@ -150,13 +117,13 @@
         {set.name}
       </h5>
       <div class="flex justify-between mt-2">
-        <a class="flex items-center space-x-4" href="/userprofile">
+        <a class="flex items-center space-x-4" href="/@{set.user?.username}?tab=folders">
           <Avatar src={bot} size="xs" />
           <div class="space-y-1 font-medium dark:text-white">
             <div>{set.user?.username}</div>
           </div>
         </a>
-        <div>{set.lists_count ?? 0 } {set.lists_count > 1 ? "sets" : "set"}</div>
+        <div>{set.lists_count ?? 0} {set.lists_count > 1 ? "sets" : "set"}</div>
       </div>
     </Card>
   {/each}
@@ -164,7 +131,14 @@
   <div use:inview={{}} on:change={loadMore} />
 
   {#if loading}
-    <Heading tag="h5">Loading...&#128516;</Heading>
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
+    <Skeleton size="xxl" class="mt-8 mb-2.5" />
   {/if}
 
   {#if sets.length == 0 && !hasMore && !loading}

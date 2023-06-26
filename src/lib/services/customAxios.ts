@@ -1,10 +1,10 @@
-import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, type InternalAxiosRequestConfig } from "axios";
+import { browser } from '$app/environment';
 import { PUBLIC_API_URL } from '$env/static/public';
-import { token } from "./auth";
+import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from '$lib/utils/constants';
+import { redirectHelper } from '$lib/utils/helpers';
+import axios, { type AxiosInstance, type AxiosResponse, type InternalAxiosRequestConfig } from "axios";
 
-let tokenData: string | null
 
-token.subscribe(value => tokenData = value)
 
 // Create a instance of axios to use the same base url.
 const axiosAPI: AxiosInstance = axios.create({
@@ -16,9 +16,9 @@ axiosAPI.defaults.withCredentials = true;
 const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const { method, url } = config;
     // Set Headers Here
-    if (tokenData != null) {
-        config.headers.set('Authorization', `Bearer ${tokenData}`)
-    }
+    // if (tokenData != null) {
+    //     config.headers.set('Authorization', `Bearer ${tokenData}`)
+    // }
     // Check Authentication Here
     // Set Loading Start Here
     console.log(`🚀 [API] ${method?.toUpperCase()} ${url} | Request`);
@@ -29,7 +29,7 @@ const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConf
     return config;
 };
 
-const onResponse = (response: AxiosResponse): AxiosResponse => {
+const onResponse = async (response: AxiosResponse): Promise<AxiosResponse> => {
     const { method, url } = response.config;
     const { status } = response;
     // Set Loading End Here
@@ -37,52 +37,23 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
     // Error Handling When Return Success with Error Code Here
     console.log(`🚀 [API] ${method?.toUpperCase()} ${url} | Response ${status}`);
 
+    if (status == 401) {
+        fetch(`${window.location.origin}/cookies?key=${COOKIE_KEY},${COOKIE_KEY_USER},${COOKIE_KEY_EXP}`, { method: "delete" })
+            .then(() => {
+                if (browser) {
+                    window.location.href = "/"
+                } else {
+                    redirectHelper('/')
+                }
+
+            })
+        return response;
+    }
+
     return response;
 };
 
-const onErrorResponse = (error: AxiosError | Error): Promise<AxiosError> => {
-    if (axios.isAxiosError(error)) {
-        const { message } = error;
-        const { method, url } = error.config as AxiosRequestConfig;
-        const { statusText, status } = error.response as AxiosResponse ?? {};
 
-        console.log(
-            `🚨 [API] ${method?.toUpperCase()} ${url} | Error ${status} ${message}`
-        );
-
-        switch (status) {
-            case 401: {
-                // "Login required"
-                break;
-            }
-            case 403: {
-                // "Permission denied"
-                break;
-            }
-            case 404: {
-                // "Invalid request"
-                break;
-            }
-            case 500: {
-                // "Server error"
-                break;
-            }
-            default: {
-                // "Unknown error occurred"
-                break;
-            }
-        }
-
-        if (status === 401) {
-            // Delete Token & Go To Login Page if you required.
-            sessionStorage.removeItem("token");
-        }
-    } else {
-        console.log(`🚨 [API] | Error ${error.message}`);
-    }
-
-    return Promise.reject(error);
-};
 
 
 axiosAPI.interceptors.request.use(onRequest)
