@@ -42,4 +42,4 @@ jobs:
           sudo npm ci --force
           sudo npm run build
           # pm2 reload grese-client-dev --update-env
-          pm2 restart all
+          sudo pm2 restart grese-client-dev
