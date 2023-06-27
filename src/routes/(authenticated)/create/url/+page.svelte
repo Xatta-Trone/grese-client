@@ -2,9 +2,10 @@
 <script lang="ts">
   import DevComponent from "$lib/components/DevComponent.svelte";
   import CloseIcon from "$lib/icons/closeIcon.svelte";
+  import type { BadStatusErrorResponse } from "$lib/interfaces/common.js";
   import type { MeEndpointResponse } from "$lib/services/auth.js";
   import axiosAPI from "$lib/services/customAxios.js";
-  import type { AxiosResponse } from "axios";
+  import type { AxiosError, AxiosResponse } from "axios";
   import {
     A,
     Alert,
@@ -123,12 +124,14 @@
     visibility: 1,
   };
   let submitting = true;
-  let resetForm: HTMLFormElement;
+  // let resetForm: HTMLFormElement;
 
   onMount(() => {
     submitting = false;
-    resetForm = <HTMLFormElement>document.getElementById("form");
+    // resetForm = <HTMLFormElement>document.getElementById("form");
   });
+
+  const allowedURLs = ["vocabulary.com", "memrise.com"];
 
   async function handleSubmit() {
     submitting = true;
@@ -136,6 +139,13 @@
     resetFormErrors();
     const result = schema.safeParse(formData);
     console.log(result);
+
+    // check url
+    if (!allowedURLs.some((u) => formData.url.includes(u))) {
+      FormErrors.url = "Please enter a valid url";
+      submitting = false;
+      return;
+    }
 
     if (!result.success) {
       const formatted = result.error.format();
@@ -157,17 +167,18 @@
         })
         .then((res: AxiosResponse) => {
           if (res.status == 201) {
-            resetForm.reset();
+            const form = <HTMLFormElement>document.getElementById("form");
+            form?.reset();
             const responseData: ListCreateResponse = res.data;
             formSuccess = responseData.message;
           } else {
             formError = "Some error occurred.";
           }
         })
-        .catch((err) => {
+        .catch((err: AxiosError) => {
           if (err.response?.status == 422) {
             // validation error
-            const d: ListCreateErrorResponse = err.response.data;
+            const d: ListCreateErrorResponse | any = err.response?.data;
 
             if (d.errors?.url) {
               FormErrors.url = d.errors.url;
@@ -176,7 +187,9 @@
               FormErrors.visibility = d.errors.visibility;
             }
           } else {
-            formError = err.response.data.errors;
+            const errMsg: BadStatusErrorResponse | any = err.response?.data;
+
+            formError = errMsg.errors ?? err.response?.statusText;
           }
         })
         .finally(() => {
