@@ -123,11 +123,11 @@
     visibility: 1,
   };
   let submitting = true;
-  let resetForm: HTMLFormElement;
+  // let resetForm: HTMLFormElement;
 
   onMount(() => {
     submitting = false;
-    resetForm = <HTMLFormElement>document.getElementById("form");
+    // resetForm = <HTMLFormElement>document.getElementById("form");
   });
 
   async function handleSubmit() {
@@ -157,7 +157,8 @@
         })
         .then((res: AxiosResponse) => {
           if (res.status == 201) {
-            resetForm.reset();
+            const form = <HTMLFormElement>document.getElementById("form");
+            form?.reset()
             const responseData: ListCreateResponse = res.data;
             formSuccess = responseData.message;
           } else {
@@ -165,9 +166,10 @@
           }
         })
         .catch((err) => {
+          console.log(err)
           if (err.response?.status == 422) {
             // validation error
-            const d: ListCreateErrorResponse = err.response.data;
+            const d: ListCreateErrorResponse = err.response?.data;
 
             if (d.errors?.url) {
               FormErrors.url = d.errors.url;
@@ -176,7 +178,7 @@
               FormErrors.visibility = d.errors.visibility;
             }
           } else {
-            formError = err.response.data.errors;
+            formError = err.response?.data.errors;
           }
         })
         .finally(() => {
