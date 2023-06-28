@@ -66,7 +66,13 @@
     >
       Pricing
     </NavLi>
-    <NavLi
+    <NavLi href="/sets" active={$page.url.pathname == "/sets" ? true : false}>
+      Sets
+    </NavLi>
+    <NavLi href="/folders" active={$page.url.pathname == "/folders" ? true : false}>
+      Folders
+    </NavLi>
+    <!-- <NavLi
       id="library"
       class="cursor-pointer"
       active={$page.url.pathname == "/sets" || $page.url.pathname == "/sets"
@@ -74,7 +80,7 @@
         : false}
     >
       <Chevron aligned>Library</Chevron>
-    </NavLi>
+    </NavLi> -->
 
     <NavLi
       id="create"
@@ -94,14 +100,14 @@
       </NavLi>
     {/if}
 
-    <Dropdown triggeredBy="#library" class="w-44 z-20">
+    <!-- <Dropdown triggeredBy="#library" class="w-44 z-20">
       <DropdownItem>
         <NavLi href="/sets">Set</NavLi>
       </DropdownItem>
       <DropdownItem>
         <NavLi href="/folders">Folders</NavLi>
       </DropdownItem>
-    </Dropdown>
+    </Dropdown> -->
 
     <Dropdown triggeredBy="#create" class="w-44 z-20">
       <DropdownItem>
