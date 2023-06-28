@@ -44,7 +44,7 @@
         <span
           class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"
         >
-          1 Set group (including saved)
+          0 Folder (set groups)
         </span>
       </li>
 
@@ -141,7 +141,7 @@
         <span
           class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"
         >
-          <span>Unlimited</span> set groups
+          <span>Unlimited</span> Folders (set groups)
         </span>
       </li>
 
@@ -238,7 +238,7 @@
         <span
           class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"
         >
-          <span>Unlimited</span> set groups
+          <span>Unlimited</span> Folders (set groups)
         </span>
       </li>
 

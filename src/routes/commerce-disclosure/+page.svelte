@@ -40,7 +40,7 @@
 
       <TableBodyRow>
         <TableBodyCell>Head of Operations</TableBodyCell>
-        <TableBodyCell>Islam Md Monzurul</TableBodyCell>
+        <TableBodyCell>GRE-SE</TableBodyCell>
       </TableBodyRow>
 
       <TableBodyRow>
