@@ -169,6 +169,7 @@
           if (res.status == 201) {
             const form = <HTMLFormElement>document.getElementById("form");
             form?.reset();
+            formData.url =""
             const responseData: ListCreateResponse = res.data;
             formSuccess = responseData.message;
           } else {

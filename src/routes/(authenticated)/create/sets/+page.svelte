@@ -142,6 +142,7 @@
         .then((res: AxiosResponse) => {
           if (res.status == 201) {
             resetForm.reset();
+            resetFormData()
             const responseData: ListCreateResponse = res.data;
             formSuccess = responseData.message;
           } else {
@@ -179,6 +180,10 @@
     FormErrors.visibility = null;
     FormErrors.words = null;
     formError = null;
+  }
+  function resetFormData() {
+    formData.name = ""
+    formData.words= ""
   }
 </script>
 

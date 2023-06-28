@@ -111,6 +111,7 @@
         .then((res: AxiosResponse) => {
           if (res.status == 201) {
             resetForm.reset();
+            formData.name = ""
             const responseData: FolderCreateSuccessResponse = res.data;
             redirectHelper(`/create/sets?folder=${responseData.data.id}&name=${responseData.data.name}`)
             formSuccess = responseData.message;
