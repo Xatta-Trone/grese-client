@@ -24,7 +24,7 @@
   let loading = false;
   let initLoading = true;
   let userData: UserInterface | null;
-  export let userId;
+  export let userId:number;
 
   onMount(async () => {
     getUserData();
