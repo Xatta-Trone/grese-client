@@ -58,6 +58,7 @@
       <FooterLink href="/privacy-policy">Privacy Policy</FooterLink>
       <FooterLink href="/terms-and-conditions">Terms & Conditions</FooterLink>
       <FooterLink href="/support">Support</FooterLink>
+      <FooterLink href="/commerce-disclosure">Commerce Discloser</FooterLink>
     </FooterLinkGroup>
   </Footer>
 </div>

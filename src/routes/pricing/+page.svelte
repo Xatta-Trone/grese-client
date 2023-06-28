@@ -1,7 +1,7 @@
 <!-- @format -->
 <script lang="ts">
   import PricingComponent from "$lib/components/PricingComponent.svelte";
-  import { Heading } from "flowbite-svelte";
+  import { A, Heading } from "flowbite-svelte";
 </script>
 
 <svelte:head>
@@ -15,6 +15,7 @@
     customSize="text-4xl font-extrabold  md:text-5xl lg:text-6xl"
     >Pricing Plans</Heading
   >
+  <A href="commerce-disclosure">Commerce Disclosure</A>
 </div>
 
 <PricingComponent />
