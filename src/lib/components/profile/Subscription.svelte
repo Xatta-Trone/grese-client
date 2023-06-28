@@ -3,18 +3,12 @@
   import { invalidateAll } from "$app/navigation";
   import TicketIcon from "$lib/icons/ticketIcon.svelte";
   import type { BadStatusErrorResponse } from "$lib/interfaces/common";
+  import type { CookieMaker } from "$lib/interfaces/cookiesInterface";
   import { user, type MeEndpointResponse } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
   import { updateUser } from "$lib/services/updateUser";
   import type { AxiosError } from "axios";
-  import {
-    Button,
-    Card,
-    Heading,
-    Input,
-    Modal,
-    P
-  } from "flowbite-svelte";
+  import { Button, Card, Heading, Input, Modal, P } from "flowbite-svelte";
   import { onMount } from "svelte";
 
   let expires: Date = new Date(0);
@@ -24,7 +18,7 @@
   let couponCode = "";
   let loading = false;
   let initLoading = true;
-  export let userId:number
+  export let userId: number;
 
   onMount(async () => {
     getUserData();
@@ -50,7 +44,19 @@
   }
 
   function test() {
-    invalidateAll()
+    const data: CookieMaker = {
+      key: "COOKIE_KEY_USER",
+      value: JSON.stringify((new Date()).getTime()),
+      // expires: "Wed, 05 Jul 2023 07:19:58 GMT",
+    };
+
+    const formData = new FormData();
+    formData.append("cookies", JSON.stringify([data]));
+
+    fetch("/cookies", {
+      method: "POST",
+      body: formData,
+    });
   }
 
   function submitCoupon() {
@@ -66,8 +72,10 @@
         console.log(res.data);
         couponCode = "";
         clickOutsideModal = false;
+        invalidateAll();
         getUserData();
         updateUser();
+
         alert("Upgraded to GRE SE +");
       })
       .catch((err: AxiosError) => {
@@ -97,7 +105,7 @@
   <Button disabled={couponCode.length == 0 || loading} on:click={submitCoupon}
     >Upgrade to GRE SE+</Button
   >
-  <Button on:click={test}
+   <Button  on:click={test}
     >Upgrade to GRE SE+</Button
   >
 </Modal>

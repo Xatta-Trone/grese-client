@@ -2,7 +2,6 @@ import type { CookieMaker } from '$lib/interfaces/cookiesInterface';
 import type { MeEndpointResponse } from '$lib/services/auth';
 import axiosAPI from '$lib/services/customAxios';
 import { COOKIE_KEY_EXP, COOKIE_KEY_USER } from '$lib/utils/constants';
-import cookieDomain from '$lib/utils/cookieDomain';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals, parent, cookies, fetch }) => {
@@ -38,25 +37,15 @@ export const load = (async ({ locals, parent, cookies, fetch }) => {
                         value: JSON.stringify(response.data),
                         expires: date
                     }
-                    const data2: CookieMaker = {
-                        key: 'COOKIE_KEY_USER',
-                        value: JSON.stringify(response.data),
-                        maxAge: 100
-                    }
 
-                    formData.append('cookies', JSON.stringify([data, data2]));
+
+                    formData.append('cookies', JSON.stringify([data]));
 
                     fetch("/cookies", {
                         method: "POST",
                         body: formData,
 
                     })
-
-                    cookies.set("cookie.key", "cookie.value", {
-                        maxAge: 100,
-                        path: "/",
-                        domain: cookieDomain
-                    });
 
                 }
 

@@ -6,6 +6,8 @@ import type {
 } from "$lib/interfaces/cookiesInterface";
 import cookieDomain from "$lib/utils/cookieDomain";
 import type { RequestHandler } from "./$types";
+import { COOKIE_KEY_EXP, COOKIE_KEY_USER } from '$lib/utils/constants';
+
 
 
 export const GET: RequestHandler = async ({ cookies, url }) => {
@@ -38,13 +40,23 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
     const data = await request.formData();
     const cookieStringData = data.get("cookies");
 
+    let defaultExpiry = 0
+    // default expires date 
+    const exp = cookies.get(COOKIE_KEY_EXP)
+
+    if (exp != undefined || exp != null) {
+        const d: Date = new Date(JSON.parse(exp))
+        console.log(d)
+        defaultExpiry = d.getTime()
+    }
+
     if (cookieStringData != undefined) {
         const cookieValues: CookieMaker[] = JSON.parse(cookieStringData.toString());
 
         cookieValues.forEach((cookie) => {
             console.log(cookie)
             cookies.set(cookie.key, cookie.value, {
-                expires: new Date(cookie.expires ?? 0),
+                expires: new Date(cookie.expires ?? defaultExpiry),
                 maxAge: cookie.maxAge,
                 path: "/",
                 domain: cookieDomain
