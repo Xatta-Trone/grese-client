@@ -3,6 +3,7 @@ import type { MeEndpointResponse } from '$lib/services/auth';
 import axiosAPI from '$lib/services/customAxios';
 import { COOKIE_KEY_EXP, COOKIE_KEY_USER } from '$lib/utils/constants';
 import type { LayoutServerLoad } from './$types';
+let isAlreadyRun = false
 
 export const load = (async ({ locals, parent, cookies, fetch }) => {
     await parent();
@@ -26,7 +27,8 @@ export const load = (async ({ locals, parent, cookies, fetch }) => {
                 const exp = cookies.get(COOKIE_KEY_EXP)
 
 
-                if (exp != undefined) {
+                if (exp != undefined && isAlreadyRun == false) {
+                    isAlreadyRun = true
                     console.log(JSON.parse(exp ?? ""))
 
                     const date = JSON.parse(exp)

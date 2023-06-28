@@ -110,6 +110,12 @@
   }
 
   onMount(() => {
+    saveError = null;
+    saveSuccess = null;
+    if ($page.url.searchParams.get("forbidden")) {
+      saveError = "You do not have permission to view that page";
+    }
+
     fetchData();
     if (data.user != null) {
       getLearningStatus();
@@ -239,8 +245,9 @@
         color="light">Synonyms Practice</Button
       >
       <Button
+        data-sveltekit-preload-data="none"
         href="/sets/{listMeta.id}-{listMeta.slug}/se-practice"
-        color="light">SE Practice</Button
+        color="light">SE Practice <Badge class="ml-2">Plus</Badge></Button
       >
     </div>
   {/if}
