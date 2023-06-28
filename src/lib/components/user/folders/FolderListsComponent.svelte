@@ -7,7 +7,6 @@
   import axiosAPI from "$lib/services/customAxios";
   import { Button, Listgroup, ListgroupItem } from "flowbite-svelte";
   import { onMount } from "svelte";
-  import { inview } from "svelte-inview";
 
   export let folderMeta: Folder;
 
@@ -17,7 +16,7 @@
 
   // data variables
   let currentPage = 1;
-  let per_page = 20;
+  let per_page = 50;
   let sets: Data[] = [];
   let folderIds: number[] = [];
   let loading = false;
@@ -48,6 +47,7 @@
         alert(JSON.stringify(error.response.data.errors));
       })
       .finally(() => (loading = false));
+    loadMore()
   }
 
   async function fetchFolderIds() {
@@ -117,5 +117,5 @@
     {/each}
   </Listgroup>
 
-  <div use:inview={{}} on:change={loadMore} />
+  <!-- <div use:inview={{}} on:change={loadMore} /> -->
 </div>
