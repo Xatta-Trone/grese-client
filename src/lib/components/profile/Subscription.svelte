@@ -24,6 +24,7 @@
   let loading = false;
   let initLoading = true;
   let userData: UserInterface | null;
+  export let userId;
 
   onMount(async () => {
     getUserData();
@@ -100,7 +101,7 @@
     <Heading tag="h5">Subscription</Heading>
     {#if isPremium == false || isPremiumExpired}
       <div class="mt-4">
-        <Button color="dark" href={`/api/stripe-checkout?user=${userData?.id}`}
+        <Button color="dark" href={`/api/stripe-checkout?user=${userId}`}
           >Upgrade to GRE SE+</Button
         >
         <Button color="red" on:click={() => (clickOutsideModal = true)}
