@@ -6,7 +6,7 @@
   import {
     user,
     type MeEndpointResponse,
-    type UserInterface,
+    type UserInterface
   } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
   import { COOKIE_KEY_USER } from "$lib/utils/constants";
@@ -21,7 +21,7 @@
   let couponCode = "";
   let loading = false;
   let initLoading = true;
-  export let userId: number;
+  export let userData: UserInterface;
 
   onMount(async () => {
     getUserData();
@@ -115,7 +115,7 @@
     <Heading tag="h5">Subscription</Heading>
     {#if isPremium == false || isPremiumExpired}
       <div class="mt-4">
-        <Button color="dark" href={`/api/stripe-checkout?user=${userId}`}
+        <Button color="dark" href={`/api/stripe-checkout?user=${userData.id}&email=${userData.email}`}
           >Upgrade to GRE SE+</Button
         >
         <Button color="red" on:click={() => (clickOutsideModal = true)}

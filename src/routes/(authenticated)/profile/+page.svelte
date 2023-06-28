@@ -47,7 +47,7 @@
       <UserName username={userData?.username ?? ""} />
     </div>
     <div id="subscription" class="my-8">
-      <Subscription userId={userData?.id} />
+      <Subscription userData={userData} />
     </div>
 
     <div class="my-8">

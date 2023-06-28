@@ -18,19 +18,25 @@ export const GET: RequestHandler = async ({ url }) => {
 
     const jwtSecret = env.JWT_TOKEN
     const userId = url.searchParams.get("user")
+    const email = url.searchParams.get("email")
 
     // generate token
     const token = jwt.sign({ userId: userId }, jwtSecret);
 
     console.log(token)
 
-    // It gives us a URL for the person to check out with
-    const session = await stripe.checkout.sessions.create({
+    let stripeData: Stripe.Checkout.SessionCreateParams = {
         line_items: lineItems,
         mode: 'payment',
         success_url: `${appURL}/callback/success?token=${token}`,
         cancel_url: `${appURL}/callback/cancel`,
-    });
+    }
+    if (email != null) {
+        stripeData = Object.assign(stripeData, { ...stripeData, customer_email: email })
+    }
+
+    // It gives us a URL for the person to check out with
+    const session = await stripe.checkout.sessions.create(stripeData);
 
     console.log(session)
 
