@@ -1,8 +1,9 @@
 <!-- @format -->
 <script lang="ts">
+  import { invalidateAll } from "$app/navigation";
   import TicketIcon from "$lib/icons/ticketIcon.svelte";
   import type { BadStatusErrorResponse } from "$lib/interfaces/common";
-  import { user, type MeEndpointResponse, type UserInterface } from "$lib/services/auth";
+  import { user, type MeEndpointResponse } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
   import { updateUser } from "$lib/services/updateUser";
   import type { AxiosError } from "axios";
@@ -23,8 +24,7 @@
   let couponCode = "";
   let loading = false;
   let initLoading = true;
-  let userData: UserInterface | null;
-  export let userId:number;
+  export let userId:number
 
   onMount(async () => {
     getUserData();
@@ -36,7 +36,6 @@
     axiosAPI.get("/me").then((res) => {
       const response: MeEndpointResponse = res.data;
       console.log("subscription", response);
-      userData = res.data
       determineUserState(response.data.expires_on);
     });
   }
@@ -48,6 +47,10 @@
     setTimeout(() => {
       initLoading = false;
     }, 500);
+  }
+
+  function test() {
+    invalidateAll()
   }
 
   function submitCoupon() {
@@ -92,6 +95,9 @@
     <TicketIcon slot="left" />
   </Input>
   <Button disabled={couponCode.length == 0 || loading} on:click={submitCoupon}
+    >Upgrade to GRE SE+</Button
+  >
+  <Button on:click={test}
     >Upgrade to GRE SE+</Button
   >
 </Modal>

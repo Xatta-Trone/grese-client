@@ -14,7 +14,7 @@ export const GET: RequestHandler = async ({ locals, cookies }) => {
         const data: CookieMaker = {
             key: COOKIE_KEY,
             value: JSON.stringify(response.data),
-            expires: new Date(exp ?? 0)
+            expires: exp
         }
 
         formData.append('cookies', JSON.stringify([data]));

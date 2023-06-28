@@ -44,7 +44,7 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
         cookieValues.forEach((cookie) => {
             console.log(cookie)
             cookies.set(cookie.key, cookie.value, {
-                expires: cookie.expires,
+                expires: new Date(cookie.expires ?? 0),
                 maxAge: cookie.maxAge,
                 path: "/",
                 domain: cookieDomain

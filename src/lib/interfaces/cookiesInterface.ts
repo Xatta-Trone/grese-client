@@ -7,5 +7,5 @@ export interface CookieMaker {
     key: string;
     value: string;
     maxAge?: number
-    expires?: Date
+    expires?: string
 }
