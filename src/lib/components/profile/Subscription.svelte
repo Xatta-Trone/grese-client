@@ -1,12 +1,15 @@
 <!-- @format -->
 <script lang="ts">
-  import { invalidateAll } from "$app/navigation";
   import TicketIcon from "$lib/icons/ticketIcon.svelte";
   import type { BadStatusErrorResponse } from "$lib/interfaces/common";
   import type { CookieMaker } from "$lib/interfaces/cookiesInterface";
-  import { user, type MeEndpointResponse } from "$lib/services/auth";
+  import {
+    user,
+    type MeEndpointResponse,
+    type UserInterface,
+  } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
-  import { updateUser } from "$lib/services/updateUser";
+  import { COOKIE_KEY_USER } from "$lib/utils/constants";
   import type { AxiosError } from "axios";
   import { Button, Card, Heading, Input, Modal, P } from "flowbite-svelte";
   import { onMount } from "svelte";
@@ -29,6 +32,7 @@
     initLoading = true;
     axiosAPI.get("/me").then((res) => {
       const response: MeEndpointResponse = res.data;
+      setUserData(response.data);
       console.log("subscription", response);
       determineUserState(response.data.expires_on);
     });
@@ -43,10 +47,10 @@
     }, 500);
   }
 
-  function test() {
+  function setUserData(user: UserInterface) {
     const data: CookieMaker = {
-      key: "COOKIE_KEY_USER",
-      value: JSON.stringify((new Date()).getTime()),
+      key: COOKIE_KEY_USER,
+      value: JSON.stringify(user),
       // expires: "Wed, 05 Jul 2023 07:19:58 GMT",
     };
 
@@ -72,10 +76,9 @@
         console.log(res.data);
         couponCode = "";
         clickOutsideModal = false;
-        invalidateAll();
+        const response: MeEndpointResponse = res.data;
+        setUserData(response.data);
         getUserData();
-        updateUser();
-
         alert("Upgraded to GRE SE +");
       })
       .catch((err: AxiosError) => {
@@ -103,9 +106,6 @@
     <TicketIcon slot="left" />
   </Input>
   <Button disabled={couponCode.length == 0 || loading} on:click={submitCoupon}
-    >Upgrade to GRE SE+</Button
-  >
-   <Button  on:click={test}
     >Upgrade to GRE SE+</Button
   >
 </Modal>

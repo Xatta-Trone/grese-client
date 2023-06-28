@@ -4,9 +4,9 @@ import type {
     CookieMaker,
     CookieResponse,
 } from "$lib/interfaces/cookiesInterface";
+import { COOKIE_KEY_EXP } from '$lib/utils/constants';
 import cookieDomain from "$lib/utils/cookieDomain";
 import type { RequestHandler } from "./$types";
-import { COOKIE_KEY_EXP, COOKIE_KEY_USER } from '$lib/utils/constants';
 
 
 

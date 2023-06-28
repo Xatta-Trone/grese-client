@@ -31,6 +31,7 @@ export const handle = (async ({ event, resolve }) => {
                 const response: MeEndpointResponse = res.data
                 console.log('hooks server me', response)
                 event.locals.user = response.data
+                event.locals.isLoggedIn = true
             });
     }
 
