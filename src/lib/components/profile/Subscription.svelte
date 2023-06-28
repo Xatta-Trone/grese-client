@@ -2,7 +2,7 @@
 <script lang="ts">
   import TicketIcon from "$lib/icons/ticketIcon.svelte";
   import type { BadStatusErrorResponse } from "$lib/interfaces/common";
-  import { user, type MeEndpointResponse } from "$lib/services/auth";
+  import { user, type MeEndpointResponse, type UserInterface } from "$lib/services/auth";
   import axiosAPI from "$lib/services/customAxios";
   import { updateUser } from "$lib/services/updateUser";
   import type { AxiosError } from "axios";
@@ -23,6 +23,7 @@
   let couponCode = "";
   let loading = false;
   let initLoading = true;
+  let userData: UserInterface | null;
 
   onMount(async () => {
     getUserData();
@@ -34,6 +35,7 @@
     axiosAPI.get("/me").then((res) => {
       const response: MeEndpointResponse = res.data;
       console.log("subscription", response);
+      userData = res.data
       determineUserState(response.data.expires_on);
     });
   }
@@ -98,7 +100,7 @@
     <Heading tag="h5">Subscription</Heading>
     {#if isPremium == false || isPremiumExpired}
       <div class="mt-4">
-        <Button color="dark" href={`/api/stripe-checkout?user=${$user?.id}`}
+        <Button color="dark" href={`/api/stripe-checkout?user=${userData?.id}`}
           >Upgrade to GRE SE+</Button
         >
         <Button color="red" on:click={() => (clickOutsideModal = true)}
