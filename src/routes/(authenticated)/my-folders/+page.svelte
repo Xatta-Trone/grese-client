@@ -13,7 +13,7 @@
   // interfaces
 
   // data variables
-  let currentPage = 1;
+  let currentPage = 0;
   let per_page = 20;
   let sets: Data[] = [];
   let loading = false;
@@ -29,6 +29,7 @@
   //   export let data: PageData;
 
   async function fetchData() {
+     if (loading) return;
     loading = true;
     await axiosAPI
       .get(
@@ -52,7 +53,7 @@
   }
 
   function loadMore() {
-    if (!hasMore) return;
+   if (loading || !hasMore) return;
     currentPage++;
     fetchData();
   }
@@ -99,7 +100,7 @@
       query = q;
     }
 
-    fetchData();
+    // fetchData();
   });
 
   // handle deleted action

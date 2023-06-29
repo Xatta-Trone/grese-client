@@ -3,7 +3,6 @@
   import bot from "$lib/images/bot.png";
   import type { Data, SetsResponse } from "$lib/interfaces/setListData";
   import axiosAPI from "$lib/services/customAxios";
-  import { error } from "@sveltejs/kit";
   import { Avatar, Card, Heading, Input, Skeleton } from "flowbite-svelte";
   import { onMount } from "svelte";
   import { inview } from "svelte-inview/dist/index";
@@ -12,7 +11,7 @@
   // interfaces
 
   // data variables
-  let currentPage = 1;
+  let currentPage = 0;
   let per_page = 20;
   let sets: Data[] = [];
   let newSets: Data[] = [];
@@ -37,7 +36,7 @@
 
         if (data.data.length) {
           newSets = data.data;
-          hasMore = data.data.length <= per_page ? true : false;
+          hasMore = data.data.length < per_page ? false : true;
         } else {
           hasMore = false;
         }
@@ -90,7 +89,7 @@
       query = q;
     }
 
-    fetchData();
+    // fetchData();
   });
 </script>
 

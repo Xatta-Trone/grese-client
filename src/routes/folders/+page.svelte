@@ -9,7 +9,7 @@
   import { fade } from "svelte/transition";
 
   // data variables
-  let currentPage = 1;
+  let currentPage = 0;
   let per_page = 20;
   let sets: Data[] = [];
   let newSets: Data[] = [];
@@ -34,7 +34,7 @@
 
         if (data.data.length) {
           newSets = data.data;
-          hasMore = data.data.length <= per_page ? true : false;
+          hasMore = data.data.length < per_page ? false : true;
         } else {
           hasMore = false;
         }
@@ -87,7 +87,7 @@
       query = q;
     }
 
-    fetchData();
+    // fetchData();
   });
 </script>
 

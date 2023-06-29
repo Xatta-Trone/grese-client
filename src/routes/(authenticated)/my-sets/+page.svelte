@@ -22,7 +22,7 @@
   export let data: PageData;
 
   // data variables
-  let currentPage = 1;
+  let currentPage = 0;
   let per_page = 20;
   let sets: Data[] = [];
   let loading = false;
@@ -47,6 +47,7 @@
   //   export let data: PageData;
 
   async function fetchData() {
+    if (loading) return;
     loading = true;
     await axiosAPI
       .get(
@@ -119,7 +120,7 @@
       query = q;
     }
 
-    fetchData();
+    // fetchData();
   });
 
   // handle deleted action
@@ -170,7 +171,7 @@
           <Heading tag="h4">
             {set.name}
             {#if set.user_id == data.user?.id}
-               <Badge>{set.visibility == 1 ? 'Public': 'Private'}</Badge>
+              <Badge>{set.visibility == 1 ? "Public" : "Private"}</Badge>
             {/if}
           </Heading>
         </a>
