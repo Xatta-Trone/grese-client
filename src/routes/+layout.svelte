@@ -46,7 +46,7 @@
     <Header isLoggedIn={data.isLoggedIn} />
   </div>
 
-  <main class="container max-w-screen-lg mx-auto" in:fade>
+  <main class="container max-w-screen-lg mx-auto min-h-screen" in:fade>
     <slot />
   </main>
 

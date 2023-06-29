@@ -1,8 +1,10 @@
 <!-- @format -->
 <script lang="ts">
   import { page } from "$app/stores";
+  import NotificationBellIcon from "$lib/icons/notificationBellIcon.svelte";
   import { logout } from "$lib/services/auth";
   import {
+    A,
     Button,
     Chevron,
     DarkMode,
@@ -21,11 +23,7 @@
 
 <Navbar let:hidden let:toggle color="form">
   <NavBrand href="/">
-    <img
-      src="/logo/logo.png"
-      class="mr-3 h-6 sm:h-9"
-      alt="GRE SE Logo"
-    />
+    <img src="/logo/logo.png" class="mr-3 h-6 sm:h-9" alt="GRE SE Logo" />
     <span
       class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
     >
@@ -36,7 +34,10 @@
     <DarkMode initialTheme="light" {btnClass} class="mr-2" />
 
     {#if isLoggedIn}
-      <div id="profile" class="cursor-pointer ml-4">
+      <div class="cursor-pointer ml-5">
+        <a href="/notifications"><NotificationBellIcon /></a>
+      </div>
+      <div id="profile" class="cursor-pointer ml-5">
         <Chevron aligned>Profile</Chevron>
       </div>
       <Dropdown triggeredBy="#profile" class="w-44 z-20">
@@ -69,7 +70,10 @@
     <NavLi href="/sets" active={$page.url.pathname == "/sets" ? true : false}>
       Sets
     </NavLi>
-    <NavLi href="/folders" active={$page.url.pathname == "/folders" ? true : false}>
+    <NavLi
+      href="/folders"
+      active={$page.url.pathname == "/folders" ? true : false}
+    >
       Folders
     </NavLi>
     <!-- <NavLi
