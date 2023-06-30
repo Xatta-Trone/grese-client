@@ -32,7 +32,7 @@
   import { z } from "zod";
   import type { PageData } from "./$types";
 
-  export let data: PageData;
+  // export let data: PageData;
 
   // data variables
   let currentPage = 1;
