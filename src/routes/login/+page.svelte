@@ -22,7 +22,7 @@
 <main class="w-100 h-screen flex justify-center items-center">
   <div>
     <div class="w-100 flex justify-center itemx">
-      <a href={promoCode != "" ? `/login-google?promo=${promoCode}` : `/login-google`}><GoogleSignInButton /></a>
+      <a href={promoCode ? `/login-google?promo=${promoCode}` : `/login-google`}><GoogleSignInButton /></a>
     </div>
     <div class="text-center mt-4">
       <P class="text-center"

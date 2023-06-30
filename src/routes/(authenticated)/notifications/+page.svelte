@@ -76,7 +76,7 @@
       <Button
         disabled={markAsLoading || notifications.length == 0}
         on:click={markAsRead}
-        size="sm">Mark all read</Button
+        size="sm">Mark all as read</Button
       >
     </div>
   </div>
@@ -90,7 +90,7 @@
           >
         </div>
         <div class="flex-1 ml-3">
-          {notification.content}{notification.content}
+          {notification.content}
         </div>
       </div>
     </Alert>

@@ -8,7 +8,7 @@ import { COOKIE_KEY, COOKIE_KEY_EXP, COOKIE_KEY_USER } from "$lib/utils/constant
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-export const load = (async ({ url, cookies, request }) => {
+export const load = (async ({ url, cookies }) => {
 
   // user.subscribe(val => {
   //   if (val != null) {
@@ -104,6 +104,8 @@ export const load = (async ({ url, cookies, request }) => {
     cookies.set(COOKIE_KEY, data.token, { expires: exp, domain: cookieDomain })
     cookies.set(COOKIE_KEY_EXP, JSON.stringify(data.exp), { expires: exp, domain: cookieDomain })
     cookies.set(COOKIE_KEY_USER, JSON.stringify(data.user), { expires: exp, domain: cookieDomain })
+
+    // throw redirect(302, '/profile')
 
 
     return {
