@@ -32,8 +32,8 @@
   export let data: PageData;
 
   // data variables
-  let currentPage = 1;
-  let per_page = 20;
+  let currentPage = 0;
+  let per_page = 35;
   let lists: FolderList[] = [];
   let newLists: FolderList[] = [];
   let meta: Meta;
@@ -67,7 +67,7 @@
 
         if (data.lists.length) {
           newLists = data.lists;
-          hasMore = data.lists.length <= per_page ? true : false;
+          hasMore = data.lists.length < per_page ? false : true;
         } else {
           hasMore = false;
         }
@@ -88,7 +88,7 @@
   }
 
   onMount(() => {
-    fetchData();
+    // fetchData();
   });
 
   function handleLoginToSave() {
@@ -144,7 +144,7 @@
   let saveSuccess: string | null = null;
   let saveError: string | null = null;
   function handleSave() {
-      saveSuccess = null;
+    saveSuccess = null;
     saveError = null;
     saving = true;
     console.log("handle save");
@@ -187,31 +187,34 @@
   {/if}
 
   {#if folderMeta}
-    <div class="flex justify-between my-8">
-      <a
-        class="flex items-center space-x-4"
-        href="/@{folderMeta.user.username}"
-      >
-        <Avatar src={bot} size="sm" />
-        <div class="space-y-1 font-medium dark:text-white">
-          <div class="font-bold">{folderMeta.user.username}</div>
+    <div class="">
+      
+      <div class="flex justify-between my-8">
+        <a
+          class="flex items-center space-x-4"
+          href="/@{folderMeta.user.username}"
+        >
+          <Avatar src={bot} size="sm" />
+          <div class="space-y-1 font-medium dark:text-white">
+            <div class="font-bold">{folderMeta.user.username}</div>
+          </div>
+        </a>
+        <div class="font-bold">
+          {#if data.user == null}
+            <Button color="dark" on:click={handleLoginToSave}
+              >Login to save</Button
+            >
+          {:else if data.user.id == folderMeta.user_id}
+            <FolderActionMenu
+              folderMetaData={folderMeta}
+              isOwner={folderMeta.user_id == data.user?.id}
+            />
+          {:else}
+            <Button color="dark" on:click={handleSave} disabled={saving}
+              >Save</Button
+            >
+          {/if}
         </div>
-      </a>
-      <div class="font-bold">
-        {#if data.user == null}
-          <Button color="dark" on:click={handleLoginToSave}
-            >Login to save</Button
-          >
-        {:else if data.user.id == folderMeta.user_id}
-          <FolderActionMenu
-            folderMetaData={folderMeta}
-            isOwner={folderMeta.user_id == data.user?.id}
-          />
-        {:else}
-          <Button color="dark" on:click={handleSave} disabled={saving}
-            >Save</Button
-          >
-        {/if}
       </div>
     </div>
   {/if}
