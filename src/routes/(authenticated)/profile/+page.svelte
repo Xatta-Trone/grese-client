@@ -14,6 +14,7 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import type { PageServerData } from "./$types";
+  import { version } from '$app/environment';
 
   let userData: UserInterface | null;
 
@@ -32,6 +33,8 @@
       userData = response.data;
     });
   }
+  version
+
 </script>
 
 <svelte:head>
@@ -66,4 +69,7 @@
       </Card>
     </div>
   {/if}
+  <P class="mt-3" weight="light" color="text-gray-500 dark:text-gray-400">
+  Website Version: {version}
+</P>
 </main>
