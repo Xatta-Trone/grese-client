@@ -38,9 +38,13 @@ jobs:
         script: |
           cd /var/www/grese-client
           sudo git checkout main 
+          sudo git add .
+          sudo git commit -m "asdf"
           sudo git pull origin main --rebase
           # sudo rm -rf ./node_modules
-          sudo npm ci --force
-          sudo npm run build
+          # sudo npm ci --force
+          sudo pnpm install
+          # sudo npm run build
+          sudo pnpm build
           # pm2 reload grese-client --update-env
           sudo pm2 restart grese-client
