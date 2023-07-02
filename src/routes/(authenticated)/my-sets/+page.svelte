@@ -51,7 +51,7 @@
     loading = true;
     await axiosAPI
       .get(
-        `/lists?page=${currentPage}&per_page=${per_page}&query=${query}&filter=${filter}&save_order=asc`
+        `/lists?page=${currentPage}&per_page=${per_page}&query=${query}&filter=${filter}&save_order=desc`
       )
       .then((res) => {
         const data: SetsResponse = res.data;
