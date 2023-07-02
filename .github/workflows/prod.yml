@@ -43,10 +43,10 @@ jobs:
           sudo git commit -m "asdf"
           sudo git pull origin main --rebase
           # sudo rm -rf ./node_modules
-          # sudo npm ci --force
-          sudo pnpm install
-          # sudo npm run build
-          sudo pnpm build
+          sudo npm ci --force
+          sudo npm run build
+          # sudo pnpm install
+          # sudo pnpm build
           # pm2 reload grese-client --update-env
           sudo pm2 restart grese-client
           free -h && sudo sysctl -w vm.drop_caches=3 && sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && free -h
