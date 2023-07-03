@@ -37,6 +37,7 @@ jobs:
         key: ${{ secrets.SSHKEY }}
         script: |
           cd /var/www/grese-client-dev
+          free -h && sudo sysctl -w vm.drop_caches=3 && sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && free -h
           sudo git checkout staging 
           sudo git pull origin staging --rebase
           # sudo rm -rf ./node_modules
@@ -44,3 +45,4 @@ jobs:
           sudo npm run build
           # pm2 reload grese-client-dev --update-env
           sudo pm2 restart grese-client-dev
+          free -h && sudo sysctl -w vm.drop_caches=3 && sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && free -h
