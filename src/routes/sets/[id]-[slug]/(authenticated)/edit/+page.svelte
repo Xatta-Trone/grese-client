@@ -373,7 +373,7 @@
   <title>{listMeta ? `Edit Set: ${listMeta.name}` : "Edit Set"}</title>
 </svelte:head>
 
-<main class="my-6" in:fade>
+<main class="my-6" in:fade|global>
   <DevComponent>
     {JSON.stringify(formData)}
   </DevComponent>

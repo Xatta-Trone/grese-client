@@ -12,7 +12,7 @@
   <title>@{$page.params.username}: GRE SE</title>
 </svelte:head>
 
-<main class="my-6 flex items-center flex-col" in:fade>
+<main class="my-6 flex items-center flex-col" in:fade|global>
   <!-- <div class="w-100">
     <Card img={bot} horizontal size="sm" padding="sm">
       <h5

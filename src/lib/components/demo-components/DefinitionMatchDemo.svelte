@@ -331,7 +331,7 @@
   >
 </svelte:head>
 
-<main class="my-0" in:fade>
+<main class="my-0" in:fade|global>
   <div class="my-0">
     {#if completedQuiz == false}
       {#if words.length > 0}

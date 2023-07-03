@@ -367,7 +367,7 @@
   >
 </svelte:head>
 
-<main class="my-6" in:fade>
+<main class="my-6" in:fade|global>
   <DevComponent>
     <!-- content here -->
     <p>words {words.length}</p>

@@ -155,7 +155,7 @@
 </svelte:head>
 
 
-<div class="mt-5" in:fade>
+<div class="mt-5" in:fade|global>
   <DevComponent>
     <p>Name: {formData.name}</p>
     <p>visibility: {formData.visibility}</p>

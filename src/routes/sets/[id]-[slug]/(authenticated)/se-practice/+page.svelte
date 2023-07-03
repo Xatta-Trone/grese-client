@@ -423,7 +423,7 @@
   >
 </svelte:head>
 
-<main class="my-6" in:fade>
+<main class="my-6" in:fade|global>
   <DevComponent>
     <p>words {words.length}</p>
     <p>Current Index:{currentIndex}</p>

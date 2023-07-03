@@ -97,7 +97,7 @@
   <title>Available Sets</title>
 </svelte:head>
 
-<main in:fade>
+<main in:fade|global>
   <div class="my-3">
     <Heading tag="h4">Available Sets</Heading>
   </div>
@@ -111,7 +111,7 @@
     />
   </div>
 
-  <div in:fade>
+  <div in:fade|global>
     {#each sets as set}
       <Card size="xl" href="/sets/{set.id}-{set.slug}" class="mb-3">
         <h5

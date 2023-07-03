@@ -94,7 +94,7 @@
   });
 </script>
 
-<main in:fade>
+<main in:fade|global>
   <div class="mb-6">
     <Input
       id="large-input"
@@ -105,7 +105,7 @@
     />
   </div>
 
-  <div in:fade>
+  <div in:fade|global>
     {#each sets as set}
       <Card size="xl" href="/sets/{set.id}-{set.slug}" class="mb-3">
         <h5

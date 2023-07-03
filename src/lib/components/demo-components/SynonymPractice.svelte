@@ -345,7 +345,7 @@ function checkAnswer() {
   >
 </svelte:head>
 
-<main class="" in:fade>
+<main class="" in:fade|global>
 
   <div class="my-0">
     {#if completedQuiz == false}

@@ -74,7 +74,7 @@
   let clickOutsideModal = false;
 </script>
 
-<main in:fade class="my-6">
+<main in:fade|global class="my-6">
   <Modal
     title="Flashcard settings"
     bind:open={clickOutsideModal}

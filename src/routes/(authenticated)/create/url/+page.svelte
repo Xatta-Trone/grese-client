@@ -211,7 +211,7 @@
   <title>Import Set & Folder: GRE SE</title>
 </svelte:head>
 
-<div class="mt-5" in:fade>
+<div class="mt-5" in:fade|global>
   <DevComponent>
     <p>URL: {formData.url}</p>
     <p>visibility: {formData.visibility}</p>

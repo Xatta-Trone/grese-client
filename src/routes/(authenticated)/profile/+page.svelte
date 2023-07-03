@@ -41,7 +41,7 @@
   <title>{(userData?.username ?? "My profile").toUpperCase()}: GRE SE</title>
 </svelte:head>
 
-<main class="my-6" in:fade>
+<main class="my-6" in:fade|global>
   {#if userData == null}
     <TextPlaceholder size="xxl" class="mt-8" />
     <TextPlaceholder size="xxl" class="mt-8" />

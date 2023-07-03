@@ -399,7 +399,7 @@
   >
 </svelte:head>
 
-<main class="my-0" in:fade>
+<main class="my-0" in:fade|global>
   <div class="my-0">
     {#if completedQuiz == true}
       <Heading tag="h5" class="mb-5">Completed Quiz...&#128516;</Heading>

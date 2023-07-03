@@ -91,7 +91,7 @@
   });
 </script>
 
-<main class="" in:fade>
+<main class="" in:fade|global>
   <div class="mb-6">
     <Input
       id="large-input"
